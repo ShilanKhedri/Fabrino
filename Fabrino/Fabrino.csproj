@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Resource Include="fabrics.png" />
-    <Resource Include="Fonts\IRANSans [%40ClubEdits].ttf" />
   </ItemGroup>
 
 </Project>
