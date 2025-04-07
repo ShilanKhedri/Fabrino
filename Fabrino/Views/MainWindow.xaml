@@ -19,7 +19,9 @@
         <Border Grid.Column="1" Background="#FFEDE1"/>
 
         <!-- تصویر در ستون دوم -->
+
         <Image Source="/fabric.png" Grid.Column="1" 
+
                HorizontalAlignment="Right" VerticalAlignment="Center" 
                Height="383" Width="504"/>
 
@@ -76,7 +78,9 @@
                         BorderThickness="0" 
                         Width="317" Height="56" 
                         Click="LoginButton_Click"/>
+
                 <TextBlock TextAlignment="Right" Margin="0,40,30,40"><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="حساب کاربری ندارید؟ ثبت نام در فابرینو" MouseLeftButtonDown="GoToRegister_Click"/></Hyperlink></TextBlock>
+
 
                 <!-- دکمه ورود -->
 

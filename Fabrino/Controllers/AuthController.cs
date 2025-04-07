@@ -23,8 +23,10 @@ namespace Fabrino.Controllers
                 string query = "SELECT COUNT(*) FROM users WHERE username = @username AND password_hash = HASHBYTES('SHA2_256', @password)";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+
                     cmd.Parameters.AddWithValue("@username", user.username);
                     cmd.Parameters.AddWithValue("@password", user.password_hash);
+
 
                     int count = Convert.ToInt32(cmd.ExecuteScalar());
                     isValid = count > 0;
@@ -34,4 +36,6 @@ namespace Fabrino.Controllers
             return isValid;
         }
     }
+
 }
+

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
   </ItemGroup>
 
@@ -26,6 +27,7 @@
     <Page Update="Views\MainWindow.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
+
   </ItemGroup>
 
 </Project>

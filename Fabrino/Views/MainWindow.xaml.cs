@@ -3,8 +3,10 @@ using Microsoft.Data.SqlClient;
 using System.Windows;
 using Fabrino.Controllers;
 using Fabrino.Models;
+
 using System.Windows.Input;
 using Fabrino.Views;
+
 
 namespace Fabrino
 {
@@ -18,12 +20,14 @@ namespace Fabrino
             InitializeComponent();
         }
 
+
         private void GoToRegister_Click(object sender, MouseButtonEventArgs e)
         {
             SignUpWindow registerWindow = new SignUpWindow();
             registerWindow.Show();
             this.Close(); // یا Hide اگه بخوای فرم لاگین باز بمونه
         }
+
 
         private void RemoveText(object sender, RoutedEventArgs e)
         {
@@ -70,11 +74,13 @@ namespace Fabrino
         {
             var user = new UserModel
             {
+
                 username = UsernameTextBox.Text.Trim(),
                 password_hash = PasswordTextBox.Password.Trim()
             };
 
             if (string.IsNullOrEmpty(user.username) || string.IsNullOrEmpty(user.password_hash))
+
             {
                 MessageBox.Show("لطفاً نام کاربری و رمز عبور را وارد کنید.", "خطا", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;

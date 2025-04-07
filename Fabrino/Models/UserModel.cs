@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fabrino.Models
 {
+
     public class UserModel
     {
 
@@ -19,3 +20,4 @@ namespace Fabrino.Models
         public string security_answer_hash { get; set; } = string.Empty;
     }
 }
+
