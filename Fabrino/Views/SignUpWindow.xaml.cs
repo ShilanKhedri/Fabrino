@@ -1,41 +1,99 @@
-﻿using System.Windows;
+﻿using Fabrino.Controllers;
+using Fabrino.Helpers;
+using Fabrino.Models;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Fabrino.Views
 {
     public partial class SignUpWindow : Window
     {
+        private readonly SignUpController signUpController = new SignUpController();
+
         public SignUpWindow()
         {
             InitializeComponent();
         }
 
-        // Placeholder برای TextBoxها
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            string username = UsernameTextBox.Text.Trim();
+            string fullname = FullNameTextBox.Text.Trim();
+            string password = PasswordBox.Password;
+            string confirmPassword = ConfirmPasswordBox.Password;
+            string securityAnswer = SecurityAnswerTextBox.Text.Trim();
+
+            ComboBoxItem selectedQuestion = SecurityQuestionComboBox.SelectedItem as ComboBoxItem;
+            string question = selectedQuestion != null ? selectedQuestion.Content.ToString() : "";
+
+            if (password != confirmPassword)
+            {
+                MessageBox.Show("رمز عبور و تکرار آن یکسان نیستند.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(fullname)
+                || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(securityAnswer)
+                || string.IsNullOrWhiteSpace(question))
+            {
+                MessageBox.Show("لطفاً همه‌ی فیلدها را پر کنید.");
+                return;
+            }
+
+            string passwordHash = SecurityHelper.ComputeSha256Hash(password);
+
+            var user = new UserModel
+            {
+                username = username,
+                full_name = fullname,
+                password_hash = passwordHash,
+                security_question = question,
+                role = "owner",
+                security_answer_hash = securityAnswer
+            };
+
+            bool success = signUpController.RegisterUser(user);
+
+            if (success)
+            {
+                MessageBox.Show("ثبت‌نام با موفقیت انجام شد!");
+                this.Close(); // یا رفتن به صفحه لاگین
+            }
+            else
+            {
+                MessageBox.Show("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+            }
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close(); // یا برگشت به صفحه قبل
+        }
+
+        // Placeholder برای TextBox
         private void RemoveText(object sender, RoutedEventArgs e)
         {
-            var tb = sender as TextBox;
-            if (tb != null && (tb.Text == "نام کاربری" || tb.Text == "نام کامل" || tb.Text == "پاسخ سوال امنیتی"))
+            TextBox tb = (TextBox)sender;
+            if (tb.Foreground == System.Windows.Media.Brushes.Gray)
             {
                 tb.Text = "";
-                tb.Foreground = Brushes.Black;
+                tb.Foreground = System.Windows.Media.Brushes.Black;
             }
         }
 
         private void AddText(object sender, RoutedEventArgs e)
         {
-            var tb = sender as TextBox;
-            if (tb != null && string.IsNullOrWhiteSpace(tb.Text))
+            TextBox tb = (TextBox)sender;
+            if (string.IsNullOrWhiteSpace(tb.Text))
             {
                 if (tb.Name == "UsernameTextBox") tb.Text = "نام کاربری";
                 else if (tb.Name == "FullNameTextBox") tb.Text = "نام کامل";
                 else if (tb.Name == "SecurityAnswerTextBox") tb.Text = "پاسخ سوال امنیتی";
 
-                tb.Foreground = Brushes.Gray;
+                tb.Foreground = System.Windows.Media.Brushes.Gray;
             }
         }
 
-        // Placeholder برای PasswordBoxها
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             PasswordPlaceholder.Visibility = string.IsNullOrEmpty(PasswordBox.Password) ? Visibility.Visible : Visibility.Hidden;
@@ -44,47 +102,6 @@ namespace Fabrino.Views
         private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             ConfirmPasswordPlaceholder.Visibility = string.IsNullOrEmpty(ConfirmPasswordBox.Password) ? Visibility.Visible : Visibility.Hidden;
-        }
-
-        // ثبت‌نام
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-            // بررسی فیلدها
-            if (UsernameTextBox.Text == "نام کاربری" || string.IsNullOrWhiteSpace(UsernameTextBox.Text) ||
-                FullNameTextBox.Text == "نام کامل" || string.IsNullOrWhiteSpace(FullNameTextBox.Text) ||
-                string.IsNullOrWhiteSpace(PasswordBox.Password) ||
-                string.IsNullOrWhiteSpace(ConfirmPasswordBox.Password) ||
-                SecurityQuestionComboBox.SelectedItem == null ||
-                SecurityAnswerTextBox.Text == "پاسخ سوال امنیتی" || string.IsNullOrWhiteSpace(SecurityAnswerTextBox.Text))
-            {
-                MessageBox.Show("لطفاً همه‌ی فیلدها را کامل کنید.", "خطا", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            // بررسی تطابق رمز
-            if (PasswordBox.Password != ConfirmPasswordBox.Password)
-            {
-                MessageBox.Show("رمز عبور و تکرار آن یکسان نیستند.", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            // گرفتن سوال امنیتی انتخاب شده
-            var selectedItem = SecurityQuestionComboBox.SelectedItem as ComboBoxItem;
-            string securityQuestion = selectedItem?.Content.ToString();
-
-            // حالا اینجا می‌تونی اطلاعات رو توی دیتابیس ذخیره کنی
-            // فعلاً فقط پیام موفقیت:
-            MessageBox.Show("ثبت‌نام با موفقیت انجام شد!", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            // بستن پنجره یا بردن به صفحه ورود
-            this.Close();
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow loginWindow = new MainWindow();
-            loginWindow.Show();
-            Close();
         }
     }
 }

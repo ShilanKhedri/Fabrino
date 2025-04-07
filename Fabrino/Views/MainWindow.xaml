@@ -19,7 +19,7 @@
         <Border Grid.Column="1" Background="#FFEDE1"/>
 
         <!-- تصویر در ستون دوم -->
-        <Image Source="/fabrics.png" Grid.Column="1" 
+        <Image Source="/fabric.png" Grid.Column="1" 
                HorizontalAlignment="Right" VerticalAlignment="Center" 
                Height="383" Width="504"/>
 
