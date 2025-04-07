@@ -4,10 +4,4 @@
              xmlns:local="clr-namespace:Fabrino"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-        
-    </Application.Resources>
-
-</Application>
-
-    
 

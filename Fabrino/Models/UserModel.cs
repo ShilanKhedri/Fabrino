@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace Fabrino.Models
 {
-    class UserModel
+
+    public class UserModel
     {
 
-            public int Id { get; set; }
-            public string Username { get; set; }
-            public string PasswordHash { get; set; }
-            public string FullName { get; set; }
-            public string Role { get; set; }
-            public DateTime CreatedAt { get; set; }
-        }
+        public int id { get; set; }
+        public string username { get; set; } = string.Empty;
+        public string password_hash { get; set; } = string.Empty;
+        public string full_name { get; set; } = string.Empty;
+        public string role { get; set; } = string.Empty;
+        public DateTime created_at { get; set; }
+        public string security_question { get; set; } = string.Empty;
+        public string security_answer_hash { get; set; } = string.Empty;
+    }
 }
+

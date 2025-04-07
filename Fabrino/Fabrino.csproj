@@ -9,20 +9,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="acaa38a28d303804dee4fc5963de8aad.png" />
-    <None Remove="fabrics.png" />
-    <None Remove="IRANSans [%40ClubEdits].ttf" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="fabrics.png" />
+    <Resource Include="fabric.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\MainWindow.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+
   </ItemGroup>
 
 </Project>
