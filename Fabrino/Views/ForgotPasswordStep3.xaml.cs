@@ -15,7 +15,19 @@ namespace Fabrino.Views
             username = user;
         }
 
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
+
+
+        private void NewPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            NewPasswordPlaceholder.Visibility = string.IsNullOrEmpty(NewPasswordBox.Password) ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ConfirmPasswordPlaceholder.Visibility = string.IsNullOrEmpty(ConfirmPasswordBox.Password) ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             string newPass = NewPasswordBox.Password;
             string confirm = ConfirmPasswordBox.Password;
@@ -37,6 +49,5 @@ namespace Fabrino.Views
                 MessageBox.Show("خطا در تغییر رمز عبور.");
             }
         }
-
     }
 }
