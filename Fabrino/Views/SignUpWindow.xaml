@@ -41,6 +41,7 @@
     <Grid Background="#FFF6F6F6">
         <Border BorderBrush="White" BorderThickness="0" HorizontalAlignment="Center" Height="700" VerticalAlignment="Center" Width="600"
                 Background="#FFEDE1" CornerRadius="15">
+            
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="450" Height="633">
                 <TextBlock Text="ثبت نام مالک" 
                            Foreground="#F47458" 
