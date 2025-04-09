@@ -148,7 +148,7 @@
                             Height="40" 
                             Width="120" 
                             Margin="0,0,10,0" 
-                            Click="RegisterButton_Click"/>
+                            Click="RegisterButton_Click" BorderThickness="0,0,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
