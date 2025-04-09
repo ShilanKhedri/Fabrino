@@ -23,6 +23,7 @@ namespace Fabrino.Views
             string confirmPassword = ConfirmPasswordBox.Password;
             string securityAnswer = SecurityHelper.ComputeSha256Hash(SecurityAnswerTextBox.Text.Trim());
 
+
             ComboBoxItem selectedQuestion = SecurityQuestionComboBox.SelectedItem as ComboBoxItem;
             string question = selectedQuestion != null ? selectedQuestion.Content.ToString() : "";
 
@@ -61,6 +62,7 @@ namespace Fabrino.Views
                 this.Close();
                 main.Show(); ;// یا رفتن به صفحه لاگین
                 MessageBox.Show("ثبت‌نام با موفقیت انجام شد!");
+
             }
             else
             {
@@ -72,6 +74,7 @@ namespace Fabrino.Views
         {
             MainWindow backToMain = new MainWindow();
             backToMain.Show();
+
             this.Close(); // یا برگشت به صفحه قبل
         }
 

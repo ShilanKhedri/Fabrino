@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Fabrino.Views;
 using Fabrino.Helpers;
 
+
 namespace Fabrino
 {
     public partial class MainWindow : Window
@@ -18,6 +19,7 @@ namespace Fabrino
         {
             InitializeComponent();
         }
+
 
         private void GoToRegister_Click(object sender, MouseButtonEventArgs e)
         {
@@ -31,6 +33,7 @@ namespace Fabrino
             ForgotPasswordStep1 forgotpassword = new ForgotPasswordStep1();
             forgotpassword.Show();
         }
+
 
         private void RemoveText(object sender, RoutedEventArgs e)
         {
@@ -83,6 +86,7 @@ namespace Fabrino
             };
 
             if (string.IsNullOrEmpty(user.username) || string.IsNullOrEmpty(user.password_hash))
+
             {
                 MessageBox.Show("لطفاً نام کاربری و رمز عبور را وارد کنید.", "خطا", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
