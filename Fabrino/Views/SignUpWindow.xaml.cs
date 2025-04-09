@@ -21,7 +21,8 @@ namespace Fabrino.Views
             string fullname = FullNameTextBox.Text.Trim();
             string password = PasswordBox.Password;
             string confirmPassword = ConfirmPasswordBox.Password;
-            string securityAnswer = SecurityAnswerTextBox.Text.Trim();
+            string securityAnswer = SecurityHelper.ComputeSha256Hash(SecurityAnswerTextBox.Text.Trim());
+
 
             ComboBoxItem selectedQuestion = SecurityQuestionComboBox.SelectedItem as ComboBoxItem;
             string question = selectedQuestion != null ? selectedQuestion.Content.ToString() : "";
@@ -56,8 +57,12 @@ namespace Fabrino.Views
 
             if (success)
             {
+                
+                MainWindow main = new MainWindow();
+                this.Close();
+                main.Show(); ;// یا رفتن به صفحه لاگین
                 MessageBox.Show("ثبت‌نام با موفقیت انجام شد!");
-                this.Close(); // یا رفتن به صفحه لاگین
+
             }
             else
             {
@@ -67,6 +72,9 @@ namespace Fabrino.Views
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow backToMain = new MainWindow();
+            backToMain.Show();
+
             this.Close(); // یا برگشت به صفحه قبل
         }
 

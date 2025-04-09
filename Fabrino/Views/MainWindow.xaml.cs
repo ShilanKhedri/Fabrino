@@ -3,9 +3,9 @@ using Microsoft.Data.SqlClient;
 using System.Windows;
 using Fabrino.Controllers;
 using Fabrino.Models;
-
 using System.Windows.Input;
 using Fabrino.Views;
+using Fabrino.Helpers;
 
 
 namespace Fabrino
@@ -26,6 +26,12 @@ namespace Fabrino
             SignUpWindow registerWindow = new SignUpWindow();
             registerWindow.Show();
             this.Close(); // یا Hide اگه بخوای فرم لاگین باز بمونه
+        }
+
+        private void GoToForgotPassword(object sender, MouseButtonEventArgs e)
+        {
+            ForgotPasswordStep1 forgotpassword = new ForgotPasswordStep1();
+            forgotpassword.Show();
         }
 
 
@@ -72,11 +78,11 @@ namespace Fabrino
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            string passwordHash = SecurityHelper.ComputeSha256Hash(PasswordTextBox.Password.Trim());
             var user = new UserModel
             {
-
                 username = UsernameTextBox.Text.Trim(),
-                password_hash = PasswordTextBox.Password.Trim()
+                password_hash = passwordHash
             };
 
             if (string.IsNullOrEmpty(user.username) || string.IsNullOrEmpty(user.password_hash))
