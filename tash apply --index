@@ -1,0 +1,134 @@
+[1mdiff --git a/Fabrino/Controllers/AuthController.cs b/Fabrino/Controllers/AuthController.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1b07f8c[m
+[1m--- /dev/null[m
+[1m+++ b/Fabrino/Controllers/AuthController.cs[m
+[36m@@ -0,0 +1,37 @@[m
+[32m+[m[32m﻿using Fabrino.Models;[m
+[32m+[m[32musing System;[m
+[32m+[m[32musing System.Collections.Generic;[m
+[32m+[m[32musing System.Linq;[m
+[32m+[m[32musing System.Text;[m
+[32m+[m[32musing System.Threading.Tasks;[m
+[32m+[m[32musing Microsoft.Data.SqlClient;[m
+[32m+[m[32musing System.Configuration;[m
+[32m+[m
+[32m+[m[32mnamespace Fabrino.Controllers[m
+[32m+[m[32m{[m
+[32m+[m[32m    class AuthController[m
+[32m+[m[32m    {[m
+[32m+[m[32m        private string connectionString = ConfigurationManager.ConnectionStrings["FabrinoConnection"].ConnectionString;[m
+[32m+[m
+[32m+[m[32m        public bool IsValidUser(UserModel user)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            bool isValid = false;[m
+[32m+[m
+[32m+[m[32m            using (SqlConnection conn = new SqlConnection(connectionString))[m
+[32m+[m[32m            {[m
+[32m+[m[32m                conn.Open();[m
+[32m+[m[32m                string query = "SELECT COUNT(*) FROM users WHERE username = @username AND password_hash = @password";[m
+[32m+[m[32m                using (SqlCommand cmd = new SqlCommand(query, conn))[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    cmd.Parameters.AddWithValue("@username", user.username);[m
+[32m+[m[32m                    cmd.Parameters.AddWithValue("@password", user.password_hash);[m
+[32m+[m
+[32m+[m[32m                    int count = Convert.ToInt32(cmd.ExecuteScalar());[m
+[32m+[m[32m                    isValid = count > 0;[m
+[32m+[m[32m                }[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            return isValid;[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/Fabrino/Views/MainWindow.xaml b/Fabrino/Views/MainWindow.xaml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..bfc6d19[m
+[1m--- /dev/null[m
+[1m+++ b/Fabrino/Views/MainWindow.xaml[m
+[36m@@ -0,0 +1,90 @@[m
+[32m+[m[32m﻿<Window[m[41m [m
+[32m+[m[32m        x:Class="Fabrino.MainWindow"[m
+[32m+[m[32m        WindowState="Maximized"[m
+[32m+[m[32m        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"[m
+[32m+[m[32m        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"[m
+[32m+[m[32m        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"[m
+[32m+[m[32m        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"[m
+[32m+[m[32m        xmlns:local="clr-namespace:Fabrino"[m
+[32m+[m[32m        mc:Ignorable="d"[m
+[32m+[m[32m        Title="Login Page" Height="1080" Width="1920"[m
+[32m+[m[32m        FlowDirection="LeftToRight">[m
+[32m+[m[32m    <Grid FlowDirection="LeftToRight">[m
+[32m+[m[32m        <Grid.ColumnDefinitions>[m
+[32m+[m[32m            <ColumnDefinition Width="2*"/>[m
+[32m+[m[32m            <ColumnDefinition Width="*"/>[m
+[32m+[m[32m        </Grid.ColumnDefinitions>[m
+[32m+[m
+[32m+[m[32m        <!-- پس‌زمینه ستون دوم -->[m
+[32m+[m[32m        <Border Grid.Column="1" Background="#FFEDE1"/>[m
+[32m+[m
+[32m+[m[32m        <!-- تصویر در ستون دوم -->[m
+[32m+[m[32m        <Image Source="/fabric.png" Grid.Column="1"[m[41m [m
+[32m+[m[32m               HorizontalAlignment="Right" VerticalAlignment="Center"[m[41m [m
+[32m+[m[32m               Height="383" Width="504"/>[m
+[32m+[m
+[32m+[m[32m        <!-- متن "فابرینو" -->[m
+[32m+[m[32m        <TextBlock Grid.Column="0"[m[41m [m
+[32m+[m[32m                   Text="فابرینو"[m[41m [m
+[32m+[m[32m                   Foreground="#F47458" FontFamily="Arial" FontSize="64"[m[41m [m
+[32m+[m[32m                   HorizontalAlignment="Center" VerticalAlignment="Top"[m[41m [m
+[32m+[m[32m                   Margin="0,50,0,0"/>[m
+[32m+[m
+[32m+[m[32m        <!-- متن "ورود به حساب کاربری" -->[m
+[32m+[m
+[32m+[m[32m        <!-- Border شامل TextBoxها، دکمه و لینک‌ها -->[m
+[32m+[m[32m        <Border Grid.Column="0"[m[41m [m
+[32m+[m[32m                BorderBrush="Black" BorderThickness="0"[m[41m [m
+[32m+[m[32m                HorizontalAlignment="Center" VerticalAlignment="Center"[m[41m [m
+[32m+[m[32m                Width="395" Height="514"[m[41m [m
+[32m+[m[32m                Background="#FFEDE1" CornerRadius="15">[m
+[32m+[m[32m            <StackPanel>[m
+[32m+[m[32m                <!-- TextBox برای نام کاربری -->[m
+[32m+[m[32m                <!-- متن "ورود به حساب کاربری" -->[m
+[32m+[m[32m                <TextBlock[m[41m [m
+[32m+[m[32m                   Text="ورود به حساب کاربری"[m[41m [m
+[32m+[m[32m                   Foreground="#F47458" FontFamily="Arial" FontSize="32" TextAlignment="Right" Margin="0,15,15,0"[m[41m [m
+[32m+[m[32m                   />[m
+[32m+[m
+[32m+[m[32m                <!-- TextBox برای نام کاربری -->[m
+[32m+[m[32m                <TextBox x:Name="UsernameTextBox"[m
+[32m+[m[32m                         GotFocus="RemoveText"[m[41m [m
+[32m+[m[32m                         LostFocus="AddText"[m
+[32m+[m[32m                         Text="نام کاربری"[m[41m [m
+[32m+[m[32m                         FontFamily="Arial" FontSize="32"[m[41m [m
+[32m+[m[32m                         TextAlignment="Right" Foreground="#9F9F9F"[m[41m [m
+[32m+[m[32m                         BorderThickness="1" Background="#FFFAF4"[m[41m [m
+[32m+[m[32m                         Width="317" Height="56"[m[41m [m
+[32m+[m[32m                         Margin="0,76,0,20"[m[41m [m
+[32m+[m[32m                         HorizontalAlignment="Center"/>[m
+[32m+[m
+[32m+[m[32m                <!-- TextBox برای رمز عبور -->[m
+[32m+[m[32m                <PasswordBox x:Name="PasswordTextBox"[m[41m [m
+[32m+[m[32m                             GotFocus="RemovePassword"[m[41m [m
+[32m+[m[32m             LostFocus="AddPassword"[m
+[32m+[m[32m             Password="رمز عبور"[m[41m [m
+[32m+[m[32m             FontFamily="Arial" FontSize="32"[m[41m [m
+[32m+[m[32m             Foreground="#9F9F9F"[m[41m [m
+[32m+[m[32m             BorderThickness="1" Background="#FFFAF4"[m[41m [m
+[32m+[m[32m             Width="317" Height="56"[m[41m [m
+[32m+[m[32m             Margin="0,0,0,15"[m[41m [m
+[32m+[m[32m             HorizontalAlignment="Center"/>[m
+[32m+[m[32m                <TextBlock TextAlignment="Right" Margin="0,10,30,40" ><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="رمز عبور خود را فراموش کرده‌اید؟"[m
+[32m+[m[32m                                                                                                                                            MouseLeftButtonDown="GoToForgotPassword"/></Hyperlink></TextBlock>[m
+[32m+[m[32m                <Button Content="ورود"[m[41m [m
+[32m+[m[32m                        FontFamily="Arial" FontSize="32"[m[41m [m
+[32m+[m[32m                        Foreground="White" Background="#F47458"[m[41m [m
+[32m+[m[32m                        BorderThickness="0"[m[41m [m
+[32m+[m[32m                        Width="317" Height="56"[m[41m [m
+[32m+[m[32m                        Click="LoginButton_Click"/>[m
+[32m+[m[32m                <TextBlock TextAlignment="Right" Margin="0,40,30,40"><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="حساب کاربری ندارید؟ ثبت نام در فابرینو" MouseLeftButtonDown="GoToRegister_Click"/></Hyperlink></TextBlock>[m
+[32m+[m
+[32m+[m[32m                <!-- دکمه ورود -->[m
+[32m+[m
+[32m+[m[32m                <!-
