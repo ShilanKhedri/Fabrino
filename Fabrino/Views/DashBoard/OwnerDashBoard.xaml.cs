@@ -23,6 +23,25 @@ namespace Fabrino.Views.DashBoard
         {
             InitializeComponent();
         }
+        private void RemoveText(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as System.Windows.Controls.TextBox;
+            if (tb != null && tb.Text == "جستجو")
+            {
+                tb.Text = "";
+                tb.Foreground = System.Windows.Media.Brushes.Black;
+            }
+        }
+
+        private void AddText(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as System.Windows.Controls.TextBox;
+            if (tb != null && string.IsNullOrWhiteSpace(tb.Text))
+            {
+                tb.Text = "جستجو";
+                tb.Foreground = System.Windows.Media.Brushes.Gray;
+            }
+        }
 
         private void TextBox_TextChanged(TextChangedEventArgs e)
         {

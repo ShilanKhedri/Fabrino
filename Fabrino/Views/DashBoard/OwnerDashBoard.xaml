@@ -8,7 +8,8 @@
         Title="داشبورد صاحب" Height="600" Width="1000"
         WindowStartupLocation="CenterScreen"
         Background="#FFEFEF"
-        FlowDirection="RightToLeft">
+        FlowDirection="RightToLeft"
+        WindowState="Maximized">
 
     <Window.Resources>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
@@ -50,18 +51,18 @@
         <!-- Sidebar -->
         <StackPanel Background="#F48672" Grid.Column="0" VerticalAlignment="Stretch">
             <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Center">
-                <Ellipse Width="50" Height="50" Fill="White"/>
+                <Ellipse Width="77" Height="70" Fill="White"/>
                 <StackPanel Margin="10,0,0,0">
-                    <TextBlock Text="علی احمدی" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="صاحب" Foreground="White" FontSize="12"/>
+                    <TextBlock Text="علی احمدی" Foreground="White" FontWeight="Bold" FontSize="20" Margin="0,7,0,0"/>
+                    <TextBlock Text="صاحب" Foreground="White" FontSize="16" Margin="0,5,0,0"/>
                 </StackPanel>
             </StackPanel>
 
-            <Button Content="داشبورد" Style="{StaticResource MenuButtonStyle}"/>
-            <Button Content="گزارش" Style="{StaticResource MenuButtonStyle}"/>
-            <Button Content="موجودی" Style="{StaticResource MenuButtonStyle}"/>
-            <Button Content="خرید" Style="{StaticResource MenuButtonStyle}"/>
-            <Button Content="تنظیمات" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="داشبورد" Style="{StaticResource MenuButtonStyle}" Margin="10,25,10,10"/>
+            <Button Content="گزارش" Style="{StaticResource MenuButtonStyle}" Margin="10,10,10,10"/>
+            <Button Content="موجودی" Style="{StaticResource MenuButtonStyle}" Margin="10,10,10,10"/>
+            <Button Content="خرید" Style="{StaticResource MenuButtonStyle}" Margin="10,10,10,10"/>
+            <Button Content="تنظیمات" Style="{StaticResource MenuButtonStyle}" Margin="10,10,10,55"/>
             <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32"/>
         </StackPanel>
 
@@ -81,7 +82,7 @@
          BorderBrush="#CCC" BorderThickness="1"
          Background="White" Height="47"/>
 
-                <TextBlock Text="خوش آمدید علی" FontSize="25" FontWeight="Bold" Foreground="#F48672" Height="47"/>
+                <TextBlock Text="خوش آمدید " FontSize="25" FontWeight="Bold" Foreground="#F48672" Height="47"/>
             </DockPanel>
 
             <!-- Dashboard Content -->
