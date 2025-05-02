@@ -42,7 +42,7 @@ namespace Fabrino.Views
             if (controller.ResetPassword(username, newPass))
             {
                 MessageBox.Show("رمز عبور با موفقیت تغییر کرد.");
-                this.Close(); // یا برگرد به صفحه ورود
+                this.Close(); 
             }
             else
             {
