@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\MainWindow.xaml">
+    <Page Update="Views\LoginSignUp\MainWindow.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
 
