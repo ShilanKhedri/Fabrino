@@ -1,0 +1,133 @@
+﻿<Window x:Class="Fabrino.Views.DashBoard.OwnerDashBoard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Fabrino.Views.DashBoard"
+        mc:Ignorable="d"
+        Title="داشبورد صاحب" Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFEFEF"
+        FlowDirection="RightToLeft">
+
+    <Window.Resources>
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#F1F1F1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Margin" Value="10,10,10,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F48672"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <StackPanel Background="#F48672" Grid.Column="0" VerticalAlignment="Stretch">
+            <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Center">
+                <Ellipse Width="50" Height="50" Fill="White"/>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="علی احمدی" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="صاحب" Foreground="White" FontSize="12"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Button Content="داشبورد" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="گزارش" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="موجودی" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="خرید" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="تنظیمات" Style="{StaticResource MenuButtonStyle}"/>
+            <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32"/>
+        </StackPanel>
+
+        <!-- Main Area -->
+        <Grid Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <DockPanel Margin="10" VerticalAlignment="Top">
+                <TextBox Text="جستجو..." Width="204"
+         DockPanel.Dock="Right"
+         Margin="10,0,0,0"
+         Padding="5"
+         BorderBrush="#CCC" BorderThickness="1"
+         Background="White" Height="47"/>
+
+                <TextBlock Text="خوش آمدید علی" FontSize="25" FontWeight="Bold" Foreground="#F48672" Height="47"/>
+            </DockPanel>
+
+            <!-- Dashboard Content -->
+            <WrapPanel Grid.Row="1" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+                <!-- Total Product -->
+                <Border Width="160" Height="100" Background="White" Margin="10"
+                        CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="۳۴۵" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="تعداد محصولات" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total Order -->
+                <Border Width="160" Height="100" Background="White" Margin="10"
+                        CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="۴۳۶۵" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="کل سفارش‌ها" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Out of Stock -->
+                <Border Width="160" Height="100" Background="White" Margin="10"
+                        CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="۲۷" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="اتمام موجودی" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total Customers -->
+                <Border Width="160" Height="100" Background="White" Margin="10"
+                        CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="۵۶۷K" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="تعداد مشتریان" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Pie Chart Placeholder -->
+                <Border Width="300" Height="200" Background="White" Margin="10"
+                        CornerRadius="10" BorderBrush="#DDD" BorderThickness="1">
+                    <TextBlock Text="[نمودار دایره‌ای]" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#AAA"/>
+                </Border>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+</Window>
