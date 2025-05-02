@@ -22,7 +22,7 @@
 
         <Image Source="/fabric.png" Grid.Column="1" 
 
-               HorizontalAlignment="Right" VerticalAlignment="Center" 
+               HorizontalAlignment="Center" VerticalAlignment="Center" 
                Height="383" Width="504"/>
 
         <!-- متن "فابرینو" -->

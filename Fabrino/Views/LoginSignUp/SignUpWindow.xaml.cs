@@ -14,7 +14,7 @@ namespace Fabrino.Views
         {
             InitializeComponent();
         }
-
+        //registering user
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTextBox.Text.Trim();
@@ -60,7 +60,7 @@ namespace Fabrino.Views
                 
                 MainWindow main = new MainWindow();
                 this.Close();
-                main.Show(); ;// یا رفتن به صفحه لاگین
+                main.Show(); 
                 MessageBox.Show("ثبت‌نام با موفقیت انجام شد!");
 
             }
@@ -75,10 +75,10 @@ namespace Fabrino.Views
             MainWindow backToMain = new MainWindow();
             backToMain.Show();
 
-            this.Close(); // یا برگشت به صفحه قبل
+            this.Close(); // back to login page
         }
 
-        // Placeholder برای TextBox
+        // Placeholder for TextBox
         private void RemoveText(object sender, RoutedEventArgs e)
         {
             TextBox tb = (TextBox)sender;

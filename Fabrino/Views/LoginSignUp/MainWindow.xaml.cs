@@ -12,7 +12,7 @@ namespace Fabrino
 {
     public partial class MainWindow : Window
     {
-        // رشته اتصال به دیتابیس 
+        // connectioon string
         private AuthController authController = new AuthController();
 
         public MainWindow()
@@ -25,7 +25,7 @@ namespace Fabrino
         {
             SignUpWindow registerWindow = new SignUpWindow();
             registerWindow.Show();
-            this.Close(); // یا Hide اگه بخوای فرم لاگین باز بمونه
+            this.Close(); 
         }
 
         private void GoToForgotPassword(object sender, MouseButtonEventArgs e)

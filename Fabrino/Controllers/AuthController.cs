@@ -13,6 +13,7 @@ namespace Fabrino.Controllers
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["FabrinoConnection"].ConnectionString;
 
+        //check user information
         public bool IsValidUser(UserModel user)
         {
             bool isValid = false;
