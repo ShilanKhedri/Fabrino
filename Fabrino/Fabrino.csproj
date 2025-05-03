@@ -17,6 +17,19 @@
 
   <ItemGroup>
     <None Remove="fabric.png" />
+    <None Remove="Views\DashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png" />
+    <None Remove="Views\DashBoard\Assets\290137_clipboard_document_file_list_report_icon.png" />
+    <None Remove="Views\DashBoard\Assets\7088618_byte_database_server_data_warehouse_icon.png" />
+    <None Remove="Views\DashBoard\Assets\box.png" />
+    <None Remove="Views\DashBoard\Assets\cart.png" />
+    <None Remove="Views\DashBoard\Assets\checklists.png" />
+    <None Remove="Views\DashBoard\Assets\customer.png" />
+    <None Remove="Views\DashBoard\Assets\dashboard.png" />
+    <None Remove="Views\DashBoard\Assets\logout.png" />
+    <None Remove="Views\DashBoard\Assets\out-of-stock.png" />
+    <None Remove="Views\DashBoard\Assets\search.png" />
+    <None Remove="Views\DashBoard\Assets\shopping-cart.png" />
+    <None Remove="Views\DashBoard\Assets\user.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +39,45 @@
 
   <ItemGroup>
     <Resource Include="fabric.png" />
+    <Resource Include="Views\DashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\290137_clipboard_document_file_list_report_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\7088618_byte_database_server_data_warehouse_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\box.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\cart.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\checklists.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\customer.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\dashboard.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\logout.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\out-of-stock.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\search.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\shopping-cart.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DashBoard\Assets\user.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
