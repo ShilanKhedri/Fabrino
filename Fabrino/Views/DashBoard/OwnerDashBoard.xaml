@@ -5,10 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fabrino.Views.DashBoard"
         mc:Ignorable="d"
-        Title="داشبورد صاحب" Height="600" Width="1000"
+        Title="داشبورد صاحب"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Height="600" Width="1000"
         Background="#FFEFEF"
-        FlowDirection="RightToLeft">
+        FlowDirection="RightToLeft"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+
 
     <Window.Resources>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
@@ -48,60 +53,71 @@
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
-        <StackPanel Background="#F48672" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Center">
-                <Ellipse Width="50" Height="50">
-                    <Ellipse.Fill>
-                        <ImageBrush ImageSource="Assets/user.png"/>
-                    </Ellipse.Fill>
-                </Ellipse>
+        <Grid Grid.Column="0" Background="#F48672" Margin="0,-18,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <!-- محتوای منو -->
+                <RowDefinition Height="Auto"/>
+                <!-- دکمه خروج -->
+            </Grid.RowDefinitions>
 
-                <StackPanel Margin="10,0,0,0">
-                    <TextBlock Text="علی احمدی" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="صاحب" Foreground="White" FontSize="12"/>
+            <!-- بخش بالا: عکس کاربر و دکمه‌ها -->
+            <StackPanel Grid.Row="0" Margin="10">
+                <!-- پروفایل کاربر -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10">
+                    <Ellipse Width="50" Height="50">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="Assets/user.png"/>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="علی احمدی" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="صاحب" Foreground="White" FontSize="12"/>
+                    </StackPanel>
                 </StackPanel>
+
+                <!-- دکمه‌های منو -->
+                <Button Style="{StaticResource MenuButtonStyle}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="Assets/dashboard.png" Width="20" Height="20" Margin="0,0,5,0"/>
+                        <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MenuButtonStyle}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="Assets/290137_clipboard_document_file_list_report_icon.png" Width="28" Height="30" Margin="0,0,5,0"/>
+                        <TextBlock Text="گزارش" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MenuButtonStyle}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="Assets/checklists.png" Width="39" Height="45" Margin="0,0,5,0"/>
+                        <TextBlock Text="موجودی" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MenuButtonStyle}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="Assets/cart.png" Width="31" Height="29" Margin="0,0,5,0"/>
+                        <TextBlock Text="خرید" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MenuButtonStyle}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="Assets/2849830_multimedia_options_setting_settings_gear_icon.png" Width="33" Height="27" Margin="0,0,5,0"/>
+                        <TextBlock Text="تنظیمات" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
 
-            <Button Style="{StaticResource MenuButtonStyle}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image Source="Assets/dashboard.png" Width="20" Height="20" Margin="0,0,5,0"/>
-                    <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-
-            <Button Style="{StaticResource MenuButtonStyle}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image Source="Assets/290137_clipboard_document_file_list_report_icon.png" Width="28" Height="30" Margin="0,0,5,0"/>
-                    <TextBlock Text="گزارش" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-
-            <Button Style="{StaticResource MenuButtonStyle}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image Source="Assets/checklists.png" Width="39" Height="45" Margin="0,0,5,0"/>
-                    <TextBlock Text="موجودی" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-
-            <Button Style="{StaticResource MenuButtonStyle}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image Source="Assets/cart.png" Width="31" Height="29" Margin="0,0,5,0"/>
-                    <TextBlock Text="خرید" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-
-            <Button Style="{StaticResource MenuButtonStyle}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image Source="Assets/2849830_multimedia_options_setting_settings_gear_icon.png" Width="33" Height="27" Margin="0,0,5,0"/>
-                    <TextBlock Text="تنظیمات" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-
-
-            <StackPanel VerticalAlignment="Bottom" Margin="10">
+            <!-- بخش پایین: خروج -->
+            <StackPanel Grid.Row="1" Margin="10">
                 <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32"/>
             </StackPanel>
-        </StackPanel>
+        </Grid>
 
         <!-- Main Area -->
         <Grid Grid.Column="1" Margin="10">
@@ -112,74 +128,99 @@
 
             <!-- Header -->
             <DockPanel Margin="10" VerticalAlignment="Top">
-                <TextBox Text="جستجو..." Width="150" HorizontalAlignment="Left" DockPanel.Dock="Right"
+                <TextBox Text="جستجو..." Width="150" HorizontalAlignment="Left" DockPanel.Dock="Right" LostFocus="AddText" GotFocus="RemoveText"
                          Margin="0,0,10,0" Padding="5" BorderBrush="#CCC" BorderThickness="1" Background="White"/>
                 <TextBlock Text="خوش آمدید علی" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Foreground="#F48672"/>
             </DockPanel>
 
             <!-- Dashboard Content -->
             <ScrollViewer Grid.Row="1">
-                <StackPanel>
-                    <WrapPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- بالا: کارت‌ها -->
+                        <RowDefinition Height="*"/>
+                        <!-- وسط: نمودار + مشتریان -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- پایین: نوار وضعیت -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0: کارت‌های بالا -->
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
                         <!-- Total Product -->
-                        <Border Width="160" Height="100" Background="White" Margin="10"
-                                CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                        <Border Grid.Column="0" Background="White" Margin="10"
+                    CornerRadius="15" Padding="20" BorderBrush="#DDD" BorderThickness="1" Height="150">
                             <StackPanel>
-                                <TextBlock Text="۳۴۵" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock Text="تعداد محصولات" FontSize="12" Foreground="#666" HorizontalAlignment="Center" Margin="0,0,0,15"/>
-                                <Image Source="Assets/box.png" Width="45" Height="34" HorizontalAlignment="Left" Margin="0,-86,5,0"/>
+                                <TextBlock Text="۳۴۵" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="تعداد محصولات" FontSize="16" Foreground="#666" HorizontalAlignment="Center"/>
+                                <Image Source="Assets/box.png" Width="68" Height="61" HorizontalAlignment="Left" Margin="0,-90,0,0"/>
                             </StackPanel>
                         </Border>
 
                         <!-- Total Order -->
-                        <Border Width="160" Height="100" Background="White" Margin="10"
-                                CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                        <Border Grid.Column="1" Background="White" Margin="10"
+                    CornerRadius="15" Padding="20" BorderBrush="#DDD" BorderThickness="1" Height="150">
                             <StackPanel>
-
-                                <TextBlock Text="۴۳۶۵" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="کل سفارش‌ها" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
-                                <Image Source="Assets/shopping-cart.png" Width="44" Height="33" HorizontalAlignment="Left" Margin="9,-53,0,0"/>
+                                <TextBlock Text="۴۳۶۵" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="کل سفارش‌ها" FontSize="16" Foreground="#666" HorizontalAlignment="Center"/>
+                                <Image Source="Assets/shopping-cart.png" Width="68" Height="61" HorizontalAlignment="Left" Margin="0,-90,0,0"/>
                             </StackPanel>
                         </Border>
 
                         <!-- Out of Stock -->
-                        <Border Width="160" Height="100" Background="White" Margin="10"
-                                CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+                        <Border Grid.Column="2" Background="White" Margin="10"
+                    CornerRadius="15" Padding="20" BorderBrush="#DDD" BorderThickness="1" Height="150">
                             <StackPanel>
-
-                                <TextBlock Text="۲۷" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="اتمام موجودی" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
-                                <Image Source="Assets/out-of-stock.png" Width="40" Height="38" HorizontalAlignment="Left" Margin="-1,-59,11,0"/>
+                                <TextBlock Text="۲۷" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="اتمام موجودی" FontSize="16" Foreground="#666" HorizontalAlignment="Center"/>
+                                <Image Source="Assets/out-of-stock.png" Width="68" Height="67" HorizontalAlignment="Left" Margin="0,-90,0,0"/>
                             </StackPanel>
                         </Border>
-                        <!-- Total Customers -->
-                        <Border Width="160" Height="100" Background="White" Margin="10"
-                                CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
-                            <StackPanel>
-                                <TextBlock Text="۵۶۷K" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="تعداد مشتریان" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
-                                <Image Source="Assets/customer.png" Width="40" Height="38" HorizontalAlignment="Left" Margin="-4,-59,11,0"/>
-                            </StackPanel>
-                        </Border>
+                    </Grid>
 
-                        <!-- Pie Chart Placeholder -->
-                        <Border Width="300" Height="200" Background="White" Margin="10,10,10,50"
-                                CornerRadius="10" BorderBrush="#DDD" BorderThickness="1">
+                    <!-- Row 1: نمودار و مشتریان -->
+                    <Grid Grid.Row="1" Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- نمودار -->
+                        <Border Grid.Column="0" Background="White" Margin="10"
+                    CornerRadius="15" Padding="20" BorderBrush="#DDD" BorderThickness="1" Height="300">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="[نمودار دایره‌ای]" HorizontalAlignment="Center" Foreground="#AAA"/>
+                                <TextBlock Text="[نمودار دایره‌ای]" FontSize="20" Foreground="#AAA" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                    </WrapPanel>
 
-                    <!-- Notification Bar -->
-                    <Border Background="#FFF8E1" BorderBrush="#FFECB3" BorderThickness="1"
-                            CornerRadius="10" Margin="10,0,10,10" Padding="10" Height="60">
-                        <TextBlock Text="سیستم با موفقیت به‌روزرسانی شد." Foreground="#795548"
-                                   FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"
-                                   HorizontalAlignment="Center" FontSize="14"/>
+                        <!-- Total Customers -->
+                        <Border Grid.Column="1" Background="White" Margin="10"
+                    CornerRadius="15" Padding="20" BorderBrush="#DDD" BorderThickness="1" Height="300">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="۵۶۷K" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="تعداد مشتریان" FontSize="16" Foreground="#666" HorizontalAlignment="Center"/>
+                                <Image Source="Assets/customer.png" Width="60" Height="50" HorizontalAlignment="Left" Margin="0,-90,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Row 2: نوار وضعیت -->
+                    <Border Grid.Row="2" Background="#FFF8E1" BorderBrush="#FFECB3" BorderThickness="1"
+                CornerRadius="10" Margin="10" Padding="15">
+                        <TextBlock Text="سیستم با موفقیت به‌روزرسانی شد."
+                       Foreground="#795548" FontWeight="Bold" TextAlignment="Center"
+                       VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
                     </Border>
-                </StackPanel>
+                </Grid>
             </ScrollViewer>
+
+
         </Grid>
     </Grid>
 </Window>

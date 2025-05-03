@@ -26,7 +26,7 @@ namespace Fabrino.Views.DashBoard
         private void RemoveText(object sender, RoutedEventArgs e)
         {
             var tb = sender as System.Windows.Controls.TextBox;
-            if (tb != null && tb.Text == "جستجو")
+            if (tb != null && tb.Text == "جستجو...")
             {
                 tb.Text = "";
                 tb.Foreground = System.Windows.Media.Brushes.Black;
@@ -38,11 +38,11 @@ namespace Fabrino.Views.DashBoard
             var tb = sender as System.Windows.Controls.TextBox;
             if (tb != null && string.IsNullOrWhiteSpace(tb.Text))
             {
-                tb.Text = "جستجو";
+                tb.Text = "جستجو...";
                 tb.Foreground = System.Windows.Media.Brushes.Gray;
             }
         }
-
+       
         private void TextBox_TextChanged(TextChangedEventArgs e)
         {
 

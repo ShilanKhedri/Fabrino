@@ -6,6 +6,7 @@ using Fabrino.Models;
 using System.Windows.Input;
 using Fabrino.Views;
 using Fabrino.Helpers;
+using Fabrino.Views.DashBoard;
 
 
 namespace Fabrino
@@ -94,7 +95,9 @@ namespace Fabrino
 
             if (authController.IsValidUser(user))
             {
-                MessageBox.Show("ورود موفق!", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
+                OwnerDashBoard dashboard = new OwnerDashBoard();
+                dashboard.Show();
+                this.Close();
             }
             else
             {
