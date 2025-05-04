@@ -13,12 +13,14 @@ namespace Fabrino
 {
     public partial class MainWindow : Window
     {
-        // connectioon string
-        private AuthController authController = new AuthController();
+        private IUserRepository repository;
+        private AuthController authController;
 
         public MainWindow()
         {
             InitializeComponent();
+            repository = new SqlUserRepository(); // اتصال واقعی
+            authController = new AuthController(repository);
         }
 
 
