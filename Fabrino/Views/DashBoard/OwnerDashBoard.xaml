@@ -43,6 +43,10 @@
                     <Setter Property="Background" Value="#F48672"/>
                 </Trigger>
             </Style.Triggers>
+            
+        </Style>
+        <Style x:Key="ActiveMenuButtonStyle" TargetType="Button" BasedOn="{StaticResource MenuButtonStyle}">
+            <Setter Property="Background" Value="#DADADA"/>
         </Style>
     </Window.Resources>
 
@@ -53,7 +57,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
-        <Grid Grid.Column="0" Background="#F48672" Margin="0,-18,0,0">
+        <Grid Grid.Column="0" Background="#F48672" Margin="0,10,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <!-- محتوای منو -->
@@ -77,11 +81,12 @@
                 </StackPanel>
 
                 <!-- دکمه‌های منو -->
-                <Button Style="{StaticResource MenuButtonStyle}">
+                <Button Style="{StaticResource ActiveMenuButtonStyle}">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image Source="Assets/dashboard.png" Width="20" Height="20" Margin="0,0,5,0"/>
                         <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
                     </StackPanel>
+                    
                 </Button>
 
                 <Button Style="{StaticResource MenuButtonStyle}">
