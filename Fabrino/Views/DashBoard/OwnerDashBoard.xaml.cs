@@ -23,6 +23,7 @@ namespace Fabrino.Views.DashBoard
         {
             InitializeComponent();
         }
+
         private void RemoveText(object sender, RoutedEventArgs e)
         {
             var tb = sender as System.Windows.Controls.TextBox;
@@ -47,5 +48,24 @@ namespace Fabrino.Views.DashBoard
         {
 
         }
+        private Button currentActiveButton;
+
+        private void SetActiveButton(Button clickedButton)
+        {
+            if (currentActiveButton != null)
+                currentActiveButton.Style = (Style)this.Resources["MenuButtonStyle"];
+
+            clickedButton.Style = (Style)this.Resources["ActiveMenuButtonStyle"];
+            currentActiveButton = clickedButton;
+        }
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            var clickedButton = sender as Button;
+            SetActiveButton(clickedButton);
+
+            // اینجا می‌تونی با توجه به دکمه انتخاب شده، محتوا را نیز تغییر دهی.
+        }
+
+
     }
 }
