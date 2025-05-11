@@ -78,6 +78,13 @@ namespace Fabrino.Views.DashBoard
                 tb.Foreground = Brushes.Gray;
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow exit = new MainWindow();
+            exit.Show();
+            this.Close();
+        }
     }
 
     public class Supplier

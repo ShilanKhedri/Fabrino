@@ -66,6 +66,18 @@ namespace Fabrino.Views.DashBoard
             // اینجا می‌تونی با توجه به دکمه انتخاب شده، محتوا را نیز تغییر دهی.
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Purchase purchase = new Purchase();
+            purchase.Show();
+            this.Close();
+        }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MainWindow exit = new MainWindow();
+            exit.Show();
+            this.Close();
+        }
     }
 }

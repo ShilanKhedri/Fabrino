@@ -8,8 +8,8 @@
         xmlns:local="clr-namespace:Fabrino"
         mc:Ignorable="d"
         Title="Login Page" Height="1080" Width="1920"
-        FlowDirection="LeftToRight">
-    <Grid FlowDirection="LeftToRight">
+        FlowDirection="RightToLeft">
+    <Grid FlowDirection="RightToLeft">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
@@ -45,7 +45,7 @@
                 <!-- متن "ورود به حساب کاربری" -->
                 <TextBlock 
                    Text="ورود به حساب کاربری" 
-                   Foreground="#F47458" FontFamily="Arial" FontSize="32" TextAlignment="Right" Margin="0,15,15,0" 
+                   Foreground="#F47458" FontFamily="Arial" FontSize="32" TextAlignment="Center" Margin="0,15,15,0" 
                    />
 
                 <!-- TextBox برای نام کاربری -->
@@ -53,8 +53,7 @@
                          GotFocus="RemoveText" 
                          LostFocus="AddText"
                          Text="نام کاربری" 
-                         FontFamily="Arial" FontSize="32" 
-                         TextAlignment="Right" Foreground="#9F9F9F" 
+                         FontFamily="Arial" FontSize="32" Foreground="#9F9F9F" 
                          BorderThickness="1" Background="#FFFAF4" 
                          Width="317" Height="56" 
                          Margin="0,76,0,20" 
@@ -72,7 +71,7 @@
              Margin="0,0,0,15" 
              HorizontalAlignment="Center"/>
 
-                <TextBlock TextAlignment="Right" Margin="0,10,30,40" ><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="رمز عبور خود را فراموش کرده‌اید؟"
+                <TextBlock Margin="15,10,30,40" ><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="رمز عبور خود را فراموش کرده‌اید؟"
                                                                                                                                             MouseLeftButtonDown="GoToForgotPassword"/></Hyperlink></TextBlock>
 
                 <Button Content="ورود" 
@@ -81,7 +80,7 @@
                         BorderThickness="0" 
                         Width="317" Height="56" 
                         Click="LoginButton_Click"/>
-                <TextBlock TextAlignment="Right" Margin="0,40,30,40"><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="حساب کاربری ندارید؟ ثبت نام در فابرینو" MouseLeftButtonDown="GoToRegister_Click"/></Hyperlink></TextBlock>
+                <TextBlock Margin="15,40,30,40"><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="حساب کاربری ندارید؟ ثبت نام در فابرینو" MouseLeftButtonDown="GoToRegister_Click"/></Hyperlink></TextBlock>
 
 
                 <!-- دکمه ورود -->

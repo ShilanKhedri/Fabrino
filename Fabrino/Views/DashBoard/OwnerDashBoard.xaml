@@ -103,7 +103,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Style="{StaticResource MenuButtonStyle}">
+                <Button Style="{StaticResource MenuButtonStyle}" Click="Button_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image Source="Assets/cart.png" Width="31" Height="29" Margin="0,0,5,0"/>
                         <TextBlock Text="خرید" VerticalAlignment="Center"/>
@@ -120,7 +120,7 @@
 
             <!-- بخش پایین: خروج -->
             <StackPanel Grid.Row="1" Margin="10">
-                <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32"/>
+                <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32" Click="Button_Click_1"/>
             </StackPanel>
         </Grid>
 
@@ -135,7 +135,7 @@
             <DockPanel Margin="10" VerticalAlignment="Top">
                 <TextBox Text="جستجو..." Width="150" HorizontalAlignment="Left" DockPanel.Dock="Right" LostFocus="AddText" GotFocus="RemoveText"
                          Margin="0,0,10,0" Padding="5" BorderBrush="#CCC" BorderThickness="1" Background="White"/>
-                <TextBlock Text="خوش آمدید علی" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Foreground="#F48672"/>
+                <TextBlock Text="خوش آمدید " FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Foreground="#F48672"/>
             </DockPanel>
 
             <!-- Dashboard Content -->
