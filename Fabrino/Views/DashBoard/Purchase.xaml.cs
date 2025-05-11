@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+
 namespace Fabrino.Views.DashBoard
 {
     public partial class Purchase : Window
@@ -78,6 +79,9 @@ namespace Fabrino.Views.DashBoard
                 tb.Foreground = Brushes.Gray;
             }
         }
+
+       
+
     }
 
     public class Supplier

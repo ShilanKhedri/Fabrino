@@ -81,7 +81,7 @@
                 </StackPanel>
 
                 <!-- دکمه‌های منو -->
-                <Button Style="{StaticResource ActiveMenuButtonStyle}">
+                <Button Style="{StaticResource ActiveMenuButtonStyle}" Click="Button_Click_1">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image Source="Assets/dashboard.png" Width="20" Height="20" Margin="0,0,5,0"/>
                         <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
@@ -103,7 +103,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Style="{StaticResource MenuButtonStyle}">
+                <Button Style="{StaticResource MenuButtonStyle}" Click="Button_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image Source="Assets/cart.png" Width="31" Height="29" Margin="0,0,5,0"/>
                         <TextBlock Text="خرید" VerticalAlignment="Center"/>
@@ -120,7 +120,7 @@
 
             <!-- بخش پایین: خروج -->
             <StackPanel Grid.Row="1" Margin="10">
-                <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32"/>
+                <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32" Click="Button_Click_1"/>
             </StackPanel>
         </Grid>
 

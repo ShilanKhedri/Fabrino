@@ -7,7 +7,7 @@ namespace Fabrino.Controllers
 {
     public class SignUpController
     {
-        private string connectionString = "Server=SHILAN;Database=Fabrino;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;";
+        private string connectionString = "Server=DESKTOP-QJTT0EG;Database=Fabrino;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;";
 
         public bool RegisterUser(UserModel user)
         {
