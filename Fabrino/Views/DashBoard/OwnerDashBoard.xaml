@@ -135,7 +135,7 @@
             <DockPanel Margin="10" VerticalAlignment="Top">
                 <TextBox Text="جستجو..." Width="150" HorizontalAlignment="Left" DockPanel.Dock="Right" LostFocus="AddText" GotFocus="RemoveText"
                          Margin="0,0,10,0" Padding="5" BorderBrush="#CCC" BorderThickness="1" Background="White"/>
-                <TextBlock Text="خوش آمدید علی" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Foreground="#F48672"/>
+                <TextBlock Text="خوش آمدید " FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Foreground="#F48672"/>
             </DockPanel>
 
             <!-- Dashboard Content -->

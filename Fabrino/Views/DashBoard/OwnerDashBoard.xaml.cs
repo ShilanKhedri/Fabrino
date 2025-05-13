@@ -73,10 +73,18 @@ namespace Fabrino.Views.DashBoard
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            Purchase purchase = new Purchase();
+            purchase.Show();
+            this.Close();
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MainWindow exit = new MainWindow();
+            exit.Show();
+            this.Close();
+        }
     }
 }
