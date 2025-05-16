@@ -115,7 +115,7 @@
 
             <!-- خروج -->
             <StackPanel Grid.Row="1" Margin="10">
-                <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32" Click="Button_Click"/>
+                <Button Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32" />
             </StackPanel>
         </Grid>
  <Grid Grid.Column="1" Margin="20">

@@ -22,7 +22,7 @@ namespace Fabrino.Views.DashBoard
         public Dashboard()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Uri("DashBoardPage.xaml", UriKind.Relative));
+            //MainFrame.Navigate(new Uri("DashBoardPage.xaml", UriKind.Relative));
         }
 
         private void DashboardButton_Click(object sender, RoutedEventArgs e)

@@ -1,30 +1,21 @@
-﻿using System;
-using Microsoft.Data.SqlClient;
-using System.Configuration;
+﻿using Fabrino.Models;
+using Microsoft.EntityFrameworkCore;
 
-public class SqlUserRepository : IUserRepository
+namespace Fabrino.Repositories
 {
-    private string connectionString = ConfigurationManager.ConnectionStrings["FabrinoConnection"].ConnectionString;
-
-    public bool IsValidUser(string username, string passwordHash)
+    public class SqlUserRepository : IUserRepository
     {
-        bool isValid = false;
+        private readonly AppDbContext _db;
 
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        public SqlUserRepository(AppDbContext db)
         {
-            conn.Open();
-
-            string query = "SELECT COUNT(*) FROM users WHERE username = @username AND password_hash = @password";
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@username", username);
-                cmd.Parameters.AddWithValue("@password", passwordHash);
-
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                isValid = count > 0;
-            }
+            _db = db;
         }
 
-        return isValid;
+        public bool IsValidUser(string username, string passwordHash)
+        {
+            return _db.Users
+                .Any(u => u.username == username && u.password_hash == passwordHash);
+        }
     }
 }

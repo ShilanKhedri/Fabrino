@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Fabrino.Views;
 using Fabrino.Helpers;
 using Fabrino.Views.DashBoard;
+using Fabrino.Repositories;
 
 
 namespace Fabrino
@@ -19,7 +20,7 @@ namespace Fabrino
         public MainWindow()
         {
             InitializeComponent();
-            repository = new SqlUserRepository(); // اتصال واقعی
+            repository = new SqlUserRepository(new AppDbContext()); // اتصال واقعی
             authController = new AuthController(repository);
         }
 
