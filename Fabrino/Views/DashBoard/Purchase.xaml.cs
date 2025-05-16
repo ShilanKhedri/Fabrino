@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+
 namespace Fabrino.Views.DashBoard
 {
     public partial class Purchase : Window
@@ -79,12 +80,8 @@ namespace Fabrino.Views.DashBoard
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow exit = new MainWindow();
-            exit.Show();
-            this.Close();
-        }
+       
+
     }
 
     public class Supplier

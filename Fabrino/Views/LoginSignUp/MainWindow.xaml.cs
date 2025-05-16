@@ -78,7 +78,7 @@ namespace Fabrino
             }
         }
 
-
+     
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string passwordHash = SecurityHelper.ComputeSha256Hash(PasswordTextBox.Password.Trim());

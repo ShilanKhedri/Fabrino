@@ -61,7 +61,8 @@
                          Text="نام کاربری" 
                          GotFocus="RemoveText" 
                          LostFocus="AddText" 
-                         TextAlignment="Right"/>
+                         TextAlignment="Right"
+                         MaxLength="15"/>
 
                 <!-- نام کامل -->
                 <TextBox x:Name="FullNameTextBox" 
@@ -73,7 +74,8 @@
                          Text="نام کامل" 
                          GotFocus="RemoveText" 
                          LostFocus="AddText" 
-                         TextAlignment="Right"/>
+                         TextAlignment="Right"
+                         MaxLength="18"/>
 
                 <!-- رمز عبور -->
                 <Grid Margin="0,15,0,15">
@@ -81,7 +83,8 @@
                                  Height="35" 
                                  FontFamily="Arial" 
                                  FontSize="16" 
-                                 PasswordChanged="PasswordBox_PasswordChanged"/>
+                                 PasswordChanged="PasswordBox_PasswordChanged"
+                                 MaxLength="8"/>
                     <TextBlock x:Name="PasswordPlaceholder" 
                                Text="رمز عبور" 
                                FontFamily="Arial" 
@@ -89,7 +92,7 @@
                                Foreground="Gray" 
                                IsHitTestVisible="False" 
                                VerticalAlignment="Center" 
-                               Margin="5,0,0,0" TextAlignment="Right"/>
+                               Margin="5,0,0,0" TextAlignment="Right" />
                 </Grid>
 
                 <!-- تکرار رمز عبور -->
@@ -98,7 +101,8 @@
                                  Height="35" 
                                  FontFamily="Arial" 
                                  FontSize="16" 
-                                 PasswordChanged="ConfirmPasswordBox_PasswordChanged"/>
+                                 PasswordChanged="ConfirmPasswordBox_PasswordChanged"
+                                 MaxLength="8"/>
                     <TextBlock x:Name="ConfirmPasswordPlaceholder" 
                                Text="تکرار رمز عبور" 
                                FontFamily="Arial" 
@@ -132,7 +136,8 @@
                          Text="پاسخ سوال امنیتی" 
                          GotFocus="RemoveText" 
                          LostFocus="AddText" 
-                         TextAlignment="Right"/>
+                         TextAlignment="Right"
+                         MaxLength="20"/>
 
                 <!-- دکمه‌ها -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">

@@ -57,13 +57,15 @@
                          BorderThickness="1" Background="#FFFAF4" 
                          Width="317" Height="56" 
                          Margin="0,76,0,20" 
-                         HorizontalAlignment="Center"/>
+                         HorizontalAlignment="Center"
+                          MaxLength="15" />
 
-                <!-- TextBox برای رمز عبور -->
+
                 <PasswordBox x:Name="PasswordTextBox" 
-                             GotFocus="RemovePassword" 
-             LostFocus="AddPassword"
+             GotFocus="RemovePassword" 
+             LostFocus="AddPassword"      
              Password="رمز عبور" 
+             MaxLength="8"
              FontFamily="Arial" FontSize="32" 
              Foreground="#9F9F9F" 
              BorderThickness="1" Background="#FFFAF4" 
@@ -82,12 +84,8 @@
                         Click="LoginButton_Click"/>
                 <TextBlock Margin="15,40,30,40"><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="حساب کاربری ندارید؟ ثبت نام در فابرینو" MouseLeftButtonDown="GoToRegister_Click"/></Hyperlink></TextBlock>
 
-
-                <!-- دکمه ورود -->
-
-                <!-- لینک "رمز عبور خود را فراموش کرده‌اید؟" -->
-
-                <!-- لینک "حساب کاربری ندارید؟ ثبت نام در فابرینو" -->
+                
+            
             </StackPanel>
         </Border>
     </Grid>
