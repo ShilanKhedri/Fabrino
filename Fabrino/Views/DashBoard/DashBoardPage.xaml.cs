@@ -10,28 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Fabrino.Views.DashBoard
 {
     /// <summary>
-    /// Interaction logic for Dashboard.xaml
+    /// Interaction logic for DashBoardPage.xaml
     /// </summary>
-    public partial class Dashboard : Window
+    public partial class DashBoardPage : Page
     {
-        public Dashboard()
+        public DashBoardPage()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Uri("DashBoardPage.xaml", UriKind.Relative));
-        }
-
-        private void DashboardButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
         }
     }
 }

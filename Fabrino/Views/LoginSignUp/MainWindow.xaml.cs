@@ -97,7 +97,7 @@ namespace Fabrino
 
             if (authController.IsValidUser(user))
             {
-                OwnerDashBoard dashboard = new OwnerDashBoard();
+                Dashboard dashboard = new Dashboard();
                 dashboard.Show();
                 this.Close();
             }

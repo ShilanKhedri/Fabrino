@@ -21,7 +21,7 @@ namespace Fabrino.Views.DashBoard
     {
         public OwnerDashBoard()
         {
-            InitializeComponent();
+            //InitializeComponent();
         }
 
         private void RemoveText(object sender, RoutedEventArgs e)
