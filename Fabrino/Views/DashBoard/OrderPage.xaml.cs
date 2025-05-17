@@ -10,18 +10,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Fabrino.Views.DashBoard
 {
     /// <summary>
-    /// Interaction logic for PurchaseOrder.xaml
+    /// Interaction logic for OrderPage.xaml
     /// </summary>
-    public partial class PurchaseOrder : Window
+    public partial class OrderPage : Page
     {
-        public PurchaseOrder()
+        public OrderPage()
         {
             InitializeComponent();
+        }
+        private void SubmitOrder_Click(object sender, RoutedEventArgs e)
+        {
+            // کد مربوط به ثبت سفارش
+            MessageBox.Show("سفارش با موفقیت ثبت شد!", "ثبت سفارش", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

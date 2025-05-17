@@ -1,0 +1,88 @@
+﻿<Page x:Class="Fabrino.Views.DashBoard.Purchase2Way"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Fabrino.Views.DashBoard"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="Purchase2Way">
+
+    <Page.Resources>
+        <!-- استفاده از استایل‌های اصلی از داشبورد -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#F1F1F1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F48672"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- عنوان صفحه -->
+        <TextBlock Grid.Row="0" 
+                   Text="مدیریت خرید" 
+                   FontSize="24" 
+                   FontWeight="Bold"
+                   Margin="20"
+                   HorizontalAlignment="Center"
+                   Foreground="#333333"/>
+
+        <!-- Container برای دکمه‌ها -->
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    >
+
+            <!-- دکمه ثبت سفارش -->
+            <Button x:Name="btnNewOrder" 
+                    Style="{StaticResource MenuButtonStyle}"
+                    Width="250"
+                    Click="btnNewOrder_Click">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                    <TextBlock Text="ثبت سفارش جدید" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+
+            <!-- دکمه لیست تأمین‌کنندگان -->
+            <Button x:Name="btnSuppliers" 
+                    Style="{StaticResource MenuButtonStyle}"
+                    Width="250"
+                    Click="btnSuppliers_Click">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                    <TextBlock Text="لیست تأمین‌کنندگان" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>
