@@ -57,5 +57,18 @@ namespace Fabrino.Views.DashBoard
             SetActiveButton(PurchaseButton); // اگه تابع SetActiveButton داری
             MainFrame.Navigate(new Purchase2Way());
         }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetActiveButton(SettingsButton); // اگه تابع SetActiveButton داری
+            MainFrame.Navigate(new SettingsPage());
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            MainWindow login = new MainWindow();
+            login.Show();
+        }
     }
 }
