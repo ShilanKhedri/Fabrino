@@ -65,7 +65,7 @@
              GotFocus="RemovePassword" 
              LostFocus="AddPassword"      
              Password="رمز عبور" 
-             MaxLength="8"
+             MaxLength="25"
              FontFamily="Arial" FontSize="32" 
              Foreground="#9F9F9F" 
              BorderThickness="1" Background="#FFFAF4" 

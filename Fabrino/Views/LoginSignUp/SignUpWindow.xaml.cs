@@ -1,18 +1,25 @@
 ﻿using Fabrino.Controllers;
 using Fabrino.Helpers;
 using Fabrino.Models;
+using Fabrino.Services;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Fabrino.Views
 {
     public partial class SignUpWindow : Window
     {
-        private readonly SignUpController signUpController = new SignUpController();
+        private readonly SignUpController _controller;
+        private readonly PasswordValidationService _passwordValidator;
+
 
         public SignUpWindow()
         {
             InitializeComponent();
+            _controller = new SignUpController();
+            _passwordValidator = new PasswordValidationService();
+
         }
         //registering user
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
@@ -22,51 +29,100 @@ namespace Fabrino.Views
             string password = PasswordBox.Password;
             string confirmPassword = ConfirmPasswordBox.Password;
             string securityAnswer = SecurityHelper.ComputeSha256Hash(SecurityAnswerTextBox.Text.Trim());
+            string question = (SecurityQuestionComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
 
 
-            ComboBoxItem selectedQuestion = SecurityQuestionComboBox.SelectedItem as ComboBoxItem;
-            string question = selectedQuestion != null ? selectedQuestion.Content.ToString() : "";
-
-            if (password != confirmPassword)
+            // اعتبارسنجی‌ها
+            if (!UserValidationService.ValidatePassword(password, confirmPassword))
             {
-                MessageBox.Show("رمز عبور و تکرار آن یکسان نیستند.");
+                MessageBox.Show("رمز عبور باید حداقل ۸ کاراکتر و با تکرار آن مطابقت داشته باشد!");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(fullname)
-                || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(securityAnswer)
-                || string.IsNullOrWhiteSpace(question))
+            if (!UserValidationService.ValidateUsername(username))
             {
-                MessageBox.Show("لطفاً همه‌ی فیلدها را پر کنید.");
+                MessageBox.Show("نام کاربری باید حداقل ۳ کاراکتر باشد!");
                 return;
             }
 
-            string passwordHash = SecurityHelper.ComputeSha256Hash(password);
+            if (!UserValidationService.ValidateSecurityQuestion(question))
+            {
+                MessageBox.Show("لطفاً یک سوال امنیتی انتخاب کنید!");
+                return;
+            }
+
+            if (!UserValidationService.ValidateSecurityAnswer(securityAnswer))
+            {
+                MessageBox.Show("پاسخ سوال امنیتی نمی‌تواند خالی باشد!");
+                return;
+            }
+
+            if (!UserValidationService.ValidateUsernameFormat(UsernameTextBox.Text.Trim()))
+            {
+                MessageBox.Show("نام کاربری فقط می‌تواند شامل حروف انگلیسی، اعداد و زیرخط باشد");
+                return;
+            }
 
             var user = new UserModel
             {
                 username = username,
                 full_name = fullname,
-                password_hash = passwordHash,
+                password_hash = SecurityHelper.ComputeSha256Hash(password),
                 security_question = question,
+                security_answer_hash = securityAnswer,
                 role = "owner",
-                security_answer_hash = securityAnswer
+                created_at = DateTime.Now
             };
 
-            bool success = signUpController.RegisterUser(user);
+            bool success = _controller.RegisterUser(user);
 
             if (success)
             {
-                
-                MainWindow main = new MainWindow();
-                this.Close();
-                main.Show(); 
                 MessageBox.Show("ثبت‌نام با موفقیت انجام شد!");
-
+                var mainWindow = new MainWindow();
+                mainWindow.Show();
+                this.Close();
             }
             else
             {
                 MessageBox.Show("خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.");
+            }
+        }
+
+        private void FullNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (FullNameTextBox.IsFocused)
+            {
+                bool isValid = UserValidationService.ValidatePersianName(FullNameTextBox.Text);
+                FullNameTextBox.BorderBrush = isValid ? Brushes.Gray : Brushes.Red;
+           
+            }
+        }
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            // نمایش/مخفی کردن placeholder
+            PasswordPlaceholder.Visibility = string.IsNullOrEmpty(PasswordBox.Password)
+                ? Visibility.Visible
+                : Visibility.Hidden;
+
+            // نمایش قدرت رمز عبور
+            var strength = _passwordValidator.CheckPasswordStrength(PasswordBox.Password);
+            PasswordStrengthText.Text = strength.GetDescription();
+            PasswordStrengthText.Foreground = strength.GetColor();
+        }
+
+        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ConfirmPasswordPlaceholder.Visibility = string.IsNullOrEmpty(ConfirmPasswordBox.Password)
+                ? Visibility.Visible
+                : Visibility.Hidden;
+
+            if (!string.IsNullOrEmpty(PasswordBox.Password) &&
+               !string.IsNullOrEmpty(ConfirmPasswordBox.Password))
+            {
+                MatchPasswordsText.Visibility = PasswordBox.Password == ConfirmPasswordBox.Password
+                    ? Visibility.Collapsed
+                    : Visibility.Visible;
             }
         }
 
@@ -102,14 +158,15 @@ namespace Fabrino.Views
             }
         }
 
-        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            PasswordPlaceholder.Visibility = string.IsNullOrEmpty(PasswordBox.Password) ? Visibility.Visible : Visibility.Hidden;
-        }
+        
 
-        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        private void UsernameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ConfirmPasswordPlaceholder.Visibility = string.IsNullOrEmpty(ConfirmPasswordBox.Password) ? Visibility.Visible : Visibility.Hidden;
+            if (UsernameTextBox.IsFocused) // فقط وقتی کاربر تایپ می‌کند
+            {
+                UserValidationService.ValidateUsernameRealTime(UsernameTextBox);
+            }
         }
+        
     }
 }

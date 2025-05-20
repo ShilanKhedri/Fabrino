@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Fabrino.Models;
+using System.Windows;
 
 namespace Fabrino.Views.DashBoard
 {
@@ -19,10 +21,43 @@ namespace Fabrino.Views.DashBoard
     /// </summary>
     public partial class Dashboard : Window
     {
-        public Dashboard()
+        private readonly AppDbContext _dbContext;
+        private UserModel _currentUser;
+        IUserRepository _userRepository;
+
+        public Dashboard(UserModel user)
         {
             InitializeComponent();
-            //MainFrame.Navigate(new Uri("DashBoardPage.xaml", UriKind.Relative));
+            _dbContext = new AppDbContext();
+            _userRepository = new SqlUserRepository(_dbContext);
+            _currentUser = user;
+            LoadUserData(user);
+            this.Closed += Dashboard_Closed;
+        }
+
+        private void Dashboard_Closed(object sender, EventArgs e)
+        {
+            _userRepository.UpdateLastLogin(_currentUser.username);
+
+        }
+
+        private void LoadUserData(UserModel user)
+        {
+            if (user != null)
+            {
+                Dispatcher.Invoke(() => {
+                    // تنظیم اطلاعات در Status Bar
+                    UsernameTextBlock.Text = user.full_name;
+                    UserRoleTextBlock.Text = user.role;
+                    LastLoginTextBlock.Text = user.last_login.HasValue
+                        ? $"آخرین ورود: {user.last_login.Value.ToString("yyyy/MM/dd HH:mm")}"
+                        : "اولین ورود";
+
+                    // تنظیم اطلاعات در نوار کناری
+                    SidebarUsernameText.Text = user.full_name;
+                    SidebarUserRoleText.Text = user.role;
+                });
+            }
         }
 
         private void SetActiveButton(Button activeButton)
@@ -40,8 +75,9 @@ namespace Fabrino.Views.DashBoard
 
         private void DashboardButton_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new DashBoardPage());
             SetActiveButton(DashboardButton);
+            MainFrame.Navigate(new DashBoardPage());
+            
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -54,8 +90,16 @@ namespace Fabrino.Views.DashBoard
 
         private void PurchaseButton_Click(object sender, RoutedEventArgs e)
         {
-            SetActiveButton(PurchaseButton); // اگه تابع SetActiveButton داری
+            SetActiveButton(PurchaseButton); 
             MainFrame.Navigate(new Purchase2Way());
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow login = new MainWindow();
+            _userRepository.UpdateLastLogin(_currentUser.username);
+            login.Show();
+            this.Close();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
+
 namespace Fabrino.Helpers
 {
     public static class SecurityHelper

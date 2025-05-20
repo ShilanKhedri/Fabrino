@@ -7,7 +7,6 @@ using System.Windows.Input;
 using Fabrino.Views;
 using Fabrino.Helpers;
 using Fabrino.Views.DashBoard;
-using Fabrino.Repositories;
 
 
 namespace Fabrino
@@ -20,7 +19,8 @@ namespace Fabrino
         public MainWindow()
         {
             InitializeComponent();
-            repository = new SqlUserRepository(new AppDbContext()); // اتصال واقعی
+            var dbContext = new AppDbContext();
+            repository = new SqlUserRepository(dbContext);
             authController = new AuthController(repository);
         }
 
@@ -79,32 +79,28 @@ namespace Fabrino
             }
         }
 
-     
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string passwordHash = SecurityHelper.ComputeSha256Hash(PasswordTextBox.Password.Trim());
-            var user = new UserModel
-            {
-                username = UsernameTextBox.Text.Trim(),
-                password_hash = passwordHash
-            };
+            string username = UsernameTextBox.Text.Trim();
 
-            if (string.IsNullOrEmpty(user.username) || string.IsNullOrEmpty(user.password_hash))
-
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(passwordHash))
             {
-                MessageBox.Show("لطفاً نام کاربری و رمز عبور را وارد کنید.", "خطا", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("لطفاً نام کاربری و رمز عبور را وارد کنید.");
                 return;
             }
 
-            if (authController.IsValidUser(user))
+            if (authController.Login(username, passwordHash))
             {
-                Dashboard dashboard = new Dashboard();
+                var user = repository.GetUserByUsername(username);
+                var dashboard = new Dashboard(user);
                 dashboard.Show();
                 this.Close();
             }
             else
             {
-                MessageBox.Show("نام کاربری یا رمز عبور اشتباه است!", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("نام کاربری یا رمز عبور اشتباه است!");
             }
         }
     }

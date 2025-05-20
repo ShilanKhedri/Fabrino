@@ -1,6 +1,7 @@
 ﻿using Fabrino.Models;
 using Microsoft.EntityFrameworkCore;
 using Fabrino.Models; // مسیر کلاس‌های مدل
+using System.Diagnostics;
 
 public class AppDbContext : DbContext
 {
@@ -14,5 +15,13 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(@"Server=.;Database=Fabrino;Trusted_Connection=True;TrustServerCertificate=True;");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // تنظیمات اضافی برای مدل
+        modelBuilder.Entity<UserModel>()
+            .Property(u => u.last_login)
+            .HasColumnType("datetime2");
     }
 }
