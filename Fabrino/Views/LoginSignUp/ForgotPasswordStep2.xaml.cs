@@ -1,59 +1,69 @@
 ﻿using System.Windows;
-using Microsoft.Data.SqlClient;
-using System.Configuration;
-using Fabrino.Helpers;
 using Fabrino.Controllers;
+using Fabrino.Helpers;
 
 namespace Fabrino.Views
 {
     public partial class ForgotPasswordStep2 : Window
     {
-        string username;
-        public ForgotPasswordStep2(string user, string question)
+        private readonly string _username;
+        private readonly ForgotPasswordController _controller;
+
+        public ForgotPasswordStep2(string username, string question)
         {
             InitializeComponent();
-            username = user;
-            AnswerTextBox.Text = question;
-            
+            _username = username;
+            _controller = new ForgotPasswordController(); // ایجاد کنترلر EF
+
+            AnswerTextBox.Text = question; // نمایش سوال امنیتی
             
         }
 
-
         private void RemoveText(object sender, RoutedEventArgs e)
         {
-            var tb = sender as System.Windows.Controls.TextBox;
-            if (tb != null && tb.Text == "پاسخ")
+            if (QuestionTextBox.Text == "پاسخ")
             {
-                tb.Text = "";
-                tb.Foreground = System.Windows.Media.Brushes.Black;
+                QuestionTextBox.Text = "";
+                QuestionTextBox.Foreground = System.Windows.Media.Brushes.Black;
             }
         }
 
         private void AddText(object sender, RoutedEventArgs e)
         {
-            var tb = sender as System.Windows.Controls.TextBox;
-            if (tb != null && string.IsNullOrWhiteSpace(tb.Text))
+            if (string.IsNullOrWhiteSpace(AnswerTextBox.Text))
             {
-                tb.Text = "پاسخ";
-                tb.Foreground = System.Windows.Media.Brushes.Gray;
+                QuestionTextBox.Text = "پاسخ";
+                QuestionTextBox.Foreground = System.Windows.Media.Brushes.Gray;
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            string answer = QuestionTextBox.Text;
-            var controller = new ForgotPasswordController();
+            string answer = QuestionTextBox.Text.Trim();
 
-            if (controller.ValidateSecurityAnswer(username, answer))
+            if (string.IsNullOrWhiteSpace(answer) || answer == "پاسخ")
             {
-                ForgotPasswordStep3 step3 = new ForgotPasswordStep3(username);
+                MessageBox.Show("لطفاً پاسخ سوال امنیتی را وارد کنید.");
+                return;
+            }
+
+            bool isValid = _controller.ValidateSecurityAnswer(_username, answer);
+
+            if (isValid)
+            {
+                ForgotPasswordStep3 step3 = new ForgotPasswordStep3(_username);
                 step3.Show();
                 this.Close();
             }
             else
             {
-                MessageBox.Show("پاسخ نادرست است.");
+                MessageBox.Show("پاسخ نادرست است. لطفاً مجدداً تلاش کنید.");
             }
+        }
+
+        private void QuestionTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            
         }
     }
 }

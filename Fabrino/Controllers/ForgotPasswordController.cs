@@ -1,65 +1,45 @@
-﻿using System;
-using System.Configuration;
-using Microsoft.Data.SqlClient;
+﻿using Fabrino.Models;
 using Fabrino.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fabrino.Controllers
 {
     public class ForgotPasswordController
     {
-        private string connectionString;
+        private readonly AppDbContext _db;
 
         public ForgotPasswordController()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["FabrinoConnection"]?.ConnectionString;
+            _db = new AppDbContext(); 
         }
 
         public string GetSecurityQuestion(string username)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT security_question FROM users WHERE Username = @Username";
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Username", username);
-                connection.Open();
-
-                var result = cmd.ExecuteScalar();
-                return result?.ToString();
-            }
+            return _db.Users
+                .Where(u => u.username == username)
+                .Select(u => u.security_question)
+                .FirstOrDefault();
         }
 
         public bool ValidateSecurityAnswer(string username, string answer)
         {
             string hashedAnswer = SecurityHelper.ComputeSha256Hash(answer);
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT COUNT(*) FROM users WHERE username = @Username AND security_answer_hash = @Answer";
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Answer", hashedAnswer);
-                connection.Open();
-
-                int count = (int)cmd.ExecuteScalar();
-                return count > 0;
-            }
+            return _db.Users
+                .Any(u => u.username == username &&
+                          u.security_answer_hash == hashedAnswer);
         }
 
         public bool ResetPassword(string username, string newPassword)
         {
-            string hashedPassword = SecurityHelper.ComputeSha256Hash(newPassword);
+            var user = _db.Users
+                .FirstOrDefault(u => u.username == username);
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "UPDATE users SET password_hash = @Password WHERE Username = @Username";
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Password", hashedPassword);
-                cmd.Parameters.AddWithValue("@Username", username);
-                connection.Open();
+            if (user == null)
+                return false;
 
-                int rows = cmd.ExecuteNonQuery();
-                return rows > 0;
-            }
+            user.password_hash = SecurityHelper.ComputeSha256Hash(newPassword);
+            return _db.SaveChanges() > 0;
         }
     }
 }

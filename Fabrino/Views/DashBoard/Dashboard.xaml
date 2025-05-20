@@ -53,12 +53,16 @@
     <DockPanel FlowDirection="LeftToRight">
         <!-- Status Bar -->
         <Border DockPanel.Dock="Bottom" Background="#FFF8E1" BorderBrush="#FFECB3" BorderThickness="1"
-                CornerRadius="10" Margin="10" Padding="10">
+        CornerRadius="10" Margin="10" Padding="10">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Text="کاربر: علی احمدی | " Foreground="#795548" FontSize="14"/>
-                <TextBlock Text="آخرین ورود: ۱۴۰۴/۰۲/۲۳ ۱۹:۰۳ | " Foreground="#795548" FontSize="14"/>
+                <TextBlock x:Name="UsernameTextBlock" Text="{Binding UserFullName}" Foreground="#795548" FontSize="14"/>
+                <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
+                <TextBlock x:Name="UserRoleTextBlock" Text="{Binding UserRole}" Foreground="#795548" FontSize="14"/>
+                <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
+                <TextBlock x:Name="LastLoginTextBlock"  Foreground="#795548" FontSize="14"/>
+                <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
                 <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='تاریخ: {0:yyyy/MM/dd HH:mm}'}" 
-                           Foreground="#795548" FontSize="14"/>
+                   Foreground="#795548" FontSize="14"/>
             </StackPanel>
         </Border>
 
@@ -73,12 +77,14 @@
             <StackPanel Grid.Row="0" Margin="10">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10">
                     <StackPanel Margin="10,0,0,0">
-                        <TextBlock Text="علی احمدی" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                        <TextBlock Text="صاحب" Foreground="White" FontSize="12"/>
+                        <TextBlock x:Name="SidebarUsernameText" Text="{Binding UserFullName}" 
+                   Foreground="White" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock x:Name="SidebarUserRoleText" Text="{Binding UserRole}" 
+                   Foreground="White" FontSize="12"/>
                     </StackPanel>
                     <Ellipse Width="50" Height="50">
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="Assets/user.png"/>
+                            <ImageBrush ImageSource="Assets/user.png" />
                         </Ellipse.Fill>
                     </Ellipse>
                 </StackPanel>

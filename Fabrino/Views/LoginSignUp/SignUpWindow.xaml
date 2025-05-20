@@ -53,6 +53,7 @@
 
                 <!-- نام کاربری -->
                 <TextBox x:Name="UsernameTextBox" 
+                         TextChanged="UsernameTextBox_TextChanged"
                          Margin="0,15,0,15" 
                          Height="35" 
                          FontFamily="Arial" 
@@ -66,6 +67,7 @@
 
                 <!-- نام کامل -->
                 <TextBox x:Name="FullNameTextBox" 
+                         TextChanged="FullNameTextBox_TextChanged"
                          Margin="0,15,0,15" 
                          Height="35" 
                          FontFamily="Arial" 
@@ -78,40 +80,60 @@
                          MaxLength="18"/>
 
                 <!-- رمز عبور -->
-                <Grid Margin="0,15,0,15">
+                <!-- رمز عبور -->
+                <Grid Margin="0,15,0,5">
+                    <!-- Margin پایین را کاهش دادیم -->
                     <PasswordBox x:Name="PasswordBox" 
-                                 Height="35" 
-                                 FontFamily="Arial" 
-                                 FontSize="16" 
-                                 PasswordChanged="PasswordBox_PasswordChanged"
-                                 MaxLength="8"/>
+                 Height="35" 
+                 FontFamily="Arial" 
+                 FontSize="16" 
+                 PasswordChanged="PasswordBox_PasswordChanged"
+                 MaxLength="25" HorizontalAlignment="Right" Width="450"/>
                     <TextBlock x:Name="PasswordPlaceholder" 
-                               Text="رمز عبور" 
-                               FontFamily="Arial" 
-                               FontSize="16" 
-                               Foreground="Gray" 
-                               IsHitTestVisible="False" 
-                               VerticalAlignment="Center" 
-                               Margin="5,0,0,0" TextAlignment="Right" />
+               Text="رمز عبور" 
+               FontFamily="Arial" 
+               FontSize="16" 
+               Foreground="Gray" 
+               IsHitTestVisible="False" 
+               VerticalAlignment="Center" 
+               Margin="5,0,0,0" 
+               TextAlignment="Right"/>
                 </Grid>
 
+                <!-- نمایش قدرت رمز عبور -->
+                <TextBlock x:Name="PasswordStrengthText"
+           Margin="0,0,0,15"
+           FontSize="12"
+           HorizontalAlignment="Right"
+           FontFamily="Arial"/>
+
                 <!-- تکرار رمز عبور -->
-                <Grid Margin="0,15,0,15">
+                <Grid Margin="0,5,0,15">
+                    <!-- Margin بالا را کاهش دادیم -->
                     <PasswordBox x:Name="ConfirmPasswordBox" 
-                                 Height="35" 
-                                 FontFamily="Arial" 
-                                 FontSize="16" 
-                                 PasswordChanged="ConfirmPasswordBox_PasswordChanged"
-                                 MaxLength="8"/>
+                 Height="35" 
+                 FontFamily="Arial" 
+                 FontSize="16" 
+                 PasswordChanged="ConfirmPasswordBox_PasswordChanged"
+                 MaxLength="25"/>
                     <TextBlock x:Name="ConfirmPasswordPlaceholder" 
-                               Text="تکرار رمز عبور" 
-                               FontFamily="Arial" 
-                               FontSize="16" 
-                               Foreground="Gray" 
-                               IsHitTestVisible="False" 
-                               VerticalAlignment="Center" 
-                               Margin="5,0,0,0" TextAlignment="Right"/>
+               Text="تکرار رمز عبور" 
+               FontFamily="Arial" 
+               FontSize="16" 
+               Foreground="Gray" 
+               IsHitTestVisible="False" 
+               VerticalAlignment="Center" 
+               Margin="5,0,0,0" 
+               TextAlignment="Right"/>
                 </Grid>
+                <TextBlock x:Name="MatchPasswordsText"
+           Margin="0,5,0,0"
+           FontSize="12"
+           HorizontalAlignment="Right"
+           FontFamily="Arial"
+           Foreground="Red"
+           Visibility="Collapsed"
+           Text="رمزها مطابقت ندارند!"/>
 
                 <!-- سوال امنیتی -->
                 <ComboBox x:Name="SecurityQuestionComboBox" 
