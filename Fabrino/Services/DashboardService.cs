@@ -15,10 +15,10 @@ public class DashboardService
     {
         return new DashboardData
         {
-            ProductCount = _db.Fabrics.Count(),
-            TotalOrders = _db.Orders.Count(),
-            OutOfStockItems = _db.Fabrics.Count(p => p.Quantity <= 0),
-            CustomerCount = _db.Customers.Count()
+            ProductCount = _db.Fabric.Count(),
+            TotalOrders = _db.Order.Count(),
+            OutOfStockItems = _db.Fabric.Count(p => p.Quantity <= 0),
+            CustomerCount = _db.Customer.Count()
         };
     }
 }

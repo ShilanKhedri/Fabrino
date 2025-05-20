@@ -70,7 +70,7 @@ namespace Fabrino.Views
                 password_hash = SecurityHelper.ComputeSha256Hash(password),
                 security_question = question,
                 security_answer_hash = securityAnswer,
-                role = "owner",
+                role = "مالک",
                 created_at = DateTime.Now
             };
 

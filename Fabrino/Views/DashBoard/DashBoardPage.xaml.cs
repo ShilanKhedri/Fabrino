@@ -2,25 +2,28 @@
 using Fabrino.Services;
 using System.Windows.Controls;
 
-public partial class DashBoardPage : Page
+namespace Fabrino.Views.DashBoard
 {
-    private readonly DashboardService _dashboardService;
-
-    public DashBoardPage()
+    public partial class DashBoardPage : Page
     {
-        //InitializeComponent();
-        _dashboardService = new DashboardService(new AppDbContext());
-        LoadDashboardData();
-    }
+        private readonly DashboardService _dashboardService;
 
-    private void LoadDashboardData()
-    {
-        var data = _dashboardService.GetDashboardData();
+        public DashBoardPage()
+        {
+            InitializeComponent();
+            _dashboardService = new DashboardService(new AppDbContext());
+            LoadDashboardData();
+        }
 
-        // تنظیم مقادیر در UI
-        /*ProductCountText.Text = data.ProductCount.ToString();
-        TotalOrdersText.Text = data.TotalOrders.ToString();
-        OutOfStockText.Text = data.OutOfStockItems.ToString();
-        CustomerCountText.Text = data.CustomerCount.ToString("N0") + "K"; // فرمت هزارگان*/
+        private void LoadDashboardData()
+        {
+            var data = _dashboardService.GetDashboardData();
+
+            // تنظیم مقادیر در UI
+            ProductCountText.Text = data.ProductCount.ToString();
+            TotalOrdersText.Text = data.TotalOrders.ToString();
+            OutOfStockText.Text = data.OutOfStockItems.ToString();
+            CustomerCountText.Text = data.CustomerCount.ToString("N0") ; // فرمت هزارگان
+        }
     }
 }
