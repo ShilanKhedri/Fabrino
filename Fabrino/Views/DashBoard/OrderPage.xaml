@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="800"
-      Title="OrderPage">
+      Title="OrderPage"
+      FlowDirection="RightToLeft">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -41,15 +42,16 @@
 
                     <!-- فیلدهای ورودی -->
                     <Label Content=":نام کالا" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="ProductName" 
-          DisplayMemberPath="Name"
-          SelectedValuePath="Id"
-          FontSize="14" 
-          Margin="0,0,0,10" 
-          Height="30"/>
+                    <TextBox x:Name="ProductName" FontSize="14" Margin="0,0,0,10" Height="30"/>
 
-                    <Label Content=":تعداد" HorizontalAlignment="Right"/>
-                    <TextBox x:Name="Quantity" FontSize="14" Margin="0,0,0,10" Height="30"/>
+                    <Label Content="تعداد:"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBox x:Name="QuantityBox" Width="60" Text="1" FontSize="14" VerticalContentAlignment="Center"/>
+                        <StackPanel>
+                            <Button Content="▲" Click="IncreaseQuantity_Click" Padding="0" Height="18"/>
+                            <Button Content="▼" Click="DecreaseQuantity_Click" Padding="0" Height="18"/>
+                        </StackPanel>
+                    </StackPanel>
 
                     <Label Content=":قیمت واحد" HorizontalContentAlignment="Right"/>
                     <TextBox x:Name="UnitPrice" FontSize="14" Margin="0,0,0,10" Height="30"/>
@@ -67,10 +69,14 @@
                     <TextBlock Text="اطلاعات تامین‌کننده" FontSize="18" FontWeight="Bold" Margin="0,0,0,10" TextAlignment="Right"/>
 
                     <!-- فیلدهای ورودی -->
-                    <Label Content=":نام تامین‌کننده" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="SupplierName" FontSize="14" Margin="0,0,0,10" Height="30"/>
-
-                    <Label Content=":شماره تماس" HorizontalAlignment="Right"/>
+                    <Label Content="نام تامین‌کننده:"/>
+                    <ComboBox x:Name="SupplierName" SelectionChanged="SupplierName_SelectionChanged"
+          FontSize="14" Margin="0,0,0,10" Height="30">
+                        <ComboBoxItem Content="تامین‌کننده X"/>
+                        <ComboBoxItem Content="تامین‌کننده Y"/>
+                        <ComboBoxItem Content="➕ افزودن تامین‌کننده جدید" Tag="add"/>
+                    </ComboBox>
+                    <Label Content="شماره تماس:"/>
                     <TextBox x:Name="SupplierPhone" FontSize="14" Margin="0,0,0,10" Height="30"/>
 
                     <Label Content=":آدرس" HorizontalAlignment="Right"/>

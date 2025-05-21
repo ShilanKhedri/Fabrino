@@ -113,7 +113,7 @@
                         <Image Source="Assets/cart.png" Width="31" Height="29"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="SettingsButton" Style="{StaticResource MenuButtonStyle}"  Height="46">
+                <Button x:Name="SettingsButton" Style="{StaticResource MenuButtonStyle}"  Height="46" Click="SettingsButton_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="تنظیمات" VerticalAlignment="Center"/>
                         <Image Source="Assets/2849830_multimedia_options_setting_settings_gear_icon.png" Width="33" Height="27"/>
