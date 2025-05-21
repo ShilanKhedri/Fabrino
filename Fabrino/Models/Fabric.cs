@@ -1,4 +1,6 @@
-﻿public class Fabric
+﻿using Fabrino.Models;
+
+public class Fabric
 {
     public int FabricID { get; set; }
     public string Name { get; set; }
@@ -9,4 +11,5 @@
     public decimal PricePerMeter { get; set; }
     public int SupplierID { get; set; }
     public Supplier Supplier { get; set; }
+    public List<PurchaseOrderItem> PurchaseOrderItems { get; set; } = new List<PurchaseOrderItem>();
 }
