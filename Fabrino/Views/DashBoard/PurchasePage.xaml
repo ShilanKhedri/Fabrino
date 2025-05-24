@@ -19,6 +19,7 @@
                          Foreground="Gray"
                          GotFocus="SearchBox_GotFocus"
                          LostFocus="SearchBox_LostFocus"
+                         TextChanged="SearchBox_TextChanged"
                          Padding="8"
                          FontSize="14"
                          BorderBrush="#CCC" BorderThickness="1" Background="White"/>
@@ -28,7 +29,9 @@
                           Width="167"
                           Padding="5"
                           FontSize="14"
-                          SelectedIndex="0" Margin="10,0,0,0">
+                          SelectedIndex="0" 
+                          SelectionChanged="SortComboBox_SelectionChanged"
+                          Margin="10,0,0,0">
                     <ComboBoxItem Content="مرتب‌سازی بر اساس نام"/>
                     <ComboBoxItem Content="مرتب‌سازی بر اساس شماره تماس"/>
                     <ComboBoxItem Content="مرتب‌سازی بر اساس ایمیل"/>
@@ -39,7 +42,9 @@
                           Width="150"
                           Padding="5"
                           FontSize="14"
-                          SelectedIndex="0" Margin="10,0,0,0">
+                          SelectedIndex="0" 
+                          SelectionChanged="FilterComboBox_SelectionChanged"
+                          Margin="10,0,0,0">
                     <ComboBoxItem Content="همه تامین‌کننده‌ها"/>
                     <ComboBoxItem Content="داخلی"/>
                     <ComboBoxItem Content="خارجی"/>
@@ -53,14 +58,48 @@
                       CanUserAddRows="False"
                       Margin="0,10,0,0"
                       BorderBrush="#DDD" BorderThickness="1"
-                      FontSize="14">
+                      FontSize="14"
+                      SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="نام تامین‌کننده" Binding="{Binding Name}" Width="*"/>
                     <DataGridTextColumn Header="شماره تماس" Binding="{Binding Phone}" Width="*"/>
                     <DataGridTextColumn Header="ایمیل" Binding="{Binding Email}" Width="*"/>
-                    <DataGridTextColumn Header="نوع" Binding="{Binding Type}" Width="*"/>
+                    <DataGridTextColumn Header="آدرس" Binding="{Binding Address}" Width="2*"/>
+
+                    <!-- ستون عملیات -->
+                    <DataGridTemplateColumn Header="عملیات" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="ویرایش" 
+                                            Margin="5,0" 
+                                            Padding="10,3"
+                                            Background="#FFC107"
+                                            Foreground="White"
+                                            Click="EditSupplier_Click"/>
+
+                                    <Button Content="حذف" 
+                                            Margin="5,0" 
+                                            Padding="10,3"
+                                            Background="#F44336"
+                                            Foreground="White"
+                                            Click="DeleteSupplier_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+
+            <!-- دکمه افزودن جدید -->
+            <Button Content="+ افزودن تامین‌کننده جدید"
+                    HorizontalAlignment="Left"
+                    Margin="0,20,0,0"
+                    Padding="15,5"
+                    Background="#4CAF50"
+                    Foreground="White"
+                    FontSize="14"
+                    Click="AddNewSupplier_Click"/>
         </StackPanel>
     </ScrollViewer>
 </Page>

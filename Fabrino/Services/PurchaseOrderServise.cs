@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace Fabrino.Services
 {
@@ -36,20 +37,23 @@ namespace Fabrino.Services
                 order.OrderDate = DateTime.Now;
                 order.TotalAmount = items.Sum(i => i.TotalPrice);
 
-                _context.PurchaseOrders.Add(order);
+                _context.PurchaseOrder.Add(order);
                 _context.SaveChanges();
 
                 foreach (var item in items)
                 {
                     item.PurchaseOrderID = order.PurchaseOrderID;
-                    _context.PurchaseOrderItems.Add(item);
+                    _context.PurchaseOrderItem.Add(item);
                 }
 
                 _context.SaveChanges();
                 transaction.Commit();
             }
-            catch
+            catch(Exception ex)
             {
+                MessageBox.Show($"Message: {ex.Message}");
+                MessageBox.Show($"Inner Message: {ex.InnerException.Message}");
+
                 transaction.Rollback();
                 throw;
             }
@@ -57,7 +61,7 @@ namespace Fabrino.Services
 
         public PurchaseOrder GetOrderByNumber(string orderNumber)
         {
-            return _context.PurchaseOrders
+            return _context.PurchaseOrder
                 .Include(po => po.Supplier)
                 .Include(po => po.PurchaseOrderItems)
                     .ThenInclude(poi => poi.Fabric)

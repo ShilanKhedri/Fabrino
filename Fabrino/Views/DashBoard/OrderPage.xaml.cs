@@ -20,6 +20,21 @@ namespace Fabrino.Views.DashBoard
             _orderService = new PurchaseOrderService(new AppDbContext());
             LoadData();
         }
+        private void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(QuantityBox.Text, out int current))
+            {
+                QuantityBox.Text = (current + 1).ToString();
+            }
+        }
+
+        private void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(QuantityBox.Text, out int current) && current > 0)
+            {
+                QuantityBox.Text = (current - 1).ToString();
+            }
+        }
 
         private void LoadData()
         {
@@ -58,7 +73,7 @@ namespace Fabrino.Views.DashBoard
                 var orderItem = new PurchaseOrderItem
                 {
                     FabricID = (int)ProductName.SelectedValue,
-                    Quantity = decimal.Parse(Quantity.Text),
+                    Quantity = decimal.Parse(QuantityBox.Text),
                     UnitPrice = decimal.Parse(UnitPrice.Text)
                 };
 
@@ -70,7 +85,7 @@ namespace Fabrino.Views.DashBoard
                     MessageBoxImage.Information);
 
                 // ریست فرم
-                Quantity.Text = "";
+                QuantityBox.Text = "";
                 UnitPrice.Text = "";
             }
             catch (Exception ex)
@@ -82,14 +97,14 @@ namespace Fabrino.Views.DashBoard
             }
         }
 
-        private void SearchOrder_Click(object sender, RoutedEventArgs e)
+       /* private void SearchOrder_Click(object sender, RoutedEventArgs e)
         {
             var order = _orderService.GetOrderByNumber(SearchOrderNumber.Text);
             if (order != null)
             {
                 SupplierName.SelectedValue = order.SupplierID;
                 ProductName.SelectedValue = order.PurchaseOrderItems.FirstOrDefault()?.FabricID;
-                Quantity.Text = order.PurchaseOrderItems.FirstOrDefault()?.Quantity.ToString();
+                QuantityBox.Text = order.PurchaseOrderItems.FirstOrDefault()?.Quantity.ToString();
                 UnitPrice.Text = order.PurchaseOrderItems.FirstOrDefault()?.UnitPrice.ToString();
                 DeliveryDate.SelectedDate = order.ExpectedDeliveryDate;
             }
@@ -100,7 +115,11 @@ namespace Fabrino.Views.DashBoard
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
             }
-        }
+        }*/
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

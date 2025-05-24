@@ -11,8 +11,8 @@ public class AppDbContext : DbContext
     public DbSet<OrderItem> OrderItem { get; set; }
     public DbSet<Supplier> Supplier { get; set; }
     public DbSet<UserModel> Users { get; set; }
-    public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-    public DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; }
+    public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
+    public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }
     public DbSet<Inventory> Inventories { get; set; }
     public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
     public DbSet<Payment> Payments { get; set; }

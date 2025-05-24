@@ -101,5 +101,17 @@ namespace Fabrino.Views.DashBoard
             login.Show();
             this.Close();
         }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetActiveButton(SettingsButton);
+            MainFrame.Navigate(new SettingsPage());
+        }
+
+        private void ReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetActiveButton(ReportButton);
+            MainFrame.Navigate(new ReportPage());
+        }
     }
 }
