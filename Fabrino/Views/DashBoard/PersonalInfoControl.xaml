@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="Fabrino.Views.DashBoard.PersonalInfoControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="450">
+
+    <UserControl.Resources>
+        <!-- استایل دکمه -->
+        <Style x:Key="BlueButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#59A5F7"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3E8BE0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="White" Padding="20" CornerRadius="12" Margin="10" Width="400">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,20">
+                <TextBlock Text="👤" FontSize="24" Margin="0,0,10,0"/>
+                <TextBlock Text="اطلاعات شخصی" FontSize="20" FontWeight="Bold"/>
+            </StackPanel>
+
+            <Label Content="نام"/>
+            <TextBox x:Name="FirstNameBox" Height="30" Margin="0,0,0,5"/>
+
+            <Label Content="نام خانوادگی"/>
+            <TextBox x:Name="LastNameBox" Height="30" Margin="0,0,0,5"/>
+
+            <Label Content="ایمیل"/>
+            <TextBox x:Name="EmailBox" Height="30" Margin="0,0,0,5"/>
+
+            <Label Content="شماره تلفن"/>
+            <TextBox x:Name="PhoneBox" Height="30" Margin="0,0,0,5"/>
+
+            <Label Content="نقش"/>
+            <ComboBox x:Name="RoleBox" Height="30" Margin="0,0,0,5">
+                <ComboBoxItem Content="فروشنده"/>
+                <ComboBoxItem Content="کارمند"/>
+            </ComboBox>
+
+            <Label Content="نام کاربری"/>
+            <TextBox x:Name="UsernameBox" Height="30" Margin="0,0,0,5"/>
+
+            <Label Content="رمز عبور"/>
+            <PasswordBox x:Name="PasswordBox" Height="30" Margin="0,0,0,5"/>
+
+            <Label Content="تأیید رمز عبور"/>
+            <PasswordBox x:Name="ConfirmPasswordBox" Height="30" Margin="0,0,0,15"/>
+
+            <TextBlock x:Name="ErrorMessage" Foreground="Red" FontSize="12" Visibility="Collapsed" Margin="0,0,0,10"/>
+            <TextBlock x:Name="SuccessMessage" Foreground="Green" FontSize="12" Visibility="Collapsed" Margin="0,0,0,10"/>
+
+            <Button Content="ذخیره اطلاعات" Style="{StaticResource BlueButtonStyle}" Click="SaveButton_Click"/>
+        </StackPanel>
+    </Border>
+</UserControl>

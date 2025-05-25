@@ -113,5 +113,11 @@ namespace Fabrino.Views.DashBoard
             SetActiveButton(ReportButton);
             MainFrame.Navigate(new ReportPage());
         }
+
+        private void InventoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetActiveButton(InventoryButton);
+            MainFrame.Navigate(new InventoryPage());
+        }
     }
 }

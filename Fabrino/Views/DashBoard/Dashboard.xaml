@@ -101,7 +101,7 @@
                         <Image Source="Assets/290137_clipboard_document_file_list_report_icon.png" Width="28" Height="30" RenderTransformOrigin="1.129,0.553" Margin="5,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="InventoryButton" Style="{StaticResource MenuButtonStyle}" >
+                <Button x:Name="InventoryButton" Style="{StaticResource MenuButtonStyle}" Click="InventoryButton_Click" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="موجودی" VerticalAlignment="Center"/>
                         <Image Source="Assets/checklists.png" Width="39" Height="45"/>

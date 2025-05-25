@@ -3,28 +3,41 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:local="clr-namespace:Fabrino.Views.DashBoard"
       mc:Ignorable="d"
       Title="SettingsPage"
       FlowDirection="RightToLeft">
 
     <Page.Resources>
-        <!-- استایل دکمه با Hover -->
-        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#59A5F7"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <!-- استایل دکمه به شکل کارت -->
+        <Style x:Key="CardButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="FontFamily" Value="Vazirmatn"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="6"
-                                Padding="10">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <StackPanel>
+                                <TextBlock Text="{TemplateBinding Tag}" 
+                                           FontSize="14" 
+                                           FontWeight="Bold"/>
+                                <TextBlock Text="{TemplateBinding Content}" 
+                                           FontSize="11" 
+                                           TextWrapping="Wrap" 
+                                           Foreground="Gray"/>
+                            </StackPanel>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#3E8BE0"/>
+                                <Setter Property="BorderBrush" Value="#59A5F7"/>
+                                <Setter Property="Background" Value="#E6F2FF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -33,86 +46,30 @@
         </Style>
     </Page.Resources>
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" >
+    <DockPanel LastChildFill="True" Background="#F9F9F9">
 
-        <!-- باکس‌های بالا -->
-        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" ItemHeight="100" ItemWidth="200" Margin="0,0,0,20">
-            <Border Background="White" CornerRadius="12" Padding="12" Margin="10" Width="180" Height="100">
-                <StackPanel>
-                    <TextBlock Text="اطلاعات شخصی" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="اطلاعات تماس خود را وارد کنید" FontSize="11" TextWrapping="Wrap"/>
-                </StackPanel>
-            </Border>
-            <Border Background="White" CornerRadius="12" Padding="12" Margin="10" Width="180" Height="100">
-                <StackPanel>
-                    <TextBlock Text="ورود و امنیت" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="رمز عبور خود را تغییر دهید و حساب را ایمن کنید" FontSize="11" TextWrapping="Wrap"/>
-                </StackPanel>
-            </Border>
-            <Border Background="White" CornerRadius="12" Padding="12" Margin="10" Width="180" Height="100">
-                <StackPanel>
-                    <TextBlock Text="پشتیبان‌گیری" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="اطلاعات خود را ایمن نگه دارید" FontSize="11" TextWrapping="Wrap"/>
-                </StackPanel>
-            </Border>
-        </WrapPanel>
+        <!-- نوار کارت‌های بالا -->
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,20,0,10">
+            <Button Tag="اطلاعات شخصی" 
+                    Content="اطلاعات تماس خود را وارد کنید" 
+                    Style="{StaticResource CardButtonStyle}" 
+                    Margin="10" 
+                    Click="PersonalInfo_Click"/>
 
-        <!-- فرم ثبت کارکنان -->
-        <Border Background="White" CornerRadius="12" Padding="20" Margin="10,-15,10,10" Width="400" Opacity="0">
-            <Border.Triggers>
-                <EventTrigger RoutedEvent="Loaded">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Border.Triggers>
+            <Button Tag="ورود و امنیت" 
+                    Content="رمز عبور خود را تغییر دهید و حساب را ایمن کنید" 
+                    Style="{StaticResource CardButtonStyle}" 
+                    Margin="10" 
+                    Click="Security_Click"/>
 
-            <StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,20">
-                    <TextBlock Text="👤" FontSize="24" Margin="0,0,10,0"/>
-                    <TextBlock Text="ثبت کارکنان" FontSize="20" FontWeight="Bold"/>
-                </StackPanel>
+            <Button Tag="پشتیبان‌گیری" 
+                    Content="اطلاعات خود را ایمن نگه دارید" 
+                    Style="{StaticResource CardButtonStyle}" 
+                    Margin="10" 
+                    Click="Backup_Click"/>
+        </StackPanel>
 
-                <Label Content="نام"/>
-                <TextBox x:Name="NameBox" Height="30" Margin="0,0,0,5"/>
-
-                <Label Content="نام خانوادگی"/>
-                <TextBox x:Name="LastNameBox" Height="30" Margin="0,0,0,5"/>
-
-                <Label Content="ایمیل"/>
-                <TextBox x:Name="EmailBox" Height="30" Margin="0,0,0,5"/>
-
-                <Label Content="شماره تلفن"/>
-                <TextBox x:Name="PhoneBox" Height="30" Margin="0,0,0,5"/>
-
-                <Label Content="نقش"/>
-                <ComboBox x:Name="RoleBox" Height="30" Margin="0,0,0,5">
-                    <ComboBoxItem Content="فروشنده"/>
-                    <ComboBoxItem Content="کارمند"/>
-                </ComboBox>
-
-                <Label Content="نام کاربری"/>
-                <TextBox x:Name="UsernameBox" Height="30" Margin="0,0,0,5"/>
-
-                <Label Content="رمز عبور"/>
-                <PasswordBox x:Name="PasswordBox" Height="30" Margin="0,0,0,5"/>
-
-                <Label Content="تأیید رمز عبور"/>
-                <PasswordBox x:Name="ConfirmPasswordBox" Height="30" Margin="0,0,0,15"/>
-
-                <!-- پیام خطا -->
-                <TextBlock x:Name="ErrorMessage" Foreground="Red" FontSize="12" Visibility="Collapsed" Margin="0,0,0,10"/>
-
-                <!-- پیام موفقیت -->
-                <TextBlock x:Name="SuccessMessage" Foreground="Green" FontSize="12" Visibility="Collapsed" Margin="0,0,0,10"/>
-
-                <Button Content="ثبت"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Width="150" Height="40"
-                        Click="RegisterButton_Click"/>
-            </StackPanel>
-        </Border>
-    </StackPanel>
+        <!-- محتوای قابل تغییر -->
+        <ContentControl x:Name="ContentArea" Margin="30"/>
+    </DockPanel>
 </Page>
