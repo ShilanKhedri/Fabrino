@@ -61,17 +61,40 @@
                           MaxLength="15" />
 
 
-                <PasswordBox x:Name="PasswordTextBox" 
-             GotFocus="RemovePassword" 
-             LostFocus="AddPassword"      
-             Password="رمز عبور" 
-             MaxLength="25"
-             FontFamily="Arial" FontSize="32" 
-             Foreground="#9F9F9F" 
-             BorderThickness="1" Background="#FFFAF4" 
-             Width="317" Height="56" 
-             Margin="0,0,0,15" 
-             HorizontalAlignment="Center"/>
+                <!-- کانتینر رمز عبور و آیکون چشم -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <!-- PasswordBox -->
+                    <PasswordBox x:Name="PasswordTextBox"
+                                 PasswordChanged="PasswordTextBox_PasswordChanged"
+                 GotFocus="RemovePassword"
+                 LostFocus="AddPassword"
+                 Password="رمز عبور"
+                 MaxLength="25"
+                 FontFamily="Arial" FontSize="32"
+                 Foreground="#9F9F9F"
+                 BorderThickness="1" Background="#FFFAF4"
+                 Width="270" Height="56"
+                 Visibility="Visible"/>
+
+                    <!-- TextBox برای رمز قابل مشاهده -->
+                    <TextBox x:Name="VisiblePasswordTextBox"
+             FontFamily="Arial" FontSize="32"
+             Foreground="#9F9F9F"
+             BorderThickness="1" Background="#FFFAF4"
+             Width="270" Height="56"
+             Visibility="Collapsed"/>
+
+                    <!-- دکمه چشم -->
+                    <CheckBox x:Name="ShowPasswordCheckbox"
+              Checked="ShowPassword_Checked"
+              Unchecked="ShowPassword_Unchecked"
+              Width="40" Height="40"
+              VerticalAlignment="Center"
+              Margin="5,0,0,0">
+                        <Image x:Name="EyeIcon" Source="/eye_closed.png"/>
+                    </CheckBox>
+                </StackPanel>
+
 
                 <TextBlock Margin="15,10,30,40" ><Hyperlink Foreground="#F47458" FontFamily="Arial" FontSize="16"><Run Text="رمز عبور خود را فراموش کرده‌اید؟"
                                                                                                                                             MouseLeftButtonDown="GoToForgotPassword"/></Hyperlink></TextBlock>

@@ -10,25 +10,25 @@ namespace Fabrino.Models
         [Key]
         public int SupplierID { get; set; }
 
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "نام تامین‌کننده الزامی است")]
+        [StringLength(100, ErrorMessage = "نام نمی‌تواند بیش از 100 کاراکتر باشد")]
         public string Name { get; set; }
 
         [StringLength(100)]
         public string ContactPerson { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = "شماره تماس نمی‌تواند بیش از 20 کاراکتر باشد")]
         public string Phone { get; set; }
 
-        [StringLength(100)]
+        [StringLength(100, ErrorMessage = "ایمیل نمی‌تواند بیش از 100 کاراکتر باشد")]
         [EmailAddress]
         public string Email { get; set; }
 
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "آدرس نمی‌تواند بیش از 255 کاراکتر باشد")]
         public string Address { get; set; }
 
-        [StringLength(50)]
+        [StringLength(50, ErrorMessage = "شماره مالیاتی نمی‌تواند بیش از 50 کاراکتر باشد")]
         public string TaxNumber { get; set; }
 
         // Navigation Properties

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Fabrino.Views;
 using Fabrino.Helpers;
 using Fabrino.Views.DashBoard;
+using System.Windows.Media.Imaging;
 
 
 namespace Fabrino
@@ -78,6 +79,37 @@ namespace Fabrino
                 pb.Foreground = System.Windows.Media.Brushes.Gray;
             }
         }
+        private void ShowPassword_Checked(object sender, RoutedEventArgs e)
+        {
+            if (VisiblePasswordTextBox != null && PasswordTextBox != null && EyeIcon != null)
+            {
+                VisiblePasswordTextBox.Text = PasswordTextBox.Password;
+                PasswordTextBox.Visibility = Visibility.Collapsed;
+                VisiblePasswordTextBox.Visibility = Visibility.Visible;
+                EyeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/eye_open.png"));
+            }
+        }
+
+        private void ShowPassword_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (VisiblePasswordTextBox != null && PasswordTextBox != null && EyeIcon != null)
+            {
+                PasswordTextBox.Password = VisiblePasswordTextBox.Text;
+                PasswordTextBox.Visibility = Visibility.Visible;
+                VisiblePasswordTextBox.Visibility = Visibility.Collapsed;
+                EyeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/eye_closed.png"));
+            }
+        }
+
+        private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (VisiblePasswordTextBox != null &&
+                VisiblePasswordTextBox.Visibility == Visibility.Visible)
+            {
+                VisiblePasswordTextBox.Text = PasswordTextBox.Password;
+            }
+        }
+
 
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)

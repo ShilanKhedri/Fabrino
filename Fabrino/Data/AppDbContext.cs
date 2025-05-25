@@ -46,6 +46,10 @@ public class AppDbContext : DbContext
                 .WithOne(poi => poi.PurchaseOrder)
                 .HasForeignKey(poi => poi.PurchaseOrderID);
 
+        modelBuilder.Entity<PurchaseOrder>()
+        .Property(p => p.SupplierID)
+        .IsRequired(false);
+
         modelBuilder.Entity<PurchaseOrderItem>()
             .HasOne(poi => poi.Fabric)
             .WithMany(f => f.PurchaseOrderItems)

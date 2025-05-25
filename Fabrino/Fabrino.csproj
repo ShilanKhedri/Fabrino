@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="eye_closed.png" />
+    <None Remove="eye_open.png" />
     <None Remove="fabric.png" />
     <None Remove="Views\DashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png" />
     <None Remove="Views\DashBoard\Assets\290137_clipboard_document_file_list_report_icon.png" />
@@ -49,6 +51,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="eye_closed.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="eye_open.png" />
     <Resource Include="fabric.png" />
     <Resource Include="Views\DashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

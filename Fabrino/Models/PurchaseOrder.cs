@@ -12,7 +12,7 @@ namespace Fabrino.Models
         public int PurchaseOrderID { get; set; }
 
         [Required]
-        public int SupplierID { get; set; }
+        public int? SupplierID  { get; set; }
 
         [Required]
         public DateTime OrderDate { get; set; } = DateTime.Now;

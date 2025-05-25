@@ -1,6 +1,8 @@
 ﻿using Fabrino.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -95,58 +97,71 @@ namespace Fabrino.Views.DashBoard
 
         private void EditSupplier_Click(object sender, RoutedEventArgs e)
         {
-            /*if (SupplierGrid.SelectedItem is Supplier selectedSupplier)
+            if (SupplierGrid.SelectedItem is Supplier selectedSupplier)
             {
-                // انتقال به صفحه ویرایش
+                // انتقال به صفحه ویرایش با ارسال تامین‌کننده انتخاب شده
                 var editPage = new EditSupplierPage(selectedSupplier);
                 this.NavigationService.Navigate(editPage);
             }
             else
             {
-                MessageBox.Show("لطفاً یک تامین‌کننده را انتخاب کنید.");
-            }*/
+                MessageBox.Show("لطفاً یک تامین‌کننده را انتخاب کنید.", "هشدار");
+            }
         }
 
-        private void DeleteSupplier_Click(object sender, RoutedEventArgs e)
+        private async void DeleteSupplier_Click(object sender, RoutedEventArgs e)
         {
-            if (SupplierGrid.SelectedItem is Supplier selectedSupplier)
+            if (SupplierGrid.SelectedItem is not Supplier selectedSupplier || selectedSupplier.SupplierID == 0)
             {
-                // بررسی وجود سفارشات مرتبط
-                var relatedOrders = _context.PurchaseOrder
-                    .Where(po => po.SupplierID == selectedSupplier.SupplierID)
-                    .ToList();
+                MessageBox.Show("لطفاً یک تامین‌کننده معتبر را انتخاب کنید.");
+                return;
+            }
 
-                if (relatedOrders.Any())
+            try
+            {
+                // مرحله 1: بررسی وجود سفارشات مرتبط
+                bool hasOrders = await _context.PurchaseOrder
+                    .AnyAsync(po => po.SupplierID == selectedSupplier.SupplierID);
+
+                if (hasOrders)
                 {
-                    var confirm = MessageBox.Show($"این تامین‌کننده دارای {relatedOrders.Count} سفارش خرید است. آیا می‌خواهید همه سفارشات و تامین‌کننده حذف شوند؟",
-                        "هشدار", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var confirm = MessageBox.Show(
+                        "این تامین‌کننده در سفارشات استفاده شده است. آیا می‌خواهید ارتباط را قطع کنید؟",
+                        "تایید عملیات",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
 
                     if (confirm != MessageBoxResult.Yes) return;
                 }
-                else
-                {
-                    var result = MessageBox.Show($"آیا از حذف '{selectedSupplier.Name}' مطمئن هستید؟",
-                        "تایید حذف", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-                    if (result != MessageBoxResult.Yes) return;
-                }
+                // مرحله 2: عملیات حذف در تراکنش
+                using var transaction = await _context.Database.BeginTransactionAsync();
 
                 try
                 {
-                    if (relatedOrders.Any())
-                    {
-                        _context.PurchaseOrder.RemoveRange(relatedOrders);
-                    }
+                    // بروزرسانی سفارشات مرتبط به صورت مستقیم در دیتابیس
+                    await _context.Database.ExecuteSqlInterpolatedAsync(
+                        $"UPDATE PurchaseOrder SET SupplierID = NULL WHERE SupplierID = {selectedSupplier.SupplierID}");
 
+                    // حذف تامین‌کننده
                     _context.Supplier.Remove(selectedSupplier);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    // به روزرسانی لیست
                     LoadSuppliers();
-                    MessageBox.Show("عملیات حذف با موفقیت انجام شد.");
+                    MessageBox.Show("عملیات با موفقیت انجام شد.");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"خطا در حذف: {ex.Message}");
+                    await transaction.RollbackAsync();
+                    MessageBox.Show($"خطا در عملیات دیتابیس: {ex.Message}");
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطای غیرمنتظره: {ex.Message}");
             }
         }
 
