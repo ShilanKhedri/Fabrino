@@ -1,27 +1,58 @@
 ﻿<Page x:Class="Fabrino.Views.DashBoard.InventoryPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-      Title="InventoryPage" Background="#F9FAFB">
+      Title="موجودی انبار" 
+      Background="#FFEFEF"
+      FlowDirection="RightToLeft">
 
     <Page.Resources>
-        <!-- استایل Watermark برای TextBox بدون نیاز به Converter -->
+        <!-- استایل دکمه‌ها مطابق داشبورد -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#F1F1F1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F48672"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- استایل Watermark برای TextBox -->
         <Style x:Key="WatermarkTextBoxStyle" TargetType="TextBox">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
                             <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4"/>
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4"/>
                             <ScrollViewer x:Name="PART_ContentHost" Margin="5"/>
                             <TextBlock x:Name="watermarkText" 
-                               Text="{TemplateBinding Tag}"
-                               Foreground="LightGray"
-                               Margin="8,0,0,0"
-                               VerticalAlignment="Center"
-                               Visibility="Collapsed"/>
+                                       Text="{TemplateBinding Tag}"
+                                       Foreground="LightGray"
+                                       Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Text" Value="">
@@ -35,96 +66,122 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- استایل کارت‌های خلاصه -->
+        <Style x:Key="SummaryCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" Color="#888888" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
-    <DockPanel Margin="30" LastChildFill="True">
 
-        <!-- نوار عنوان بالا -->
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,20" HorizontalAlignment="Right">
-            <TextBlock Text="📦 موجودی انبار" FontSize="26" FontWeight="Bold" VerticalAlignment="Center"/>
-        </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <!-- کارت‌های خلاصه -->
-        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,20" HorizontalAlignment="Right">
-            <Border Background="White" CornerRadius="12" Width="200" Height="100" Margin="10" Padding="10" >
-                <StackPanel>
-                    <TextBlock Text="کل کالاها" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="{Binding TotalItems}" FontSize="24" FontWeight="Bold"/>
-                </StackPanel>
-            </Border>
-            <Border Background="White" CornerRadius="12" Width="200" Height="100" Margin="10" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="کمترین موجودی" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="{Binding MinStockItem}" FontSize="16"/>
-                </StackPanel>
-            </Border>
-            <Border Background="White" CornerRadius="12" Width="200" Height="100" Margin="10" Padding="10" >
-                <StackPanel>
-                    <TextBlock Text="بیشترین موجودی" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="{Binding MaxStockItem}" FontSize="16"/>
-                </StackPanel>
-            </Border>
-        </WrapPanel>
+        <!-- عنوان صفحه -->
+        <TextBlock Grid.Row="0" Text="📦 موجودی انبار" 
+                   FontSize="26" FontWeight="Bold"
+                   Margin="30,20,30,20" HorizontalAlignment="Right"/>
 
         <!-- محتوای اصلی -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="30,0,30,30">
+                <!-- کارت‌های خلاصه -->
+                <UniformGrid Columns="3" HorizontalAlignment="Right">
+                    <Border Style="{StaticResource SummaryCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="کل کالاها" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="{Binding TotalItems}" FontSize="24" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
 
-            <!-- فیلتر و جستجو -->
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Column="0">
-                <TextBox x:Name="SearchBox" Width="200" Height="30" Margin="5" 
-                         Style="{StaticResource WatermarkTextBoxStyle}" Tag="جستجوی کالا..."/>
+                    <Border Style="{StaticResource SummaryCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="کمترین موجودی" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="{Binding MinStockItem}" FontSize="16"/>
+                        </StackPanel>
+                    </Border>
 
-                <ComboBox x:Name="CategoryFilter" Width="150" Height="30" Margin="5">
-                    <ComboBoxItem Content="همه دسته‌ها"/>
-                    <ComboBoxItem Content="پارچه"/>
-                    <ComboBoxItem Content="نخ"/>
-                </ComboBox>
+                    <Border Style="{StaticResource SummaryCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="بیشترین موجودی" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="{Binding MaxStockItem}" FontSize="16"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
 
-                <Button Content="اعمال فیلتر" Width="100" Height="30" Margin="5"/>
+                <!-- فیلتر و جدول -->
+                <Grid Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- فیلتر و جستجو -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBox x:Name="SearchBox" Width="200" Height="30" Margin="5"
+                                 Style="{StaticResource WatermarkTextBoxStyle}" Tag="جستجوی کالا..."/>
+
+                        <ComboBox x:Name="CategoryFilter" Width="150" Height="30" Margin="5">
+                            <ComboBoxItem Content="همه دسته‌ها"/>
+                            <ComboBoxItem Content="پارچه"/>
+                            <ComboBoxItem Content="نخ"/>
+                        </ComboBox>
+
+                        <Button Content="اعمال فیلتر" Width="100" Height="30" Margin="5"
+                                Style="{StaticResource MenuButtonStyle}"/>
+                    </StackPanel>
+
+                    <!-- جدول کالاها -->
+                    <DataGrid x:Name="InventoryGrid" Grid.Column="0" Grid.Row="1"
+                              AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                              Margin="0,10,10,0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="نام کالا" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="دسته‌بندی" Binding="{Binding Category}" Width="*"/>
+                            <DataGridTextColumn Header="تعداد موجودی" Binding="{Binding Quantity}" Width="*"/>
+                            <DataGridTextColumn Header="قیمت واحد" Binding="{Binding UnitPrice}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- فرم افزودن کالا -->
+                    <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="15" Margin="10">
+                        <StackPanel>
+                            <TextBlock Text="➕ افزودن کالا" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                            <TextBox x:Name="ItemNameBox" Height="30" Margin="0,0,0,10"
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="نام کالا"/>
+
+                            <ComboBox x:Name="ItemCategoryBox" Height="30" Margin="0,0,0,10">
+                                <ComboBoxItem Content="پارچه"/>
+                                <ComboBoxItem Content="نخ"/>
+                            </ComboBox>
+
+                            <TextBox x:Name="ItemQuantityBox" Height="30" Margin="0,0,0,10"
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="تعداد"/>
+
+                            <TextBox x:Name="ItemPriceBox" Height="30" Margin="0,0,0,10"
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="قیمت واحد"/>
+
+                            <Button Content="افزودن" Height="35" Background="#59A5F7" Foreground="White" 
+                                    FontWeight="Bold" Click="AddItem_Click"
+                                    Style="{StaticResource MenuButtonStyle}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </StackPanel>
-
-            <!-- جدول کالاها -->
-            <DataGrid x:Name="InventoryGrid" Grid.Row="1" Grid.Column="0" Margin="0,0,10,0"
-                      AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="نام کالا" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="دسته‌بندی" Binding="{Binding Category}" />
-                    <DataGridTextColumn Header="تعداد موجودی" Binding="{Binding Quantity}" />
-                    <DataGridTextColumn Header="قیمت واحد" Binding="{Binding UnitPrice}" />
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <!-- فرم افزودن کالا -->
-            <Border Background="White" CornerRadius="10" Padding="15" Grid.Column="1" Margin="10">
-                <StackPanel>
-                    <TextBlock Text="➕ افزودن کالا" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
-
-                    <TextBox x:Name="ItemNameBox" Height="30" Margin="0,0,0,10"
-                             Style="{StaticResource WatermarkTextBoxStyle}" Tag="نام کالا"/>
-
-                    <ComboBox x:Name="ItemCategoryBox" Height="30" Margin="0,0,0,10">
-                        <ComboBoxItem Content="پارچه"/>
-                        <ComboBoxItem Content="نخ"/>
-                    </ComboBox>
-
-                    <TextBox x:Name="ItemQuantityBox" Height="30" Margin="0,0,0,10"
-                             Style="{StaticResource WatermarkTextBoxStyle}" Tag="تعداد"/>
-
-                    <TextBox x:Name="ItemPriceBox" Height="30" Margin="0,0,0,10"
-                             Style="{StaticResource WatermarkTextBoxStyle}" Tag="قیمت واحد"/>
-
-                    <Button Content="افزودن" Height="35" Background="#59A5F7" Foreground="White" FontWeight="Bold"
-                            Click="AddItem_Click"/>
-                </StackPanel>
-            </Border>
-        </Grid>
-    </DockPanel>
+        </ScrollViewer>
+    </Grid>
 </Page>
