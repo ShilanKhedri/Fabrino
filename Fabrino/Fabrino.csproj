@@ -19,6 +19,20 @@
     <None Remove="eye_closed.png" />
     <None Remove="eye_open.png" />
     <None Remove="fabric.png" />
+    <None Remove="Views\AdminDashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png" />
+    <None Remove="Views\AdminDashBoard\Assets\290137_clipboard_document_file_list_report_icon.png" />
+    <None Remove="Views\AdminDashBoard\Assets\7088618_byte_database_server_data_warehouse_icon.png" />
+    <None Remove="Views\AdminDashBoard\Assets\box.png" />
+    <None Remove="Views\AdminDashBoard\Assets\cart.png" />
+    <None Remove="Views\AdminDashBoard\Assets\checklists.png" />
+    <None Remove="Views\AdminDashBoard\Assets\customer.png" />
+    <None Remove="Views\AdminDashBoard\Assets\dashboard.png" />
+    <None Remove="Views\AdminDashBoard\Assets\logout.png" />
+    <None Remove="Views\AdminDashBoard\Assets\maintenance.png" />
+    <None Remove="Views\AdminDashBoard\Assets\out-of-stock.png" />
+    <None Remove="Views\AdminDashBoard\Assets\search.png" />
+    <None Remove="Views\AdminDashBoard\Assets\shopping-cart.png" />
+    <None Remove="Views\AdminDashBoard\Assets\user.png" />
     <None Remove="Views\DashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png" />
     <None Remove="Views\DashBoard\Assets\290137_clipboard_document_file_list_report_icon.png" />
     <None Remove="Views\DashBoard\Assets\7088618_byte_database_server_data_warehouse_icon.png" />
@@ -73,6 +87,48 @@
     </Resource>
     <Resource Include="eye_open.png" />
     <Resource Include="fabric.png" />
+    <Resource Include="Views\AdminDashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\290137_clipboard_document_file_list_report_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\7088618_byte_database_server_data_warehouse_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\box.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\cart.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\checklists.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\customer.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\dashboard.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\logout.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\maintenance.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\out-of-stock.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\search.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\shopping-cart.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\AdminDashBoard\Assets\user.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\DashBoard\Assets\2849830_multimedia_options_setting_settings_gear_icon.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

@@ -25,7 +25,7 @@ namespace Fabrino.Views.DashBoard
 
         private void InventoryPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // مقداردهی اولیه داده‌ها
+            
             LoadInventoryData();
         }
 
