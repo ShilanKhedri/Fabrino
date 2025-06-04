@@ -25,6 +25,20 @@ public class EfSignUpRepository : ISignUpRepository
         }
     }
 
+    public bool UpdateUser(UserModel user)
+    {
+        try
+        {
+            _db.Users.Update(user);
+            _db.SaveChanges();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public bool IsUsernameTaken(string username)
     {
         return _db.Users.Any(u => u.username == username);

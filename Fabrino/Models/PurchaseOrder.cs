@@ -28,9 +28,9 @@ namespace Fabrino.Models
         public string Status { get; set; } = "Pending"; // Pending, Completed, Cancelled
 
         [StringLength(50)]
-        public string PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         [Required]
         [StringLength(20)]
