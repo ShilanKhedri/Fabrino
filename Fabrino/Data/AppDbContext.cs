@@ -1,6 +1,6 @@
 ﻿using Fabrino.Models;
 using Microsoft.EntityFrameworkCore;
-using Fabrino.Models; // مسیر کلاس‌های مدل
+using Fabrino.Models; 
 using System.Diagnostics;
 
 public class AppDbContext : DbContext
