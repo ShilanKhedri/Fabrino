@@ -16,6 +16,8 @@ public class AppDbContext : DbContext
     public DbSet<Inventory> Inventories { get; set; }
     public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
     public DbSet<Payment> Payments { get; set; }
+    public DbSet<Supplier> Suppliers { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(@"Server=.;Database=Fabrino;Trusted_Connection=True;TrustServerCertificate=True;");

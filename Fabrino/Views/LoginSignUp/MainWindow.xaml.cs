@@ -1,12 +1,13 @@
-﻿using System;
-using Microsoft.Data.SqlClient;
-using System.Windows;
-using Fabrino.Controllers;
-using Fabrino.Models;
-using System.Windows.Input;
-using Fabrino.Views;
+﻿using Fabrino.Controllers;
 using Fabrino.Helpers;
+using Fabrino.Models;
+using Fabrino.Views;
 using Fabrino.Views.DashBoard;
+using Fabrino.Views.SellerDashBoard;
+using Microsoft.Data.SqlClient;
+using System;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 
@@ -23,8 +24,38 @@ namespace Fabrino
             var dbContext = new AppDbContext();
             repository = new SqlUserRepository(dbContext);
             authController = new AuthController(repository);
+            CreateTestSeller();
         }
 
+        private void CreateTestSeller()
+        {
+            using var db = new AppDbContext();
+
+            if (!db.Users.Any(u => u.username == "seller1"))
+            {
+                var seller = new UserModel
+                {
+                    username = "seller1",
+                    password_hash = SecurityHelper.ComputeSha256Hash("12345678"),
+                    full_name = "فروشنده تست",
+                    role = "seller",
+                    security_question = "نام اولین ماشینتان چیست؟",
+                    security_answer_hash = SecurityHelper.ComputeSha256Hash("پیکان"),
+                    created_at = DateTime.Now
+                };
+
+                db.Users.Add(seller);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
+                }
+
+            }
+        }
 
         private void GoToRegister_Click(object sender, MouseButtonEventArgs e)
         {
@@ -126,10 +157,23 @@ namespace Fabrino
             if (authController.Login(username, passwordHash))
             {
                 var user = repository.GetUserByUsername(username);
-                var dashboard = new Dashboard(user);
-                dashboard.Show();
-                this.Close();
-            }
+
+                if (user.role == "owner")
+                {
+                    var dashboard = new Dashboard(user);
+                    dashboard.Show();
+                }
+                else if (user.role == "seller")
+                {
+                    var sellerDashboard = new SellerDashBoard();
+                    sellerDashboard.Show();
+                }
+                else
+                {
+                    MessageBox.Show("نقش کاربر معتبر نیست.");
+                    return;
+                }
+             }
             else
             {
                 MessageBox.Show("نام کاربری یا رمز عبور اشتباه است!");

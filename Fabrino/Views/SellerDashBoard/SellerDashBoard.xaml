@@ -100,7 +100,7 @@
                         <Image Source="Assets/checklists.png" Width="39" Height="45"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="PurchaseButton"  Style="{StaticResource MenuButtonStyle}" Click="PurchaseButton_Click" >
+                <Button x:Name="OrderButton"  Style="{StaticResource MenuButtonStyle}" Click="OrderButton_Click" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="فروش" VerticalAlignment="Center"/>
                         <Image Source="Assets/cart.png" Width="31" Height="29"/>
