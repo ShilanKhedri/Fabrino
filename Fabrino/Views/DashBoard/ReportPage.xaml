@@ -7,7 +7,7 @@
       mc:Ignorable="d"
       Title="ReportPage">
 
-    <Grid Margin="20">
+    <Grid Margin="20" FlowDirection="RightToLeft">
         <TabControl>
             <!-- فروش -->
             <TabItem Header="فروش">

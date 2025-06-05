@@ -180,7 +180,7 @@
                                  Style="{StaticResource WatermarkTextBoxStyle}" Tag="قیمت واحد"/>
 
                             <Button Content="افزودن" Height="35" Background="#59A5F7" Foreground="White" 
-                                FontWeight="Bold" Click="AddItem_Click"
+                                FontWeight="Bold" 
                                 Style="{StaticResource MenuButtonStyle}"/>
                         </StackPanel>
                     </Border>

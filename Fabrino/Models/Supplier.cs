@@ -31,6 +31,8 @@ namespace Fabrino.Models
         [StringLength(50, ErrorMessage = "شماره مالیاتی نمی‌تواند بیش از 50 کاراکتر باشد")]
         public string TaxNumber { get; set; }
 
+        public bool is_active { get; set; }
+
         // Navigation Properties
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     }
