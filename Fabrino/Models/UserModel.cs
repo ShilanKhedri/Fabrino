@@ -20,6 +20,8 @@ namespace Fabrino.Models
         public string? Phone { get; set; }
         public string security_question { get; set; } = string.Empty;
         public string security_answer_hash { get; set; } = string.Empty;
+        public bool is_active { get; set; }
+
         public DateTime? last_login { get; set; }
     }
 }

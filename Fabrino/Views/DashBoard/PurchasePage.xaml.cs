@@ -139,13 +139,11 @@ namespace Fabrino.Views.DashBoard
 
                 try
                 {
-                    // بروزرسانی سفارشات مرتبط به صورت مستقیم در دیتابیس
-                    await _context.Database.ExecuteSqlInterpolatedAsync(
-                        $"UPDATE PurchaseOrder SET SupplierID = NULL WHERE SupplierID = {selectedSupplier.SupplierID}");
+
 
                     // حذف تامین‌کننده
-                    _context.Supplier.Remove(selectedSupplier);
-                    await _context.SaveChangesAsync();
+                    selectedSupplier.is_active = false;
+                    _context.Supplier.Update(selectedSupplier); await _context.SaveChangesAsync();
 
                     await transaction.CommitAsync();
 
