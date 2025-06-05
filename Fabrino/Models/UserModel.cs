@@ -16,6 +16,8 @@ namespace Fabrino.Models
         public string full_name { get; set; } = string.Empty;
         public string role { get; set; } = string.Empty;
         public DateTime created_at { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
         public string security_question { get; set; } = string.Empty;
         public string security_answer_hash { get; set; } = string.Empty;
         public DateTime? last_login { get; set; }

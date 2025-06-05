@@ -23,6 +23,7 @@ namespace Fabrino.Services
 
         public List<Fabric> GetFabrics()
         {
+            Console.WriteLine(_context.Fabric);
             return _context.Fabric.ToList();
         }
 
