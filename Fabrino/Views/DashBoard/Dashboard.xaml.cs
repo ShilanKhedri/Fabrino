@@ -105,7 +105,7 @@ namespace Fabrino.Views.DashBoard
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(SettingsButton);
-           // MainFrame.Navigate(new SettingsPage());
+            MainFrame.Navigate(new SettingsPage(_currentUser));
         }
 
         private void ReportButton_Click(object sender, RoutedEventArgs e)

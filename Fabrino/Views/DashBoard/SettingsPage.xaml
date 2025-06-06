@@ -1,0 +1,88 @@
+﻿<Page x:Class="Fabrino.Views.DashBoard.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="SettingsPage">
+
+    <Grid Margin="20"
+          FlowDirection="RightToLeft">
+        <TabControl>
+
+            <!-- اطلاعات شخصی -->
+            <TabItem Header="اطلاعات شخصی">
+                <StackPanel Margin="30" Width="350">
+                    <TextBlock Text="ویرایش اطلاعات شخصی" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock Text="نام کامل:"/>
+                    <TextBox x:Name="FullNameBox" Margin="0,5"/>
+                    <TextBlock Text="ایمیل:"/>
+                    <TextBox x:Name="EmailBox" Margin="0,5"/>
+                    <TextBlock Text="شماره تماس:"/>
+                    <TextBox x:Name="PhoneBox" Margin="0,5"/>
+                    <Button Content="ذخیره تغییرات" Click="SaveProfile_Click" Margin="0,15,0,0" Width="150"/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- تغییر رمز عبور -->
+            <TabItem Header="تغییر رمز عبور">
+                <StackPanel Margin="30" Width="350">
+                    <TextBlock Text="تغییر رمز عبور" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock Text="رمز فعلی:"/>
+                    <PasswordBox x:Name="CurrentPassword" Margin="0,5"/>
+                    <TextBlock Text="رمز جدید:"/>
+                    <PasswordBox x:Name="NewPassword" Margin="0,5"/>
+                    <TextBlock Text="تکرار رمز جدید:"/>
+                    <PasswordBox x:Name="ConfirmPassword" Margin="0,5"/>
+                    <Button Content="تغییر رمز" Click="ChangePassword_Click" Margin="0,15,0,0" Width="150"/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- افزودن کاربر -->
+            <TabItem Header="افزودن کاربر">
+                <StackPanel Margin="30" Width="350">
+                    <TextBlock Text="افزودن کاربر جدید" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock Text="نام کاربری:"/>
+                    <TextBox x:Name="NewUsername" Margin="0,5"/>
+                    <TextBlock Text="رمز عبور:"/>
+                    <PasswordBox x:Name="NewUserPassword" Margin="0,5"/>
+                    <TextBlock Text="نقش کاربر:"/>
+                    <ComboBox x:Name="RoleCombo" Margin="0,5">
+                        <ComboBoxItem Content="Admin"/>
+                        <ComboBoxItem Content="Seller"/>
+                    </ComboBox>
+                    <Button Content="افزودن" Click="AddUser_Click" Margin="0,15,0,0" Width="150"/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- پشتیبان‌گیری -->
+            <TabItem Header="پشتیبان‌گیری">
+                <StackPanel Margin="30" HorizontalAlignment="Center">
+                    <TextBlock Text="بک‌آپ‌گیری از دیتابیس" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+                    <Button Content="گرفتن بک‌آپ" Width="200" Click="BackupDatabase_Click"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="مدیریت کاربران">
+                <StackPanel Margin="20">
+                    <DataGrid x:Name="UsersGrid"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  Height="200"
+                  Margin="0,0,0,10"
+                  SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="نام کاربری" Binding="{Binding username}" />
+                            <DataGridTextColumn Header="نقش" Binding="{Binding role}" />
+                            <DataGridTextColumn Header="نام کامل" Binding="{Binding full_name}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Content="ویرایش" Click="EditUser_Click" Margin="5"/>
+                        <Button Content="حذف" Click="DeleteUser_Click" Margin="5"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+
+        </TabControl>
+    </Grid>
+</Page>
