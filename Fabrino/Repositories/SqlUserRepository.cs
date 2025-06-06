@@ -12,7 +12,7 @@ public class SqlUserRepository : IUserRepository
 
     public bool IsValidUser(string username, string passwordHash)
     {
-        return _db.Users.Any(u => u.username == username && u.password_hash == passwordHash);
+        return _db.Users.Any(u => u.username == username && u.password_hash == passwordHash );
     }
 
     public bool UpdateLastLogin(string username)

@@ -88,7 +88,7 @@
                         </Ellipse.Fill>
                     </Ellipse>
                 </StackPanel>
-                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" Click="DashboardButton_Click" Background="#FFF1F1F1">
+                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" Click="DashboardButton_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
                         <Image Source="Assets/dashboard.png" Width="20" Height="20"/>

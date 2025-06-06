@@ -35,6 +35,7 @@ namespace Fabrino.Views.DashBoard
             this.Closed += Dashboard_Closed;
         }
 
+
         private void Dashboard_Closed(object sender, EventArgs e)
         {
             _userRepository.UpdateLastLogin(_currentUser.username);
@@ -82,10 +83,9 @@ namespace Fabrino.Views.DashBoard
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new DashBoardPage());
-        }
-        
-        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
+            SetActiveButton(DashboardButton);
+
+
         }
 
         private void PurchaseButton_Click(object sender, RoutedEventArgs e)
@@ -118,6 +118,11 @@ namespace Fabrino.Views.DashBoard
         {
             SetActiveButton(InventoryButton);
             MainFrame.Navigate(new InventoryPage());
+        }
+
+        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+
         }
     }
 }

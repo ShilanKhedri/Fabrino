@@ -17,6 +17,7 @@ public class AppDbContext : DbContext
     public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
+    public DbSet<SecurityQuestion> SecurityQuestion { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -25,6 +26,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         // تنظیمات اضافی برای مدل
         modelBuilder.Entity<UserModel>()
             .Property(u => u.last_login)

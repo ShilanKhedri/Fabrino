@@ -45,8 +45,8 @@
                     <PasswordBox x:Name="NewUserPassword" Margin="0,5"/>
                     <TextBlock Text="نقش کاربر:"/>
                     <ComboBox x:Name="RoleCombo" Margin="0,5">
-                        <ComboBoxItem Content="Admin"/>
-                        <ComboBoxItem Content="Seller"/>
+                        <ComboBoxItem Content="ادمین"/>
+                        <ComboBoxItem Content="فروشنده"/>
                     </ComboBox>
                     <Button Content="افزودن" Click="AddUser_Click" Margin="0,15,0,0" Width="150"/>
                 </StackPanel>
