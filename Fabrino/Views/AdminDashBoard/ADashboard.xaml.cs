@@ -24,9 +24,6 @@ namespace Fabrino.Views.AdminDashBoard
             InitializeComponent();
         }
 
-        private void DashboardButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }

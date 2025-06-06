@@ -24,7 +24,7 @@ namespace Fabrino
             var dbContext = new AppDbContext();
             repository = new SqlUserRepository(dbContext);
             authController = new AuthController(repository);
-            //CreateTestSeller();
+            CreateTestSeller();
         }
 
         private void CreateTestSeller()
