@@ -45,20 +45,30 @@ namespace Fabrino.Services
                 {
                     item.PurchaseOrderID = order.PurchaseOrderID;
                     _context.PurchaseOrderItem.Add(item);
+
+                    // 🟢 افزایش مقدار پارچه
+                    var fabric = _context.Fabric.FirstOrDefault(f => f.FabricID == item.FabricID);
+                    if (fabric != null)
+                    {
+                        fabric.Quantity += item.Quantity;
+                        _context.Fabric.Update(fabric);
+                    }
                 }
 
                 _context.SaveChanges();
                 transaction.Commit();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Message: {ex.Message}");
-                MessageBox.Show($"Inner Message: {ex.InnerException.Message}");
+                if (ex.InnerException != null)
+                    MessageBox.Show($"Inner Message: {ex.InnerException.Message}");
 
                 transaction.Rollback();
                 throw;
             }
         }
+
 
         public PurchaseOrder GetOrderByNumber(string orderNumber)
         {
