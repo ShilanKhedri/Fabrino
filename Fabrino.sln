@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabrino", "Fabrino\Fabrino.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabrino.Tests", "Fabrino.Tests\Fabrino.Tests.csproj", "{49D8190A-86C4-4CED-8B76-3423097F5FAE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,10 +17,6 @@ Global
 		{11F84255-2DA1-4707-B2F2-18A305D20B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11F84255-2DA1-4707-B2F2-18A305D20B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11F84255-2DA1-4707-B2F2-18A305D20B5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49D8190A-86C4-4CED-8B76-3423097F5FAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49D8190A-86C4-4CED-8B76-3423097F5FAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49D8190A-86C4-4CED-8B76-3423097F5FAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49D8190A-86C4-4CED-8B76-3423097F5FAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
