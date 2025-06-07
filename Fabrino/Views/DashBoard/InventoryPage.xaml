@@ -150,25 +150,25 @@
                         <StackPanel>
                             <TextBlock Text="➕ افزودن کالا" FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
 
-                            <TextBox x:Name="ItemNameBox" Height="20" Margin="0,0,0,5"
+                            <TextBox x:Name="ItemNameBox" Height="30" Margin="0,0,0,5"
                  Style="{StaticResource WatermarkTextBoxStyle}" Tag="نام کالا"/>
 
-                            <TextBox x:Name="ItemColorBox" Height="20" Margin="0,0,0,5"
+                            <TextBox x:Name="ItemColorBox" Height="30" Margin="0,0,0,5"
                  Style="{StaticResource WatermarkTextBoxStyle}" Tag="رنگ"/>
 
-                            <TextBox x:Name="ItemMaterialBox" Height="20" Margin="0,0,0,5"
+                            <TextBox x:Name="ItemMaterialBox" Height="30" Margin="0,0,0,5"
                  Style="{StaticResource WatermarkTextBoxStyle}" Tag="جنس"/>
 
-                            <TextBox x:Name="ItemWidthBox" Height="20" Margin="0,0,0,5"
+                            <TextBox x:Name="ItemWidthBox" Height="30" Margin="0,0,0,5"
                  Style="{StaticResource WatermarkTextBoxStyle}" Tag="عرض (سانتی‌متر)"/>
 
-                            <TextBox x:Name="ItemQuantityBox" Height="20" Margin="0,0,0,5"
+                            <TextBox x:Name="ItemQuantityBox" Height="30" Margin="0,0,0,5"
                  Style="{StaticResource WatermarkTextBoxStyle}" Tag="تعداد"/>
 
-                            <TextBox x:Name="ItemPriceBox" Height="20" Margin="0,0,0,5"
+                            <TextBox x:Name="ItemPriceBox" Height="30" Margin="0,0,0,5"
                  Style="{StaticResource WatermarkTextBoxStyle}" Tag="قیمت واحد (تومان)"/>
 
-                            <ComboBox x:Name="SupplierComboBox" Height="20" Margin="0,0,0,5"
+                            <ComboBox x:Name="SupplierComboBox" Height="30" Margin="0,0,0,5"
                   Tag="تأمین‌کننده">
                                 <ComboBoxItem Content="تأمین‌کننده ۱" Tag="1"/>
                                 <ComboBoxItem Content="تأمین‌کننده ۲" Tag="2"/>

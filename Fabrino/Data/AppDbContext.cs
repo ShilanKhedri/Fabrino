@@ -18,6 +18,8 @@ public class AppDbContext : DbContext
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<SecurityQuestion> SecurityQuestion { get; set; }
+    public DbSet<SystemLog> SystemLogs { get; set; }
+    public DbSet<SupportTicket> SupportTickets { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

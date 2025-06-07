@@ -88,20 +88,20 @@
                         </Ellipse.Fill>
                     </Ellipse>
                 </StackPanel>
-                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" Background="#FFF1F1F1">
+                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" Background="#FFF1F1F1" Click="DashboardButton_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
                         <Image Source="Assets/dashboard.png" Width="20" Height="20"/>
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="SupportButton" Style="{StaticResource MenuButtonStyle}"  >
+                <Button x:Name="SupportButton" Style="{StaticResource MenuButtonStyle}" Click="SupportButton_Click"  >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="پشتیبانی" VerticalAlignment="Center" Margin="4,0,0,0"/>
                         <Image Source="Assets/maintenance.png" Width="28" Height="30" RenderTransformOrigin="1.129,0.553" Margin="5,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="SettingsButton" Style="{StaticResource MenuButtonStyle}"  Height="46" >
+                <Button x:Name="SettingsButton" Style="{StaticResource MenuButtonStyle}"  Height="46" Click="SettingsButton_Click" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="تنظیمات سیستم" VerticalAlignment="Center"/>
                         <Image Source="Assets/2849830_multimedia_options_setting_settings_gear_icon.png" Width="33" Height="27"/>
@@ -111,7 +111,7 @@
 
             <!-- Logout -->
             <StackPanel Grid.Row="1" Margin="10">
-                <Button x:Name="LogoutButton" Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32"/>
+                <Button x:Name="LogoutButton" Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32" Click="LogoutButton_Click"/>
             </StackPanel>
         </Grid>
 

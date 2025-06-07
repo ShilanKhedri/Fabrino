@@ -74,11 +74,11 @@ namespace Fabrino.Views.DashBoard
                 username = NewUsername.Text,
                 password_hash = hashedPass,
                 role = role,
-                full_name = "-",
+                full_name = NewFullName.Text.Trim(),
                 Email = "",
                 Phone = "",
                 created_at = DateTime.Now,
-                is_active = true
+                //is_active = true
             };
 
             bool result = _signUpController.RegisterUser(newUser);

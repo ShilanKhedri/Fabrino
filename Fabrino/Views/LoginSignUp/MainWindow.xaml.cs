@@ -2,6 +2,7 @@
 using Fabrino.Helpers;
 using Fabrino.Models;
 using Fabrino.Views;
+using Fabrino.Views.AdminDashBoard;
 using Fabrino.Views.DashBoard;
 using Fabrino.Views.SellerDashBoard;
 using Microsoft.Data.SqlClient;
@@ -24,37 +25,7 @@ namespace Fabrino
             var dbContext = new AppDbContext();
             repository = new SqlUserRepository(dbContext);
             authController = new AuthController(repository);
-            CreateTestSeller();
-        }
-
-        private void CreateTestSeller()
-        {
-            using var db = new AppDbContext();
-
-            if (!db.Users.Any(u => u.username == "seller1"))
-            {
-                var seller = new UserModel
-                {
-                    username = "seller1",
-                    password_hash = SecurityHelper.ComputeSha256Hash("12345678"),
-                    full_name = "فروشنده تست",
-                    role = "seller",
-                    security_question = "نام اولین ماشینتان چیست؟",
-                    security_answer_hash = SecurityHelper.ComputeSha256Hash("پیکان"),
-                    created_at = DateTime.Now
-                };
-
-                db.Users.Add(seller);
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
-                }
-
-            }
+           
         }
 
         private void GoToRegister_Click(object sender, MouseButtonEventArgs e)
@@ -154,10 +125,22 @@ namespace Fabrino
                 return;
             }
 
-                var user = repository.GetUserByUsername(username);
-            if (authController.Login(username, passwordHash) && user.is_active == true)
-            {
+            var user = repository.GetUserByUsername(username);
 
+            if (user == null)
+            {
+                MessageBox.Show("کاربری با این نام کاربری یافت نشد.");
+                return;
+            }
+
+            if (!user.is_active)
+            {
+                MessageBox.Show("دسترسی این کاربر غیرفعال شده است.");
+                return;
+            }
+
+            if (authController.Login(username, passwordHash))
+            {
                 if (user.role == "owner" || user.role == "Owner" || user.role == "مالک")
                 {
                     var dashboard = new Dashboard(user);
@@ -170,22 +153,23 @@ namespace Fabrino
                     sellerDashboard.Show();
                     this.Close();
                 }
+                else if (user.role == "admin" || user.role == "Admin" || user.role == "ادمین")
+                {
+                    var adminDashboard = new ADashboard(user); // اطمینان حاصل کن این کلاس وجود دارد
+                    adminDashboard.Show();
+                    this.Close();
+                }
                 else
                 {
                     MessageBox.Show("نقش کاربر معتبر نیست.");
-                    return;
                 }
-            }
-            else if (user.is_active == false)
-            {
-                MessageBox.Show("کاربر وجود ندارد");
-                return;
             }
             else
             {
                 MessageBox.Show("نام کاربری یا رمز عبور اشتباه است!");
             }
         }
+
     }
 
 }
