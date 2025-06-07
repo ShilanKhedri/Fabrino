@@ -8,24 +8,40 @@ using System.Windows.Controls;
 using LiveCharts;
 using LiveCharts.Wpf;
 using System.Globalization;
+using System.Collections.ObjectModel;
+using System.Windows.Media;
+using Fabrino.Services;
+using Fabrino.Helpers;
 
 namespace Fabrino.Views.AdminDashBoard
 {
+    public class LogViewModel
+    {
+        public string Message { get; set; }
+        public string Time { get; set; }
+    }
+
     public partial class ADashBoardPage : Page
     {
         private readonly AppDbContext _context = new AppDbContext();
+        private readonly AdminDashboardService _dashboardService;
 
         public SeriesCollection RoleDistributionSeries { get; set; }
         public List<string> RoleLabels { get; set; }
+        public SeriesCollection SalesSeries { get; set; }
+        public SeriesCollection PopularFabricsSeries { get; set; }
+        public ObservableCollection<Transaction> RecentTransactions { get; set; }
+        public ObservableCollection<LowStockItem> LowStockItems { get; set; }
 
         public ADashBoardPage()
         {
             InitializeComponent();
+            _dashboardService = new AdminDashboardService(new AppDbContext());
             DataContext = this;
             LoadUsers();
             LoadSystemLogs();
             LoadRoleDistribution();
-            DataContext = this;
+            LoadDashboardData();
         }
 
         private void LoadUsers()
@@ -34,12 +50,12 @@ namespace Fabrino.Views.AdminDashBoard
             {
                 var users = _context.Users
                     .OrderByDescending(u => u.last_login)
+                    .ToList()
                     .Select(u => new
                     {
-                        u.full_name,
-                        u.role,
-                        last_login = u.last_login.HasValue ? 
-                            ToPersianDateTime(u.last_login.Value) : "عدم ورود"
+                        full_name = u.full_name,
+                        role = u.role,
+                        last_login = DateTimeHelper.ToPersianDateTime(u.last_login)
                     })
                     .ToList();
 
@@ -56,29 +72,59 @@ namespace Fabrino.Views.AdminDashBoard
         {
             try
             {
+                if (_context.SystemLogs == null)
+                {
+                    SystemLogsBox.ItemsSource = new List<LogViewModel>
+                    {
+                        new LogViewModel 
+                        { 
+                            Message = "سیستم لاگ فعال نیست",
+                            Time = DateTimeHelper.ToPersianDateTime(DateTime.Now)
+                        }
+                    };
+                    return;
+                }
+
                 var logs = _context.SystemLogs
                     .OrderByDescending(l => l.Timestamp)
                     .Take(50)
-                    .Select(l => new
+                    .ToList()
+                    .Select(l => new LogViewModel
                     {
                         Message = l.Action,
-                        Time = ToPersianDateTime(l.Timestamp),
-                        l.UserId
+                        Time = DateTimeHelper.ToPersianDateTime(l.Timestamp)
                     })
                     .ToList();
+
+                if (!logs.Any())
+                {
+                    logs = new List<LogViewModel>
+                    {
+                        new LogViewModel 
+                        { 
+                            Message = "هیچ لاگی ثبت نشده است",
+                            Time = DateTimeHelper.ToPersianDateTime(DateTime.Now)
+                        }
+                    };
+                }
 
                 SystemLogsBox.ItemsSource = logs;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطا در بارگذاری لاگ‌ها: {ex.Message}", "خطا",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                SystemLogsBox.ItemsSource = new List<LogViewModel>
+                {
+                    new LogViewModel 
+                    { 
+                        Message = "خطا در بارگذاری لاگ‌ها",
+                        Time = DateTimeHelper.ToPersianDateTime(DateTime.Now)
+                    }
+                };
             }
         }
 
         private void LoadRoleDistribution()
         {
-
             try
             {
                 var roleStats = _context.Users
@@ -95,7 +141,7 @@ namespace Fabrino.Views.AdminDashBoard
                 }
                 else
                 {
-                    RoleDistributionSeries.Clear(); // پاک کردن سری‌های قبلی
+                    RoleDistributionSeries.Clear();
                 }
 
                 foreach (var role in roleStats)
@@ -115,6 +161,70 @@ namespace Fabrino.Views.AdminDashBoard
             }
         }
 
+        private void LoadDashboardData()
+        {
+            // موجودی کل پارچه
+            var totalStock = _dashboardService.GetTotalFabricStock();
+            TotalFabricStock.Text = $"{totalStock:N0} متر";
+
+            // مقایسه سفارشات
+            var ordersComparison = _dashboardService.GetOrdersComparison();
+            TodayOrders.Text = ordersComparison.todayOrders.ToString();
+            var changeText = ordersComparison.percentageChange >= 0 ? "↑" : "↓";
+            var changeColor = ordersComparison.percentageChange >= 0 ? "#4CAF50" : "#F44336";
+            OrdersComparison.Text = $"{changeText} {Math.Abs(ordersComparison.percentageChange):N1}% از دیروز";
+            OrdersComparison.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom(changeColor);
+
+            // نمودار فروش
+            LoadSalesChart();
+
+            // نمودار پرفروش‌ترین پارچه‌ها
+            LoadPopularFabricsChart();
+        }
+
+        private void LoadSalesChart()
+        {
+            var salesData = _dashboardService.GetSalesChart();
+            
+            SalesSeries = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = "فروش",
+                    Values = new ChartValues<decimal>(salesData.Select(x => x.Sales)),
+                    PointGeometry = DefaultGeometries.Circle,
+                    PointGeometrySize = 10,
+                    LineSmoothness = 0
+                }
+            };
+
+            ((CartesianChart)FindName("SalesChart")).Series = SalesSeries;
+            ((CartesianChart)FindName("SalesChart")).AxisX.Clear();
+            ((CartesianChart)FindName("SalesChart")).AxisX.Add(new Axis
+            {
+                Title = "ماه",
+                Labels = salesData.Select(x => x.Month).ToList()
+            });
+        }
+
+        private void LoadPopularFabricsChart()
+        {
+            var popularFabrics = _dashboardService.GetPopularFabrics();
+            
+            PopularFabricsSeries = new SeriesCollection();
+            foreach (var fabric in popularFabrics)
+            {
+                PopularFabricsSeries.Add(new PieSeries
+                {
+                    Title = fabric.FabricName,
+                    Values = new ChartValues<int> { fabric.SalesCount },
+                    DataLabels = true,
+                    LabelPoint = point => $"{fabric.FabricName}"
+                });
+            }
+
+            ((PieChart)FindName("PopularFabricsChart")).Series = PopularFabricsSeries;
+        }
 
         private string ToPersianDateTime(DateTime date)
         {
@@ -130,17 +240,21 @@ namespace Fabrino.Views.AdminDashBoard
             }
         }
 
-        // رویداد تغییر نقش کاربر
         private void EditUser_Click(object sender, RoutedEventArgs e)
         {
-            if (UserGrid.SelectedItem is UserModel user)
+            var selectedItem = UserGrid.SelectedItem;
+            if (selectedItem != null)
             {
-                string newName = Microsoft.VisualBasic.Interaction.InputBox("نام جدید:", "ویرایش نام", user.full_name);
-                if (!string.IsNullOrWhiteSpace(newName))
+                var user = _context.Users.FirstOrDefault(u => u.full_name == selectedItem.GetType().GetProperty("full_name").GetValue(selectedItem).ToString());
+                if (user != null)
                 {
-                    user.full_name = newName;
-                    _context.SaveChanges();
-                    LoadUsers();
+                    string newName = Microsoft.VisualBasic.Interaction.InputBox("نام جدید:", "ویرایش نام", user.full_name);
+                    if (!string.IsNullOrWhiteSpace(newName))
+                    {
+                        user.full_name = newName;
+                        _context.SaveChanges();
+                        LoadUsers();
+                    }
                 }
             }
             else
@@ -151,18 +265,39 @@ namespace Fabrino.Views.AdminDashBoard
 
         private void DeleteUser_Click(object sender, RoutedEventArgs e)
         {
-            if (UserGrid.SelectedItem is UserModel user)
+            var selectedItem = UserGrid.SelectedItem;
+            if (selectedItem != null)
             {
-                var confirm = MessageBox.Show($"آیا می‌خواهید کاربر {user.username} غیرفعال شود؟", "تأیید حذف", MessageBoxButton.YesNo);
-                if (confirm == MessageBoxResult.Yes)
+                var user = _context.Users.FirstOrDefault(u => u.full_name == selectedItem.GetType().GetProperty("full_name").GetValue(selectedItem).ToString());
+                if (user != null)
                 {
-                    user.is_active = false;
-                    _context.SaveChanges();
-                    LoadUsers();
+                    var confirm = MessageBox.Show($"آیا می‌خواهید کاربر {user.username} غیرفعال شود؟", "تأیید حذف", MessageBoxButton.YesNo);
+                    if (confirm == MessageBoxResult.Yes)
+                    {
+                        user.is_active = false;
+                        _context.SaveChanges();
+                        LoadUsers();
+                    }
                 }
             }
         }
+    }
 
+    public class Transaction
+    {
+        public string Id { get; set; }
+        public string Type { get; set; }
+        public string FabricName { get; set; }
+        public string Amount { get; set; }
+        public string Date { get; set; }
+        public string Status { get; set; }
+    }
 
+    public class LowStockItem
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string CurrentStock { get; set; }
+        public string MinStock { get; set; }
     }
 }

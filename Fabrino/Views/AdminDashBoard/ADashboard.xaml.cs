@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace Fabrino.Views.AdminDashBoard
 {
@@ -23,9 +24,9 @@ namespace Fabrino.Views.AdminDashBoard
     /// </summary>
     public partial class ADashboard : Window
     {
-         private readonly AppDbContext _dbContext;
-        private UserModel _currentUser;
-        private IUserRepository _userRepository;
+        private readonly AppDbContext _dbContext;
+        private readonly UserModel _currentUser;
+        private readonly IUserRepository _userRepository;
 
         public ADashboard(UserModel user)
         {
@@ -33,37 +34,36 @@ namespace Fabrino.Views.AdminDashBoard
             _dbContext = new AppDbContext();
             _userRepository = new SqlUserRepository(_dbContext);
             _currentUser = user;
-            LoadUserData(user);
+            DataContext = this;
+            LoadUserInfo();
             this.Closed += ADashboard_Closed;
         }
+
+        public string UserFullName => _currentUser.full_name;
+        public string UserRole => _currentUser.role;
 
         private void ADashboard_Closed(object sender, EventArgs e)
         {
             _userRepository.UpdateLastLogin(_currentUser.username);
         }
 
-        private void LoadUserData(UserModel user)
+        private void LoadUserInfo()
         {
-            if (user != null)
+            if (_currentUser.last_login.HasValue)
             {
-                Dispatcher.Invoke(() =>
-                {
-                    UsernameTextBlock.Text = user.full_name;
-                    UserRoleTextBlock.Text = user.role;
-                    LastLoginTextBlock.Text = user.last_login.HasValue
-                        ? $"آخرین ورود: {user.last_login.Value:yyyy/MM/dd HH:mm}"
-                        : "اولین ورود";
-
-                    SidebarUsernameText.Text = user.full_name;
-                    SidebarUserRoleText.Text = user.role;
-                });
+                var pc = new PersianCalendar();
+                var lastLogin = _currentUser.last_login.Value;
+                LastLoginTextBlock.Text = $"آخرین ورود: {pc.GetYear(lastLogin)}/{pc.GetMonth(lastLogin):00}/{pc.GetDayOfMonth(lastLogin):00} {lastLogin:HH:mm}";
+            }
+            else
+            {
+                LastLoginTextBlock.Text = "اولین ورود";
             }
         }
 
         private void SetActiveButton(Button activeButton)
         {
             DashboardButton.Style = (Style)FindResource("MenuButtonStyle");
-            SupportButton.Style = (Style)FindResource("MenuButtonStyle");
             SettingsButton.Style = (Style)FindResource("MenuButtonStyle");
 
             activeButton.Style = (Style)FindResource("ActiveMenuButtonStyle");
@@ -79,12 +79,6 @@ namespace Fabrino.Views.AdminDashBoard
         {
             SetActiveButton(DashboardButton);
             MainFrame.Navigate(new ADashBoardPage());
-        }
-
-        private void SupportButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetActiveButton(SupportButton);
-            MainFrame.Navigate(new SupportPage());
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)

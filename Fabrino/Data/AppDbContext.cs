@@ -17,7 +17,6 @@ public class AppDbContext : DbContext
     public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
-    public DbSet<SecurityQuestion> SecurityQuestion { get; set; }
     public DbSet<SystemLog> SystemLogs { get; set; }
     public DbSet<SupportTicket> SupportTickets { get; set; }
 

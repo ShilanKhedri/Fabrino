@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fabrino.Views.DashBoard"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:helpers="clr-namespace:Fabrino.Helpers"
         mc:Ignorable="d"
         Title="داشبورد فروشنده"
         WindowStartupLocation="CenterScreen"
@@ -17,6 +18,7 @@
         Loaded="Window_Loaded">
 
     <Window.Resources>
+        <helpers:PersianDateConverter x:Key="PersianDateConverter"/>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#F1F1F1"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -59,10 +61,10 @@
                 <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
                 <TextBlock x:Name="UserRoleTextBlock" Text="{Binding UserRole}" Foreground="#795548" FontSize="14"/>
                 <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
-                <TextBlock x:Name="LastLoginTextBlock"  Foreground="#795548" FontSize="14"/>
+                <TextBlock x:Name="LastLoginTextBlock" Foreground="#795548" FontSize="14"/>
                 <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
-                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='تاریخ: {0:yyyy/MM/dd HH:mm}'}" 
-                   Foreground="#795548" FontSize="14"/>
+                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='تاریخ: {0}', Converter={StaticResource PersianDateConverter}}" 
+                         Foreground="#795548" FontSize="14"/>
             </StackPanel>
         </Border>
 

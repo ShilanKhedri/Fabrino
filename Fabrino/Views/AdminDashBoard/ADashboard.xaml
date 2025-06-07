@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fabrino.Views.DashBoard"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:helpers="clr-namespace:Fabrino.Helpers"
         mc:Ignorable="d"
         Title="داشبورد ادمین"
         WindowStartupLocation="CenterScreen"
@@ -13,10 +14,11 @@
         Background="#FFEFEF"
         FlowDirection="RightToLeft"
         UseLayoutRounding="True"
-        
+        Loaded="Window_Loaded"
         SnapsToDevicePixels="True">
 
     <Window.Resources>
+        <helpers:PersianDateConverter x:Key="PersianDateConverter"/>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#F1F1F1"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -59,10 +61,10 @@
                 <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
                 <TextBlock x:Name="UserRoleTextBlock" Text="{Binding UserRole}" Foreground="#795548" FontSize="14"/>
                 <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
-                <TextBlock x:Name="LastLoginTextBlock"  Foreground="#795548" FontSize="14"/>
+                <TextBlock x:Name="LastLoginTextBlock" Foreground="#795548" FontSize="14"/>
                 <TextBlock Text=" | " Foreground="#795548" FontSize="14"/>
-                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='تاریخ: {0:yyyy/MM/dd HH:mm}'}" 
-                   Foreground="#795548" FontSize="14"/>
+                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='تاریخ: {0}', Converter={StaticResource PersianDateConverter}}" 
+                         Foreground="#795548" FontSize="14"/>
             </StackPanel>
         </Border>
 
@@ -88,19 +90,13 @@
                         </Ellipse.Fill>
                     </Ellipse>
                 </StackPanel>
-                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" Background="#FFF1F1F1" Click="DashboardButton_Click">
+                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" Click="DashboardButton_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
                         <Image Source="Assets/dashboard.png" Width="20" Height="20"/>
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="SupportButton" Style="{StaticResource MenuButtonStyle}" Click="SupportButton_Click"  >
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="پشتیبانی" VerticalAlignment="Center" Margin="4,0,0,0"/>
-                        <Image Source="Assets/maintenance.png" Width="28" Height="30" RenderTransformOrigin="1.129,0.553" Margin="5,0,0,0"/>
-                    </StackPanel>
-                </Button>
                 <Button x:Name="SettingsButton" Style="{StaticResource MenuButtonStyle}"  Height="46" Click="SettingsButton_Click" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="تنظیمات سیستم" VerticalAlignment="Center"/>

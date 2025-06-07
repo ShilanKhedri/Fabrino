@@ -10,60 +10,90 @@
       FlowDirection="RightToLeft">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="30">
-            <!-- 1. لیست کاربران با نقش -->
-            <TextBlock Text="👥 لیست کاربران" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" />
-            <DataGrid x:Name="UserGrid" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,30">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="نام کامل" Binding="{Binding full_name}" Width="*"/>
-                    <DataGridTextColumn Header="نقش" Binding="{Binding role}" Width="100"/>
-                    <DataGridTextColumn Header="آخرین ورود" Binding="{Binding last_login}" Width="150"/>
-                    <DataGridTemplateColumn Header="عملیات" Width="120">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Content="تغییر نقش" Width="70" Margin="2"/>
-                                    <Button Content="❌" Width="30" Margin="2" Background="Red" Foreground="White" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <!-- 4. لاگ سیستم -->
-            <TextBlock Text="📃 لاگ سیستم" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" />
-            <ListBox x:Name="SystemLogsBox" Height="150" Background="White" BorderBrush="#DDD" BorderThickness="1" Margin="0,0,0,30"/>
+            <!-- Quick Stats Cards -->
+            <WrapPanel Grid.Row="0" Margin="0,0,0,20">
+                <Border Background="White" CornerRadius="10" Margin="5" Padding="15" Width="220" Height="120">
+                    <StackPanel>
+                        <TextBlock Text="موجودی کل پارچه" FontSize="16" Foreground="#666"/>
+                        <TextBlock x:Name="TotalFabricStock" Text="در حال بارگذاری..." FontSize="24" FontWeight="Bold" Margin="0,10"/>
+                    </StackPanel>
+                </Border>
 
-            <!-- 6. نمودار نقش کاربران -->
-            <TextBlock Text="🌐 توزیع نقش کاربران" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" />
-            <Grid>
+                <Border Background="White" CornerRadius="10" Margin="5" Padding="15" Width="220" Height="120">
+                    <StackPanel>
+                        <TextBlock Text="سفارشات امروز" FontSize="16" Foreground="#666"/>
+                        <TextBlock x:Name="TodayOrders" Text="در حال بارگذاری..." FontSize="24" FontWeight="Bold" Margin="0,10"/>
+                        <TextBlock x:Name="OrdersComparison" Text="در حال مقایسه..." Foreground="#4CAF50"/>
+                    </StackPanel>
+                </Border>
+            </WrapPanel>
+
+            <!-- Charts Section -->
+            <Grid Grid.Row="1" Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <!-- در بخش نمودار دایره‌ای، این کد را جایگزین کنید: -->
-                <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="10" Margin="0,0,10,0">
-                    <lvc:PieChart x:Name="RoleDistributionChart" Series="{Binding RoleDistributionSeries}" LegendLocation="Bottom">
-                        <lvc:PieChart.ChartLegend>
-                            <lvc:DefaultLegend FontSize="14"/>
-                        </lvc:PieChart.ChartLegend>
-                    </lvc:PieChart>
+
+                <!-- Sales Chart -->
+                <Border Grid.Column="0" Background="White" CornerRadius="10" Margin="5" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="نمودار فروش" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <lvc:CartesianChart x:Name="SalesChart" Height="250">
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="مبلغ (تومان)" />
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </StackPanel>
                 </Border>
 
-                <!-- در بخش آمار عددی، این کد را جایگزین کنید: -->
-                <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="15" Margin="0,0,0,0">
-                    <ItemsControl ItemsSource="{Binding RoleDistributionSeries}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Title, StringFormat={}{0}: {Values[0]} نفر}" 
-                           Margin="5" FontSize="14"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                <!-- Popular Fabrics -->
+                <Border Grid.Column="1" Background="White" CornerRadius="10" Margin="5" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="پرفروش‌ترین پارچه‌ها" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <lvc:PieChart x:Name="PopularFabricsChart" Height="250" />
+                    </StackPanel>
                 </Border>
-
             </Grid>
-        </StackPanel>
+
+            <!-- Users Grid -->
+            <Border Grid.Row="2" Background="White" CornerRadius="10" Margin="5,0,5,20" Padding="15">
+                <StackPanel>
+                    <TextBlock Text="کاربران سیستم" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <DataGrid x:Name="UserGrid" AutoGenerateColumns="False" MaxHeight="200">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="نام کامل" Binding="{Binding full_name}" Width="*"/>
+                            <DataGridTextColumn Header="نقش" Binding="{Binding role}" Width="100"/>
+                            <DataGridTextColumn Header="آخرین ورود" Binding="{Binding last_login}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- System Logs -->
+            <Border Grid.Row="3" Background="White" CornerRadius="10" Margin="5" Padding="15">
+                <StackPanel>
+                    <TextBlock Text="گزارش‌های سیستم" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <ListBox x:Name="SystemLogsBox" MaxHeight="150">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Time}" Foreground="#666" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding Message}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+        </Grid>
     </ScrollViewer>
 </Page>

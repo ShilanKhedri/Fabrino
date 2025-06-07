@@ -26,15 +26,14 @@ namespace Fabrino.Views.DashBoard
             _signUpController = new SignUpController();
             _currentUser = user;
 
-           
+            
         }
 
-        
+       
 
         private void NavigateToProfile_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new ProfileSettingsPage(_currentUser));
-
         }
 
         private void NavigateToPassword_Click(object sender, RoutedEventArgs e)

@@ -156,7 +156,7 @@ namespace Fabrino
                 }
                 else if (user.role == "admin" || user.role == "Admin" || user.role == "ادمین")
                 {
-                    var adminDashboard = new ADashboard(user); // اطمینان حاصل کن این کلاس وجود دارد
+                    var adminDashboard = new ADashboard(user);
                     adminDashboard.Show();
                     this.Close();
                 }

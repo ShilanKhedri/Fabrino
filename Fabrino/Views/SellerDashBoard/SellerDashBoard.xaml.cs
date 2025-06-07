@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace Fabrino.Views.SellerDashBoard
 {
@@ -24,108 +25,74 @@ namespace Fabrino.Views.SellerDashBoard
     public partial class SellerDashBoard : Window
     {
         private readonly AppDbContext _dbContext;
-        private UserModel _currentUser;
-        IUserRepository _userRepository;
+        private readonly UserModel _currentUser;
+        private readonly IUserRepository _userRepository;
+
         public SellerDashBoard(UserModel user)
         {
             InitializeComponent();
-            _currentUser = user;
-            CheckAndPromptSecurityQuestion(_currentUser);
             _dbContext = new AppDbContext();
             _userRepository = new SqlUserRepository(_dbContext);
-            LoadUserData(user);
-            this.Closed += Dashboard_Closed;
-
+            _currentUser = user;
+            DataContext = this;
+            LoadUserInfo();
+            this.Closed += SellerDashBoard_Closed;
         }
-        private void CheckAndPromptSecurityQuestion(UserModel user)
+
+        public string UserFullName => _currentUser.full_name;
+        public string UserRole => _currentUser.role;
+
+        private void SellerDashBoard_Closed(object sender, EventArgs e)
         {
-            if (user.role == "Seller" && string.IsNullOrWhiteSpace(user.security_answer_hash))
+            _userRepository.UpdateLastLogin(_currentUser.username);
+        }
+
+        private void LoadUserInfo()
+        {
+            if (_currentUser.last_login.HasValue)
             {
-                SecuritySetupWindow securityQuestion = new SecuritySetupWindow(user);
-                securityQuestion.Show();
+                var pc = new PersianCalendar();
+                var lastLogin = _currentUser.last_login.Value;
+                LastLoginTextBlock.Text = $"آخرین ورود: {pc.GetYear(lastLogin)}/{pc.GetMonth(lastLogin):00}/{pc.GetDayOfMonth(lastLogin):00} {lastLogin:HH:mm}";
+            }
+            else
+            {
+                LastLoginTextBlock.Text = "اولین ورود";
             }
         }
 
-        private void Dashboard_Closed(object sender, EventArgs e)
-        {
-            _userRepository.UpdateLastLogin(_currentUser.username);
-
-        }
-        
         private void SetActiveButton(Button activeButton)
         {
-
             DashboardButton.Style = (Style)FindResource("MenuButtonStyle");
             InventoryButton.Style = (Style)FindResource("MenuButtonStyle");
             OrderButton.Style = (Style)FindResource("MenuButtonStyle");
             SettingsButton.Style = (Style)FindResource("MenuButtonStyle");
 
-
             activeButton.Style = (Style)FindResource("ActiveMenuButtonStyle");
         }
 
-        private void LoadUserData(UserModel user)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (user != null)
-            {
-                Dispatcher.Invoke(() => {
-                    // تنظیم اطلاعات در Status Bar
-                    UsernameTextBlock.Text = user.full_name;
-                    UserRoleTextBlock.Text = user.role;
-                    LastLoginTextBlock.Text = user.last_login.HasValue
-                        ? $"آخرین ورود: {user.last_login.Value.ToString("yyyy/MM/dd HH:mm")}"
-                        : "اولین ورود";
-
-                    // تنظیم اطلاعات در نوار کناری
-                    SidebarUsernameText.Text = user.full_name;
-                    SidebarUserRoleText.Text = user.role;
-                });
-            }
+            SetActiveButton(DashboardButton);
+            MainFrame.Navigate(new SDashboardPage());
         }
 
         private void DashboardButton_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(DashboardButton);
-            MainFrame.Navigate(new DashBoardPage());
-
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetActiveButton(DashboardButton);
-            MainFrame.Navigate(new DashBoardPage());
-
+            MainFrame.Navigate(new SDashboardPage());
         }
 
-
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow login = new MainWindow();
-            _userRepository.UpdateLastLogin(_currentUser.username);
-            login.Show();
-            this.Close();
-        }
-
-       
-        private void InventoryButton_Click(object sender, RoutedEventArgs e)
+        private void InventoryButton_Click_1(object sender, RoutedEventArgs e)
         {
             SetActiveButton(InventoryButton);
             MainFrame.Navigate(new InventoryPage());
         }
 
-        
-
         private void OrderButton_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(OrderButton);
             MainFrame.Navigate(new SOrderPage());
-        }
-
-        private void LogoutButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            MainWindow login = new MainWindow();
-            _userRepository.UpdateLastLogin(_currentUser.username);
-            login.Show();
-            this.Close();
         }
 
         private void SettingsButton_Click_1(object sender, RoutedEventArgs e)
@@ -134,10 +101,12 @@ namespace Fabrino.Views.SellerDashBoard
             MainFrame.Navigate(new SellerSettingPage(_currentUser));
         }
 
-        private void InventoryButton_Click_1(object sender, RoutedEventArgs e)
+        private void LogoutButton_Click_1(object sender, RoutedEventArgs e)
         {
-            SetActiveButton(InventoryButton);
-            MainFrame.Navigate(new InventoryPage());
+            _userRepository.UpdateLastLogin(_currentUser.username);
+            var loginWindow = new MainWindow();
+            loginWindow.Show();
+            this.Close();
         }
     }
 }
