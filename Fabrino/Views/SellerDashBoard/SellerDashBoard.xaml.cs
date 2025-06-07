@@ -1,4 +1,6 @@
-﻿using Fabrino.Views.DashBoard;
+﻿using Fabrino.Models;
+using Fabrino.Views.DashBoard;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +23,35 @@ namespace Fabrino.Views.SellerDashBoard
     /// </summary>
     public partial class SellerDashBoard : Window
     {
-        public SellerDashBoard()
+        private readonly AppDbContext _dbContext;
+        private UserModel _currentUser;
+        IUserRepository _userRepository;
+        public SellerDashBoard(UserModel user)
         {
             InitializeComponent();
+            _currentUser = user;
+            CheckAndPromptSecurityQuestion(_currentUser);
+            _dbContext = new AppDbContext();
+            _userRepository = new SqlUserRepository(_dbContext);
+            LoadUserData(user);
+            this.Closed += Dashboard_Closed;
+
         }
+        private void CheckAndPromptSecurityQuestion(UserModel user)
+        {
+            if (user.role == "Seller" && string.IsNullOrWhiteSpace(user.security_answer_hash))
+            {
+                SecuritySetupWindow securityQuestion = new SecuritySetupWindow(user);
+                securityQuestion.Show();
+            }
+        }
+
+        private void Dashboard_Closed(object sender, EventArgs e)
+        {
+            _userRepository.UpdateLastLogin(_currentUser.username);
+
+        }
+        
         private void SetActiveButton(Button activeButton)
         {
 
@@ -37,25 +64,43 @@ namespace Fabrino.Views.SellerDashBoard
             activeButton.Style = (Style)FindResource("ActiveMenuButtonStyle");
         }
 
+        private void LoadUserData(UserModel user)
+        {
+            if (user != null)
+            {
+                Dispatcher.Invoke(() => {
+                    // تنظیم اطلاعات در Status Bar
+                    UsernameTextBlock.Text = user.full_name;
+                    UserRoleTextBlock.Text = user.role;
+                    LastLoginTextBlock.Text = user.last_login.HasValue
+                        ? $"آخرین ورود: {user.last_login.Value.ToString("yyyy/MM/dd HH:mm")}"
+                        : "اولین ورود";
+
+                    // تنظیم اطلاعات در نوار کناری
+                    SidebarUsernameText.Text = user.full_name;
+                    SidebarUserRoleText.Text = user.role;
+                });
+            }
+        }
+
         private void DashboardButton_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(DashboardButton);
-            MainFrame.Navigate(new SDashboardPage());
+            MainFrame.Navigate(new DashBoardPage());
 
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new SDashboardPage());
+            SetActiveButton(DashboardButton);
+            MainFrame.Navigate(new DashBoardPage());
+
         }
 
-        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
-        }
 
-        
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             MainWindow login = new MainWindow();
+            _userRepository.UpdateLastLogin(_currentUser.username);
             login.Show();
             this.Close();
         }
@@ -67,16 +112,32 @@ namespace Fabrino.Views.SellerDashBoard
             MainFrame.Navigate(new InventoryPage());
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetActiveButton(SettingsButton);
-            MainFrame.Navigate(new SellerSettingPage());
-        }
+        
 
         private void OrderButton_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(OrderButton);
             MainFrame.Navigate(new SOrderPage());
+        }
+
+        private void LogoutButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            MainWindow login = new MainWindow();
+            _userRepository.UpdateLastLogin(_currentUser.username);
+            login.Show();
+            this.Close();
+        }
+
+        private void SettingsButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            SetActiveButton(SettingsButton);
+            MainFrame.Navigate(new SellerSettingPage());
+        }
+
+        private void InventoryButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            SetActiveButton(InventoryButton);
+            MainFrame.Navigate(new InventoryPage());
         }
     }
 }

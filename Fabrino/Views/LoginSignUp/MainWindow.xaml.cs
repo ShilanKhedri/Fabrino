@@ -154,26 +154,33 @@ namespace Fabrino
                 return;
             }
 
-            if (authController.Login(username, passwordHash))
-            {
                 var user = repository.GetUserByUsername(username);
+            if (authController.Login(username, passwordHash) && user.is_active == true)
+            {
 
-                if (user.role == "owner")
+                if (user.role == "owner" || user.role == "Owner" || user.role == "مالک")
                 {
                     var dashboard = new Dashboard(user);
                     dashboard.Show();
+                    this.Close();
                 }
-                else if (user.role == "seller")
+                else if (user.role == "seller" || user.role == "Seller" || user.role == "فروشنده")
                 {
-                    var sellerDashboard = new SellerDashBoard();
+                    var sellerDashboard = new SellerDashBoard(user);
                     sellerDashboard.Show();
+                    this.Close();
                 }
                 else
                 {
                     MessageBox.Show("نقش کاربر معتبر نیست.");
                     return;
                 }
-             }
+            }
+            else if (user.is_active == false)
+            {
+                MessageBox.Show("کاربر وجود ندارد");
+                return;
+            }
             else
             {
                 MessageBox.Show("نام کاربری یا رمز عبور اشتباه است!");

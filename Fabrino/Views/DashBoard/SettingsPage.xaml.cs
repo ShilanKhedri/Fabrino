@@ -77,6 +77,7 @@ namespace Fabrino.Views.DashBoard
                 full_name = "-",
                 Email = "",
                 Phone = "",
+                created_at = DateTime.Now,
                 is_active = true
             };
 
