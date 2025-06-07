@@ -7,7 +7,96 @@
       Title="سفارش فروشنده"
       FlowDirection="RightToLeft">
 
-    <Grid Margin="20">
+    <Page.Resources>
+        <Style x:Key="MainButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#D94C32"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F48672"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Background" Value="#FFF5F5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#F48672"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="TagStyle" TargetType="Border">
+            <Setter Property="Background" Value="#F48672"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="0,0,5,5"/>
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Background" Value="#FFF5F5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+        </Style>
+
+        <Style x:Key="InputTextBox" TargetType="TextBox">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Background" Value="#FFF5F5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="Auto"/>
@@ -15,53 +104,150 @@
         </Grid.ColumnDefinitions>
 
         <!-- لیست سفارشات -->
-        <Border Grid.Column="0"  CornerRadius="10" Padding="15" Margin="0,0,10,0">
-            <StackPanel>
-                <TextBlock Text="شناسه سفارش‌ها" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
-                <ListBox x:Name="OrderList" Height="400"/>
-            </StackPanel>
+        <Border Grid.Column="0" Background="White" CornerRadius="15" 
+                Effect="{DynamicResource MaterialDesignElevationShadow2}"
+                Padding="20" Margin="0,0,15,0">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="لیست سفارش‌ها" 
+                         FontSize="22" FontWeight="Bold" Margin="0,0,0,20"
+                         Foreground="#D94C32"/>
+                <ListBox x:Name="OrderList" 
+                        ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                        Background="Transparent"
+                        BorderThickness="0"/>
+            </DockPanel>
         </Border>
 
         <!-- خط جداکننده -->
-        <GridSplitter Grid.Column="1" Width="10" HorizontalAlignment="Center">
-            <GridSplitter.Template>
-                <ControlTemplate>
-                    <Rectangle Fill="Transparent" Stroke="Gray" StrokeDashArray="2 2" Width="1"/>
-                </ControlTemplate>
-            </GridSplitter.Template>
-        </GridSplitter>
+        <GridSplitter Grid.Column="1" Width="1" HorizontalAlignment="Center" 
+                      Background="#EEEEEE" Margin="10,0"/>
 
         <!-- فرم ثبت سفارش -->
-        <Border Grid.Column="2"  CornerRadius="10" Padding="20">
-            <StackPanel>
-                <TextBlock Text="ثبت سفارش جدید" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+        <Border Grid.Column="2" Background="White" CornerRadius="15"
+                Effect="{DynamicResource MaterialDesignElevationShadow2}"
+                Padding="25">
+            <ScrollViewer>
+                <StackPanel>
+                    <TextBlock Text="ثبت سفارش جدید" 
+                             FontSize="22" FontWeight="Bold" 
+                             Foreground="#D94C32" 
+                             Margin="0,0,0,25"/>
 
-                <TextBlock Text="شناسه سفارش:"/>
-                <TextBox x:Name="OrderIdTextBox" Margin="0,5"/>
+                    <!-- انتخاب مشتری -->
+                    <DockPanel Margin="0,0,0,15">
+                        <Button DockPanel.Dock="Right" 
+                                Content="+ افزودن مشتری" 
+                                Style="{StaticResource MainButtonStyle}"
+                                Click="AddNewCustomer_Click"
+                                Margin="10,0,0,0"/>
+                        <ComboBox x:Name="CustomerComboBox" 
+                                Style="{StaticResource ComboBoxStyle}"
+                                SelectionChanged="CustomerComboBox_SelectionChanged"/>
+                    </DockPanel>
 
-                <TextBlock Text="نام مشتری:"/>
-                <TextBox x:Name="NameTextBox" Margin="0,5"/>
+                    <!-- اطلاعات مشتری -->
+                    <Border Background="#FFF5F5" CornerRadius="10" Padding="15" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock x:Name="CustomerNameText" FontWeight="Bold"/>
+                            <TextBlock x:Name="CustomerPhoneText" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="CustomerAddressText" Margin="0,5,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
 
-                <TextBlock Text="شماره تلفن:"/>
-                <TextBox x:Name="PhoneTextBox" Margin="0,5"/>
+                    <!-- انتخاب پارچه -->
+                    <DockPanel Margin="0,0,0,15">
+                        <TextBox x:Name="MetrageTextBox" 
+                                DockPanel.Dock="Right"
+                                Width="100"
+                                Style="{StaticResource InputTextBox}"
+                                Margin="10,0,0,0"
+                                PreviewTextInput="NumberValidation"
+                                ToolTip="متراژ"/>
+                        <Button DockPanel.Dock="Right" 
+                                Content="افزودن" 
+                                Style="{StaticResource MainButtonStyle}"
+                                Click="AddFabric_Click"
+                                Margin="10,0,0,0"/>
+                        <ComboBox x:Name="FabricComboBox" 
+                                Style="{StaticResource ComboBoxStyle}"
+                                SelectionChanged="FabricComboBox_SelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text=" - موجودی: "/>
+                                        <TextBlock Text="{Binding Stock}"/>
+                                        <TextBlock Text=" متر"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </DockPanel>
 
-                <TextBlock Text="آدرس:"/>
-                <TextBox x:Name="AddressTextBox" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,5"/>
+                    <!-- لیست پارچه‌های انتخاب شده -->
+                    <TextBlock Text="پارچه‌های انتخاب شده:" Style="{StaticResource LabelStyle}"/>
+                    <ItemsControl x:Name="SelectedFabricsList" Margin="0,0,0,20">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource TagStyle}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" Foreground="White"/>
+                                        <TextBlock Text=" - " Foreground="White"/>
+                                        <TextBlock Text="{Binding Metrage}" Foreground="White"/>
+                                        <TextBlock Text=" متر" Foreground="White"/>
+                                        <Button Content="×" 
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Foreground="White"
+                                                Margin="5,0,0,0"
+                                                Click="RemoveFabric_Click"
+                                                Tag="{Binding Id}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <TextBlock Text="تعداد اقلام:"/>
-                <TextBox x:Name="ItemCountTextBox" Margin="0,5"/>
+                    <!-- جمع کل -->
+                    <Border Background="#FFF5F5" CornerRadius="10" Padding="15" Margin="0,0,0,20">
+                        <StackPanel>
+                            <DockPanel>
+                                <TextBlock Text="جمع کل:" FontWeight="Bold"/>
+                                <TextBlock x:Name="TotalPriceText" 
+                                         Text="0 تومان"
+                                         FontWeight="Bold"
+                                         Foreground="#D94C32"
+                                         HorizontalAlignment="Left"/>
+                            </DockPanel>
+                            <TextBlock x:Name="TotalMetrageText" 
+                                     Text="مجموع متراژ: 0 متر"
+                                     Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
 
-                <TextBlock Text="اقلام (به صورت fabricId:تعداد با , جدا شوند):"/>
-                <TextBox x:Name="ItemsTextBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,5"/>
-
-                <TextBlock Text="قیمت کل:"/>
-                <TextBox x:Name="TotalPriceTextBox" Margin="0,5"/>
-
-                <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Right">
-                    <Button Content="تایید" Width="100" Margin="5" Click="ConfirmButton_Click"/>
-                    <Button Content="پاک‌سازی" Width="100" Margin="5" Click="ClearForm_Click"/>
+                    <!-- دکمه‌های عملیات -->
+                    <StackPanel Orientation="Horizontal" 
+                              HorizontalAlignment="Left" 
+                              Margin="0,10,0,0">
+                        <Button Content="ثبت سفارش" 
+                                Style="{StaticResource MainButtonStyle}"
+                                Click="ConfirmButton_Click"
+                                Margin="0,0,10,0"/>
+                        <Button Content="پاک‌سازی فرم" 
+                                Background="Transparent"
+                                Foreground="#D94C32"
+                                BorderBrush="#D94C32"
+                                BorderThickness="1"
+                                Padding="20,10"
+                                Click="ClearForm_Click"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Border>
     </Grid>
 </Page>

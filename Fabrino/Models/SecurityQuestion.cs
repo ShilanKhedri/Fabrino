@@ -1,5 +1,8 @@
-﻿public class SecurityQuestion
+﻿namespace Fabrino.Models
 {
-    public int SecurityQuestionID { get; set; }
-    public string QuestionText { get; set; }
+    public class SecurityQuestion
+    {
+        public int Id { get; set; }
+        public string QuestionText { get; set; }
+    }
 }

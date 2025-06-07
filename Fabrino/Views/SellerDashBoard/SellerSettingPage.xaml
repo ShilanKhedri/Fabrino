@@ -5,43 +5,242 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Fabrino.Views.SellerDashBoard"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SellerSettingPage"
-      >
-
-    <Grid Margin="20"
+      d:DesignHeight="650" d:DesignWidth="900"
+      Title="تنظیمات حساب کاربری"
       FlowDirection="RightToLeft">
-        <TabControl  Background="#FFEFEF">
+
+    <Page.Resources>
+        <Style x:Key="TabItemStyle" TargetType="TabItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0" 
+                                CornerRadius="5,5,0,0"
+                                Margin="{TemplateBinding Margin}">
+                            <ContentPresenter x:Name="ContentSite"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    ContentSource="Header"
+                                    RecognizesAccessKey="True"
+                                    Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#F48672"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="#FFF5F5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputTextBox" TargetType="TextBox">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputPasswordBox" TargetType="PasswordBox">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MainButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#D94C32"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F48672"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="20">
+        <TabControl Background="#FFEFEF">
             <!-- اطلاعات شخصی -->
-            <TabItem Header="اطلاعات شخصی"  >
-            <StackPanel Margin="30" Width="350">
-                <TextBlock Text="ویرایش اطلاعات شخصی" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
-                <TextBlock Text="نام کامل:"/>
-                <TextBox x:Name="FullNameBox" Margin="0,5"/>
-                <TextBlock Text="ایمیل:"/>
-                <TextBox x:Name="EmailBox" Margin="0,5"/>
-                <TextBlock Text="شماره تماس:"/>
-                <TextBox x:Name="PhoneBox" Margin="0,5"/>
-                    <Button Content="ذخیره تغییرات" Click="SaveProfile_Click" Margin="0,15,0,0" Width="150" Background="#F48672" Foreground="White"/>
-            </StackPanel>
-        </TabItem>
+            <TabItem Header="اطلاعات شخصی" Style="{StaticResource TabItemStyle}">
+                <Border Background="White" CornerRadius="0,5,5,5" Padding="30">
+                    <StackPanel MaxWidth="500" HorizontalAlignment="Right">
+                        <TextBlock Text="ویرایش اطلاعات شخصی" 
+                                 FontSize="22" FontWeight="Bold" 
+                                 Foreground="#D94C32"
+                                 HorizontalAlignment="Right"
+                                 Margin="0,0,0,25"/>
 
-        <!-- تغییر رمز عبور -->
-        <TabItem Header="تغییر رمز عبور"  >
-            <StackPanel Margin="30" Width="350">
-                <TextBlock Text="تغییر رمز عبور" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
-                <TextBlock Text="رمز فعلی:"/>
-                <PasswordBox x:Name="CurrentPassword" Margin="0,5"/>
-                <TextBlock Text="رمز جدید:"/>
-                <PasswordBox x:Name="NewPassword" Margin="0,5"/>
-                <TextBlock Text="تکرار رمز جدید:"/>
-                <PasswordBox x:Name="ConfirmPassword" Margin="0,5"/>
-                    <Button Content="تغییر رمز" Click="ChangePassword_Click" Margin="0,15,0,0" Width="150" Background="#F48672" Foreground="White"/>
-            </StackPanel>
-        </TabItem>
-            
+                        <TextBlock Text="نام کاربری:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="UsernameBox" Style="{StaticResource InputTextBox}" IsReadOnly="True"
+                                ToolTip="نام کاربری شما که قابل تغییر نیست"/>
 
+                        <TextBlock Text="نام و نام خانوادگی:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="FullNameBox" Style="{StaticResource InputTextBox}"
+                                ToolTip="نام و نام خانوادگی کامل خود را وارد کنید"/>
 
+                        <TextBlock Text="ایمیل:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="EmailBox" Style="{StaticResource InputTextBox}"
+                                ToolTip="آدرس ایمیل معتبر خود را وارد کنید"/>
+
+                        <TextBlock Text="شماره تماس:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="PhoneBox" Style="{StaticResource InputTextBox}"
+                                ToolTip="شماره تماس خود را با فرمت صحیح وارد کنید"/>
+
+                        <TextBlock Text="تاریخ عضویت:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="CreatedAtBox" Style="{StaticResource InputTextBox}" IsReadOnly="True"
+                                ToolTip="تاریخ ایجاد حساب کاربری شما"/>
+
+                        <TextBlock Text="آخرین ورود:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox x:Name="LastLoginBox" Style="{StaticResource InputTextBox}" IsReadOnly="True"
+                                ToolTip="تاریخ و زمان آخرین ورود شما به سیستم"/>
+
+                        <Button Content="ذخیره تغییرات" 
+                                Style="{StaticResource MainButtonStyle}"
+                                Click="SaveProfile_Click" 
+                                Margin="0,15,0,0" 
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+
+            <!-- تغییر رمز عبور -->
+            <TabItem Header="تغییر رمز عبور" Style="{StaticResource TabItemStyle}">
+                <Border Background="White" CornerRadius="0,5,5,5" Padding="30">
+                    <StackPanel MaxWidth="500" HorizontalAlignment="Right">
+                        <TextBlock Text="تغییر رمز عبور" 
+                                 FontSize="22" FontWeight="Bold" 
+                                 Foreground="#D94C32"
+                                 HorizontalAlignment="Right"
+                                 Margin="0,0,0,25"/>
+
+                        <TextBlock Text="رمز عبور فعلی:" Style="{StaticResource LabelStyle}"/>
+                        <PasswordBox x:Name="CurrentPassword" Style="{StaticResource InputPasswordBox}"
+                                   ToolTip="رمز عبور فعلی خود را وارد کنید"/>
+
+                        <TextBlock Text="رمز عبور جدید:" Style="{StaticResource LabelStyle}"/>
+                        <PasswordBox x:Name="NewPassword" Style="{StaticResource InputPasswordBox}"
+                                   ToolTip="رمز عبور باید حداقل 8 کاراکتر و شامل حروف و اعداد باشد"
+                                   PasswordChanged="NewPassword_PasswordChanged"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,-10,0,10">
+                            <TextBlock x:Name="PasswordStrengthText" 
+                                     Margin="5,0"
+                                     FontSize="12"/>
+                            <TextBlock x:Name="PasswordRequirementsText"
+                                     Text="(حداقل 8 کاراکتر، شامل حروف و اعداد)"
+                                     Foreground="Gray"
+                                     FontSize="12"
+                                     Margin="10,0,0,0"/>
+                        </StackPanel>
+
+                        <TextBlock Text="تکرار رمز عبور جدید:" Style="{StaticResource LabelStyle}"/>
+                        <PasswordBox x:Name="ConfirmPassword" Style="{StaticResource InputPasswordBox}"
+                                   ToolTip="رمز عبور جدید را مجدداً وارد کنید"/>
+
+                        <Button Content="تغییر رمز عبور" 
+                                Style="{StaticResource MainButtonStyle}"
+                                Click="ChangePassword_Click" 
+                                Margin="0,15,0,0"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+
+            <!-- سوال امنیتی -->
+            <TabItem Header="سوال امنیتی" Style="{StaticResource TabItemStyle}">
+                <Border Background="White" CornerRadius="0,5,5,5" Padding="30">
+                    <StackPanel MaxWidth="500" HorizontalAlignment="Right">
+                        <TextBlock Text="تنظیم سوال امنیتی" 
+                                 FontSize="22" FontWeight="Bold" 
+                                 Foreground="#D94C32"
+                                 HorizontalAlignment="Right"
+                                 Margin="0,0,0,25"/>
+
+                        <TextBlock Text="سوال امنیتی:" Style="{StaticResource LabelStyle}"/>
+                        <ComboBox x:Name="SecurityQuestionComboBox" 
+                                Style="{StaticResource ComboBoxStyle}"
+                                ToolTip="یک سوال امنیتی را برای بازیابی حساب خود انتخاب کنید">
+                            <ComboBoxItem Content="نام اولین ماشینتان چیست؟"/>
+                            <ComboBoxItem Content="نام شهر محل تولدتان چیست؟"/>
+                            <ComboBoxItem Content="نام معلم محبوب دوران دبستانتان چیست؟"/>
+                            <ComboBoxItem Content="نام بهترین دوست دوران مدرسه‌تان چیست؟"/>
+                        </ComboBox>
+
+                        <TextBlock Text="پاسخ سوال امنیتی:" Style="{StaticResource LabelStyle}"/>
+                        <PasswordBox x:Name="SecurityAnswerBox" Style="{StaticResource InputPasswordBox}"
+                                   ToolTip="پاسخ سوال امنیتی را وارد کنید"/>
+
+                        <Button Content="ذخیره سوال امنیتی" 
+                                Style="{StaticResource MainButtonStyle}"
+                                Click="SaveSecurityQuestion_Click" 
+                                Margin="0,15,0,0"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+            </TabItem>
         </TabControl>
     </Grid>
 </Page>
