@@ -6,9 +6,42 @@
       xmlns:local="clr-namespace:Fabrino.Views.SellerDashBoard"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SellerSettingPage">
+      Title="SellerSettingPage"
+      >
 
-    <Grid>
-        
+    <Grid Margin="20"
+      FlowDirection="RightToLeft">
+        <TabControl  Background="#FFEFEF">
+            <!-- اطلاعات شخصی -->
+            <TabItem Header="اطلاعات شخصی"  >
+            <StackPanel Margin="30" Width="350">
+                <TextBlock Text="ویرایش اطلاعات شخصی" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="نام کامل:"/>
+                <TextBox x:Name="FullNameBox" Margin="0,5"/>
+                <TextBlock Text="ایمیل:"/>
+                <TextBox x:Name="EmailBox" Margin="0,5"/>
+                <TextBlock Text="شماره تماس:"/>
+                <TextBox x:Name="PhoneBox" Margin="0,5"/>
+                    <Button Content="ذخیره تغییرات" Click="SaveProfile_Click" Margin="0,15,0,0" Width="150" Background="#F48672" Foreground="White"/>
+            </StackPanel>
+        </TabItem>
+
+        <!-- تغییر رمز عبور -->
+        <TabItem Header="تغییر رمز عبور"  >
+            <StackPanel Margin="30" Width="350">
+                <TextBlock Text="تغییر رمز عبور" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="رمز فعلی:"/>
+                <PasswordBox x:Name="CurrentPassword" Margin="0,5"/>
+                <TextBlock Text="رمز جدید:"/>
+                <PasswordBox x:Name="NewPassword" Margin="0,5"/>
+                <TextBlock Text="تکرار رمز جدید:"/>
+                <PasswordBox x:Name="ConfirmPassword" Margin="0,5"/>
+                    <Button Content="تغییر رمز" Click="ChangePassword_Click" Margin="0,15,0,0" Width="150" Background="#F48672" Foreground="White"/>
+            </StackPanel>
+        </TabItem>
+            
+
+
+        </TabControl>
     </Grid>
 </Page>

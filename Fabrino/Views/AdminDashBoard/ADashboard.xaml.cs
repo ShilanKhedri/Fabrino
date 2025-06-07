@@ -90,7 +90,7 @@ namespace Fabrino.Views.AdminDashBoard
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(SettingsButton);
-            MainFrame.Navigate(new AdminSettingsPage());
+            MainFrame.Navigate(new AdminSettingsPage(_currentUser));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

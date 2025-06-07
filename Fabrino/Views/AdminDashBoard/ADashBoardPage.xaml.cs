@@ -89,7 +89,6 @@ namespace Fabrino.Views.AdminDashBoard
 
                 RoleLabels = roleStats.Select(r => r.Role).ToList();
 
-                // این قسمت را تغییر دهید:
                 if (RoleDistributionSeries == null)
                 {
                     RoleDistributionSeries = new SeriesCollection();

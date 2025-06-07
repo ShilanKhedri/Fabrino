@@ -5,10 +5,10 @@
 
     <Grid Margin="20"
           FlowDirection="RightToLeft">
-        <TabControl>
+        <TabControl Background="#FFEFEF">
 
             <!-- اطلاعات شخصی -->
-            <TabItem Header="اطلاعات شخصی">
+            <TabItem Header="اطلاعات شخصی" >
                 <StackPanel Margin="30" Width="350">
                     <TextBlock Text="ویرایش اطلاعات شخصی" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
                     <TextBlock Text="نام کامل:"/>
@@ -17,7 +17,7 @@
                     <TextBox x:Name="EmailBox" Margin="0,5"/>
                     <TextBlock Text="شماره تماس:"/>
                     <TextBox x:Name="PhoneBox" Margin="0,5"/>
-                    <Button Content="ذخیره تغییرات" Click="SaveProfile_Click" Margin="0,15,0,0" Width="150"/>
+                    <Button Content="ذخیره تغییرات" Click="SaveProfile_Click" Margin="0,15,0,0" Width="150" Background="#F48672" Foreground="White"/>
                 </StackPanel>
             </TabItem>
 
@@ -31,7 +31,7 @@
                     <PasswordBox x:Name="NewPassword" Margin="0,5"/>
                     <TextBlock Text="تکرار رمز جدید:"/>
                     <PasswordBox x:Name="ConfirmPassword" Margin="0,5"/>
-                    <Button Content="تغییر رمز" Click="ChangePassword_Click" Margin="0,15,0,0" Width="150"/>
+                    <Button Content="تغییر رمز" Click="ChangePassword_Click" Margin="0,15,0,0" Width="150" Background="#F48672" Foreground="White"/>
                 </StackPanel>
             </TabItem>
 
@@ -56,7 +56,7 @@
                             <ComboBoxItem Content="فروشنده"/>
                         </ComboBox>
 
-                        <Button Content="افزودن" Click="AddUser_Click" Margin="0,15,0,0" Width="150"/>
+                        <Button Content="افزودن" Click="AddUser_Click" Margin="0,15,0,0" Width="150" Background="#F48672" Foreground="White"/>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -66,10 +66,10 @@
             <TabItem Header="پشتیبان‌گیری">
                 <StackPanel Margin="30" HorizontalAlignment="Center">
                     <TextBlock Text="بک‌آپ‌گیری از دیتابیس" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
-                    <Button Content="گرفتن بک‌آپ" Width="200" Click="BackupDatabase_Click"/>
+                    <Button Content="گرفتن بک‌آپ" Width="200" Click="BackupDatabase_Click" Background="#F48672" Foreground="White"/>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="مدیریت کاربران">
+            <TabItem Header="مدیریت کاربران" >
                 <StackPanel Margin="20">
                     <DataGrid x:Name="UsersGrid"
                   AutoGenerateColumns="False"
@@ -86,8 +86,8 @@
                     </DataGrid>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Button Content="ویرایش" Click="EditUser_Click" Margin="5"/>
-                        <Button Content="حذف" Click="DeleteUser_Click" Margin="5"/>
+                        <Button Content="ویرایش" Click="EditUser_Click" Margin="5" Background="#F48672" Foreground="White"/>
+                        <Button Content="حذف" Click="DeleteUser_Click" Margin="5" Background="#F48672" Foreground="White"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
