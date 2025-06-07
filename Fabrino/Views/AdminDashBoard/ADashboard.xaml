@@ -1,4 +1,4 @@
-﻿<Window x:Class="Fabrino.Views.SellerDashBoard.SellerDashBoard"
+﻿<Window x:Class="Fabrino.Views.AdminDashBoard.ADashboard"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,15 +6,15 @@
         xmlns:local="clr-namespace:Fabrino.Views.DashBoard"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="داشبورد فروشنده"
+        Title="داشبورد ادمین"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Height="600" Width="1000"
         Background="#FFEFEF"
         FlowDirection="RightToLeft"
         UseLayoutRounding="True"
-        SnapsToDevicePixels="True"
-        Loaded="Window_Loaded">
+        
+        SnapsToDevicePixels="True">
 
     <Window.Resources>
         <Style x:Key="MenuButtonStyle" TargetType="Button">
@@ -88,28 +88,22 @@
                         </Ellipse.Fill>
                     </Ellipse>
                 </StackPanel>
-                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" 
-                        Click="DashboardButton_Click">
+                <Button x:Name="DashboardButton" Style="{StaticResource MenuButtonStyle}" Background="#FFF1F1F1" Click="DashboardButton_Click">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="داشبورد" VerticalAlignment="Center"/>
                         <Image Source="Assets/dashboard.png" Width="20" Height="20"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="InventoryButton" Style="{StaticResource MenuButtonStyle}" Click="InventoryButton_Click_1"  >
+
+                <Button x:Name="SupportButton" Style="{StaticResource MenuButtonStyle}" Click="SupportButton_Click"  >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="موجودی" VerticalAlignment="Center"/>
-                        <Image Source="Assets/checklists.png" Width="39" Height="45"/>
+                        <TextBlock Text="پشتیبانی" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                        <Image Source="Assets/maintenance.png" Width="28" Height="30" RenderTransformOrigin="1.129,0.553" Margin="5,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="OrderButton"  Style="{StaticResource MenuButtonStyle}" Click="OrderButton_Click" >
+                <Button x:Name="SettingsButton" Style="{StaticResource MenuButtonStyle}"  Height="46" Click="SettingsButton_Click" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="فروش" VerticalAlignment="Center"/>
-                        <Image Source="Assets/cart.png" Width="31" Height="29"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="SettingsButton" Style="{StaticResource MenuButtonStyle}"  Height="46" Click="SettingsButton_Click_1" >
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="تنظیمات" VerticalAlignment="Center"/>
+                        <TextBlock Text="تنظیمات سیستم" VerticalAlignment="Center"/>
                         <Image Source="Assets/2849830_multimedia_options_setting_settings_gear_icon.png" Width="33" Height="27"/>
                     </StackPanel>
                 </Button>
@@ -117,11 +111,11 @@
 
             <!-- Logout -->
             <StackPanel Grid.Row="1" Margin="10">
-                <Button x:Name="LogoutButton" Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32" Click="LogoutButton_Click_1"  />
+                <Button x:Name="LogoutButton" Content="خروج" Style="{StaticResource MenuButtonStyle}" Foreground="White" Background="#D94C32" Click="LogoutButton_Click"/>
             </StackPanel>
         </Grid>
 
         <!-- Main Content -->
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Margin="10"/>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Margin="10" />
     </DockPanel>
 </Window>

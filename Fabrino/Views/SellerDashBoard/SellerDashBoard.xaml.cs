@@ -131,7 +131,7 @@ namespace Fabrino.Views.SellerDashBoard
         private void SettingsButton_Click_1(object sender, RoutedEventArgs e)
         {
             SetActiveButton(SettingsButton);
-            MainFrame.Navigate(new SellerSettingPage());
+            MainFrame.Navigate(new SellerSettingPage(_currentUser));
         }
 
         private void InventoryButton_Click_1(object sender, RoutedEventArgs e)

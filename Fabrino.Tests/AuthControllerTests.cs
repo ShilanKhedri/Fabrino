@@ -7,6 +7,8 @@ namespace Fabrino.Tests
 {
     public class AuthControllerTests
     {
+
+       
         [Fact]
         public void IsValidUser_WithCorrectCredentials_ReturnsTrue()
         {

@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using Microsoft.EntityFrameworkCore;
 using Fabrino.Services;
 
+
 namespace Fabrino.Views.DashBoard
 {
     public partial class ReportPage : Page
@@ -50,16 +51,32 @@ namespace Fabrino.Views.DashBoard
 
         private void LoadSales()
         {
-            var orders = _context.Order.Include(o => o.Customer).ToList()
-                .Select(o => new
-                {
-                    PersianOrderDate = ToPersianDate(o.OrderDate),
-                    o.Customer,
-                    o.TotalAmount
-                }).ToList();
+            try
+            {
+                var orders = _context.Order
+                    .Include(o => o.Customer)
+                    .AsEnumerable()
+                    .Select(o => new
+                    {
+                        PersianOrderDate = o.OrderDate.HasValue ?
+                            ToPersianDate(o.OrderDate.Value) : "نامشخص",
+                        CustomerName = o.Customer?.FullName ?? "بدون مشتری",
+                        TotalAmount = o.TotalAmount ?? 0
+                        // فقط فیلدهای موجود استفاده شده‌اند
+                    })
+                    .ToList();
 
-            SalesGrid.ItemsSource = orders;
+                SalesGrid.ItemsSource = orders;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در بارگذاری اطلاعات: {ex.Message}", "خطا",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
+        
+ 
 
         private void LoadPurchases()
         {
@@ -128,9 +145,10 @@ namespace Fabrino.Views.DashBoard
             // نمودار فروش ماهانه
             var currentYear = DateTime.Now.Year;
             var monthlyData = _context.Order
-                .Where(o => o.OrderDate.Year == currentYear)
+              .Where(o => o.OrderDate.HasValue && o.OrderDate.Value.Year == currentYear)
+
                 .ToList()
-                .GroupBy(o => o.OrderDate.Month)
+                .GroupBy(o => o.OrderDate.HasValue ? o.OrderDate.Value.Month : -1)
                 .OrderBy(g => g.Key)
                 .Select(g => new { Month = g.Key, Total = g.Sum(o => o.TotalAmount) })
                 .ToList();
@@ -141,7 +159,8 @@ namespace Fabrino.Views.DashBoard
                 new ColumnSeries
                 {
                     Title = "مجموع فروش ماهانه",
-                    Values = new ChartValues<decimal>(monthlyData.Select(m => m.Total))
+                    Values = new ChartValues<double>(monthlyData
+    .Select(m => m.Total.HasValue ? (double)m.Total.Value : double.NaN))
                 }
             };
         }
@@ -161,7 +180,7 @@ namespace Fabrino.Views.DashBoard
                 .Where(o => o.OrderDate >= from && o.OrderDate <= to).ToList()
                 .Select(o => new
                 {
-                    PersianOrderDate = ToPersianDate(o.OrderDate),
+                    PersianOrderDate = ToPersianDate(o.OrderDate ?? DateTime.MinValue),
                     o.Customer,
                     o.TotalAmount
                 }).ToList();

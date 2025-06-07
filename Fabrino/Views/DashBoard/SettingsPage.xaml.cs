@@ -34,6 +34,7 @@ namespace Fabrino.Views.DashBoard
         private void NavigateToProfile_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new ProfileSettingsPage(_currentUser));
+
         }
 
         private void NavigateToPassword_Click(object sender, RoutedEventArgs e)
