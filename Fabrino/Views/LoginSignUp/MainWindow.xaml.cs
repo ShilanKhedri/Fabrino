@@ -24,38 +24,9 @@ namespace Fabrino
             var dbContext = new AppDbContext();
             repository = new SqlUserRepository(dbContext);
             authController = new AuthController(repository);
-            CreateTestSeller();
         }
 
-        private void CreateTestSeller()
-        {
-            using var db = new AppDbContext();
-
-            if (!db.Users.Any(u => u.username == "seller1"))
-            {
-                var seller = new UserModel
-                {
-                    username = "seller1",
-                    password_hash = SecurityHelper.ComputeSha256Hash("12345678"),
-                    full_name = "فروشنده تست",
-                    role = "seller",
-                    security_question = "نام اولین ماشینتان چیست؟",
-                    security_answer_hash = SecurityHelper.ComputeSha256Hash("پیکان"),
-                    created_at = DateTime.Now
-                };
-
-                db.Users.Add(seller);
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.InnerException?.Message ?? ex.Message);
-                }
-
-            }
-        }
+        
 
         private void GoToRegister_Click(object sender, MouseButtonEventArgs e)
         {
