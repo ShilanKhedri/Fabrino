@@ -7,134 +7,666 @@
       mc:Ignorable="d"
       Title="ReportPage">
 
-    <Grid Margin="20" FlowDirection="RightToLeft">
-        <TabControl>
-            <!-- فروش -->
-            <TabItem Header="فروش">
-                <StackPanel Margin="10">
-                    <StackPanel Orientation="Horizontal">
-                        <DatePicker x:Name="FromDatePicker" Width="130" Margin="5"/>
-                        <TextBlock Text="تا" Margin="5" VerticalAlignment="Center"/>
-                        <DatePicker x:Name="ToDatePicker" Width="130" Margin="5"/>
-                        <Button Content="فیلتر" Click="FilterSales_Click" Margin="5"/>
-                        <ComboBox x:Name="SalesExportFormat" Width="100" Margin="5">
-                            <ComboBoxItem Content="PDF" IsSelected="True"/>
-                            <ComboBoxItem Content="Excel"/>
-                        </ComboBox>
-                        <Button Content="خروجی" Click="ExportSales_Click" Margin="5"/>
-                    </StackPanel>
-                    <DataGrid x:Name="SalesGrid" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="تاریخ" Binding="{Binding PersianOrderDate}"/>
-                            <DataGridTextColumn Header="مشتری" Binding="{Binding Customer.FullName}"/>
-                            <DataGridTextColumn Header="مبلغ کل" Binding="{Binding TotalAmount}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </TabItem>
+    <Page.Resources>
+        <!-- Colors -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#F48672"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#D94C32"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#F8FAFC"/>
+        <SolidColorBrush x:Key="SurfaceColor" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextPrimaryColor" Color="#2D3748"/>
+        <SolidColorBrush x:Key="TextSecondaryColor" Color="#4A5568"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E2E8F0"/>
 
-            <!-- خرید -->
-            <TabItem Header="خرید">
-                <StackPanel Margin="10">
-                    <DataGrid x:Name="PurchaseGrid" AutoGenerateColumns="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="تاریخ" Binding="{Binding PersianOrderDate}"/>
-                            <DataGridTextColumn Header="تأمین‌کننده" Binding="{Binding Supplier.Name}"/>
-                            <DataGridTextColumn Header="مبلغ کل" Binding="{Binding TotalAmount}"/>
-                            <DataGridTextColumn Header="وضعیت" Binding="{Binding Status}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Orientation="Horizontal" Margin="0,10">
-                        <ComboBox x:Name="PurchaseExportFormat" Width="100" Margin="5">
-                            <ComboBoxItem Content="PDF" IsSelected="True"/>
-                            <ComboBoxItem Content="Excel"/>
-                        </ComboBox>
-                        <Button Content="خروجی" Click="ExportPurchase_Click" Margin="5"/>
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
+        <!-- Effects -->
+        <DropShadowEffect x:Key="HeaderShadow" 
+                         BlurRadius="10" 
+                         ShadowDepth="1" 
+                         Direction="270" 
+                         Color="#20000000"/>
 
-            <!-- پارچه‌ها -->
-            <TabItem Header="پارچه‌ها">
-                <StackPanel Margin="10">
-                    <DataGrid x:Name="FabricsGrid" AutoGenerateColumns="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="نام" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="رنگ" Binding="{Binding Color}"/>
-                            <DataGridTextColumn Header="جنس" Binding="{Binding Material}"/>
-                            <DataGridTextColumn Header="عرض" Binding="{Binding Width}"/>
-                            <DataGridTextColumn Header="موجودی" Binding="{Binding Quantity}"/>
-                            <DataGridTextColumn Header="قیمت هر متر" Binding="{Binding PricePerMeter}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Orientation="Horizontal" Margin="0,10">
-                        <ComboBox x:Name="FabricExportFormat" Width="100" Margin="5">
-                            <ComboBoxItem Content="PDF" IsSelected="True"/>
-                            <ComboBoxItem Content="Excel"/>
-                        </ComboBox>
-                        <Button Content="خروجی" Click="ExportFabrics_Click" Margin="5"/>
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
-
-            <!-- کاربران -->
-            <TabItem Header="کاربران">
-                <StackPanel Margin="10">
-                    <DataGrid x:Name="UsersGrid" AutoGenerateColumns="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="نام کامل" Binding="{Binding full_name}"/>
-                            <DataGridTextColumn Header="نام کاربری" Binding="{Binding username}"/>
-                            <DataGridTextColumn Header="نقش" Binding="{Binding role}"/>
-                            <DataGridTextColumn Header="آخرین ورود" Binding="{Binding PersianLoginDate}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Orientation="Horizontal" Margin="0,10">
-                        <ComboBox x:Name="UserExportFormat" Width="100" Margin="5">
-                            <ComboBoxItem Content="PDF" IsSelected="True"/>
-                            <ComboBoxItem Content="Excel"/>
-                        </ComboBox>
-                        <Button Content="خروجی" Click="ExportUsers_Click" Margin="5"/>
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
-
-            <!-- نمودارها -->
-            <TabItem Header="نمودارها">
-                <Grid Margin="10">
+        <!-- ComboBox Toggle Button Template -->
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Border x:Name="ToggleBorder"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    BorderThickness="0"
+                    SnapsToDevicePixels="true">
+                <Border.Effect>
+                    <DropShadowEffect Color="Transparent"/>
+                </Border.Effect>
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-
-                    <!-- نمودار فروش پارچه -->
-                    <GroupBox Header="فروش بر اساس نوع پارچه" Grid.Column="0" Margin="5">
-                        <lvc:CartesianChart Series="{Binding SalesChartSeries}" LegendLocation="Right">
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Title="پارچه" Labels="{Binding FabricLabels}" />
-                            </lvc:CartesianChart.AxisX>
-                        </lvc:CartesianChart>
-                    </GroupBox>
-
-                    <!-- نمودار خرید -->
-                    <GroupBox Header="سهم خرید تأمین‌کنندگان" Grid.Column="1" Margin="5">
-                        <lvc:PieChart Series="{Binding PurchaseChartSeries}" LegendLocation="Bottom"/>
-                    </GroupBox>
-
-                    <!-- فروش ماهانه -->
-                    <GroupBox Header="فروش ماهانه سال جاری" Grid.Column="2" Margin="5">
-                        <lvc:CartesianChart Series="{Binding MonthlySalesChart}">
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Title="ماه" Labels="{Binding MonthLabels}" />
-                            </lvc:CartesianChart.AxisX>
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="مجموع فروش (تومان)" />
-                            </lvc:CartesianChart.AxisY>
-                        </lvc:CartesianChart>
-                    </GroupBox>
+                    <Border Grid.Column="1"
+                            Width="30"
+                            Background="Transparent">
+                        <Path x:Name="Arrow"
+                              Fill="{StaticResource TextSecondaryColor}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Data="M0,0 L8,8 L16,0 Z"/>
+                    </Border>
                 </Grid>
-            </TabItem>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter TargetName="Arrow" Property="Fill" Value="{StaticResource PrimaryColor}"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="true">
+                    <Setter TargetName="Arrow" Property="Fill" Value="{StaticResource PrimaryColor}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
 
-        </TabControl>
+        <!-- Modern TabControl Style -->
+        <Style x:Key="ModernTabControl" TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Background="Transparent" 
+                                    Grid.Row="0">
+                                <TabPanel x:Name="HeaderPanel"
+                                        Panel.ZIndex="1" 
+                                        KeyboardNavigation.TabIndex="1"
+                                        IsItemsHost="True"/>
+                            </Border>
+                            <Border Grid.Row="1" 
+                                    Background="Transparent"
+                                    KeyboardNavigation.TabNavigation="Local"
+                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                    KeyboardNavigation.TabIndex="2">
+                                <ContentPresenter x:Name="PART_SelectedContentHost"
+                                                ContentSource="SelectedContent"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Typography -->
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <Style x:Key="SubHeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="CardTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="ModernCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource SurfaceColor}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="20" 
+                                    ShadowDepth="2" 
+                                    Direction="270" 
+                                    Color="#1A000000" 
+                                    Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern Tab Style -->
+        <Style x:Key="ModernTab" TargetType="TabItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" 
+                                Margin="0,0,4,0" 
+                                CornerRadius="8" 
+                                Background="Transparent">
+                            <ContentPresenter x:Name="ContentSite"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            ContentSource="Header"
+                                            Margin="12,8"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryColor}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource TextSecondaryColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <!-- Modern Button -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="10" 
+                                            ShadowDepth="1" 
+                                            Direction="270" 
+                                            Color="#40000000"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Modern ComboBox -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Background" Value="{StaticResource SurfaceColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border CornerRadius="8" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <ToggleButton IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Template="{StaticResource ComboBoxToggleButton}"/>
+                                <ContentPresenter Name="ContentSite"
+                                                Content="{TemplateBinding SelectionBoxItem}"
+                                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                Margin="12,0,0,0"
+                                                VerticalAlignment="Center"/>
+                                <Popup Name="Popup"
+                                    Placement="Bottom"
+                                    IsOpen="{TemplateBinding IsDropDownOpen}"
+                                    AllowsTransparency="True" 
+                                    Focusable="False"
+                                    PopupAnimation="Slide">
+                                    <Grid Name="DropDown"
+                                        SnapsToDevicePixels="True"                
+                                        MinWidth="{TemplateBinding ActualWidth}"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border x:Name="DropDownBorder"
+                                                Background="{StaticResource SurfaceColor}"
+                                                BorderThickness="1"
+                                                BorderBrush="{StaticResource BorderColor}"
+                                                CornerRadius="8">
+                                            <ScrollViewer Margin="0,4">
+                                                <StackPanel IsItemsHost="True" 
+                                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                            </ScrollViewer>
+                                        </Border>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern DatePicker -->
+        <Style x:Key="ModernDatePicker" TargetType="DatePicker">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Background" Value="{StaticResource SurfaceColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DatePicker">
+                        <Border CornerRadius="8" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <DatePickerTextBox x:Name="PART_TextBox"
+                                                Padding="{TemplateBinding Padding}"
+                                                VerticalContentAlignment="Center"/>
+                                <Button x:Name="PART_Button"
+                                        Grid.Column="1"
+                                        Width="30"
+                                        Content="📅"
+                                        Background="Transparent"
+                                        BorderThickness="0"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern DataGrid -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowBackground" Value="{StaticResource SurfaceColor}"/>
+            <Setter Property="AlternatingRowBackground" Value="#F8FAFC"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="VerticalGridLinesBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="RowHeight" Value="40"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Style.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Padding" Value="12,8"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Foreground" Value="{StaticResource TextSecondaryColor}"/>
+                </Style>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Margin" Value="0,4"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#F1F5F9"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12,8"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}"
+                                        BorderThickness="0">
+                                    <ContentPresenter/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <!-- Chart Styles -->
+        <Style x:Key="ModernChart" TargetType="lvc:CartesianChart">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Hoverable" Value="True"/>
+            <Setter Property="DataTooltip">
+                <Setter.Value>
+                    <lvc:DefaultTooltip Background="#F8FAFC" 
+                                      BorderBrush="{StaticResource BorderColor}"
+                                      BorderThickness="1"
+                                      CornerRadius="8"
+                                      Padding="12"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Financial Section Text Styles -->
+        <Style x:Key="FinancialLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="FinancialValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource BackgroundColor}" FlowDirection="RightToLeft">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Background="{StaticResource SurfaceColor}"
+                Padding="32,24"
+                Effect="{StaticResource HeaderShadow}">
+            <TextBlock Text="گزارش‌های سیستم"
+                     Style="{StaticResource HeaderText}"/>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" Padding="24">
+            <TabControl Style="{StaticResource ModernTabControl}">
+                <!-- فروش -->
+                <TabItem Header="فروش" Style="{StaticResource ModernTab}">
+                    <StackPanel>
+                        <!-- Filter Card -->
+                        <Border Style="{StaticResource ModernCard}">
+                            <StackPanel Orientation="Horizontal">
+                                <DatePicker x:Name="FromDatePicker" Width="160" 
+                                          Style="{StaticResource ModernDatePicker}"
+                                          Margin="0,0,16,0"/>
+                                <TextBlock Text="تا" VerticalAlignment="Center"
+                                         Style="{StaticResource SubHeaderText}"
+                                         Margin="0,0,16,0"/>
+                                <DatePicker x:Name="ToDatePicker" Width="160"
+                                          Style="{StaticResource ModernDatePicker}"
+                                          Margin="0,0,16,0"/>
+                                <Button Content="فیلتر" Click="FilterSales_Click"
+                                        Style="{StaticResource ModernButton}"
+                                        Margin="0,0,16,0"/>
+                                <ComboBox x:Name="SalesExportFormat" Width="120"
+                                         Style="{StaticResource ModernComboBox}"
+                                         Margin="0,0,16,0">
+                                    <ComboBoxItem Content="PDF" IsSelected="True"/>
+                                    <ComboBoxItem Content="Excel"/>
+                                </ComboBox>
+                                <Button Content="خروجی" Click="ExportSales_Click"
+                                        Style="{StaticResource ModernButton}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Sales Grid Card -->
+                        <Border Style="{StaticResource ModernCard}">
+                            <StackPanel>
+                                <TextBlock Text="لیست فروش‌ها" Style="{StaticResource CardTitle}"/>
+                                <DataGrid x:Name="SalesGrid"
+                                         Style="{StaticResource ModernDataGrid}"
+                                         MaxHeight="500">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="تاریخ" 
+                                                          Binding="{Binding PersianOrderDate}"
+                                                          Width="*"/>
+                                        <DataGridTextColumn Header="مشتری"
+                                                          Binding="{Binding Customer.FullName}"
+                                                          Width="*"/>
+                                        <DataGridTextColumn Header="مبلغ کل"
+                                                          Binding="{Binding TotalAmount}"
+                                                          Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </TabItem>
+
+                <!-- خرید -->
+                <TabItem Header="خرید" Style="{StaticResource ModernTab}">
+                    <Border Background="White" CornerRadius="4" Padding="15">
+                        <StackPanel>
+                            <DataGrid x:Name="PurchaseGrid" Style="{StaticResource ModernDataGrid}"
+                                    AutoGenerateColumns="False" IsReadOnly="True"
+                                    MaxHeight="500" MinHeight="300">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="تاریخ" Binding="{Binding PersianOrderDate}" Width="*"/>
+                                    <DataGridTextColumn Header="تأمین‌کننده" Binding="{Binding Supplier.Name}" Width="*"/>
+                                    <DataGridTextColumn Header="مبلغ کل" Binding="{Binding TotalAmount}" Width="*"/>
+                                    <DataGridTextColumn Header="وضعیت" Binding="{Binding Status}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <Border Background="#F5F5F5" CornerRadius="4" Padding="10" Margin="0,15,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="PurchaseExportFormat" Width="100" Style="{StaticResource ModernComboBox}">
+                                        <ComboBoxItem Content="PDF" IsSelected="True"/>
+                                        <ComboBoxItem Content="Excel"/>
+                                    </ComboBox>
+                                    <Button Content="خروجی" Click="ExportPurchase_Click" Style="{StaticResource ModernButton}" Margin="10,0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+
+                <!-- پارچه‌ها -->
+                <TabItem Header="پارچه‌ها" Style="{StaticResource ModernTab}">
+                    <Border Background="White" CornerRadius="4" Padding="15">
+                        <StackPanel>
+                            <DataGrid x:Name="FabricsGrid" Style="{StaticResource ModernDataGrid}"
+                                    AutoGenerateColumns="False" IsReadOnly="True"
+                                    MaxHeight="500" MinHeight="300">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="نام" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="رنگ" Binding="{Binding Color}" Width="*"/>
+                                    <DataGridTextColumn Header="جنس" Binding="{Binding Material}" Width="*"/>
+                                    <DataGridTextColumn Header="عرض" Binding="{Binding Width}" Width="*"/>
+                                    <DataGridTextColumn Header="موجودی" Binding="{Binding Quantity}" Width="*"/>
+                                    <DataGridTextColumn Header="قیمت هر متر" Binding="{Binding PricePerMeter}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <Border Background="#F5F5F5" CornerRadius="4" Padding="10" Margin="0,15,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="FabricExportFormat" Width="100" Style="{StaticResource ModernComboBox}">
+                                        <ComboBoxItem Content="PDF" IsSelected="True"/>
+                                        <ComboBoxItem Content="Excel"/>
+                                    </ComboBox>
+                                    <Button Content="خروجی" Click="ExportFabrics_Click" Style="{StaticResource ModernButton}" Margin="10,0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+
+                <!-- کاربران -->
+                <TabItem Header="کاربران" Style="{StaticResource ModernTab}">
+                    <Border Background="White" CornerRadius="4" Padding="15">
+                        <StackPanel>
+                            <DataGrid x:Name="UsersGrid" Style="{StaticResource ModernDataGrid}"
+                                    AutoGenerateColumns="False" IsReadOnly="True"
+                                    MaxHeight="500" MinHeight="300">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="نام کامل" Binding="{Binding full_name}" Width="*"/>
+                                    <DataGridTextColumn Header="نام کاربری" Binding="{Binding username}" Width="*"/>
+                                    <DataGridTextColumn Header="نقش" Binding="{Binding role}" Width="*"/>
+                                    <DataGridTextColumn Header="آخرین ورود" Binding="{Binding PersianLoginDate}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <Border Background="#F5F5F5" CornerRadius="4" Padding="10" Margin="0,15,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="UserExportFormat" Width="100" Style="{StaticResource ModernComboBox}">
+                                        <ComboBoxItem Content="PDF" IsSelected="True"/>
+                                        <ComboBoxItem Content="Excel"/>
+                                    </ComboBox>
+                                    <Button Content="خروجی" Click="ExportUsers_Click" Style="{StaticResource ModernButton}" Margin="10,0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+
+                <!-- نمودارها -->
+                <TabItem Header="نمودارها" Style="{StaticResource ModernTab}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Charts Header -->
+                        <TextBlock Text="تحلیل آماری" Style="{StaticResource HeaderText}"
+                                 Margin="24,24,24,16"/>
+
+                        <!-- Charts Grid -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Sales Chart -->
+                            <Border Style="{StaticResource ModernCard}" Grid.Column="0">
+                                <StackPanel>
+                                    <TextBlock Text="فروش بر اساس نوع پارچه"
+                                             Style="{StaticResource CardTitle}"/>
+                                    <lvc:CartesianChart Style="{StaticResource ModernChart}"
+                                                       Series="{Binding SalesChartSeries}"
+                                                       Height="300">
+                                        <lvc:CartesianChart.AxisX>
+                                            <lvc:Axis Title="پارچه" 
+                                                     Labels="{Binding FabricLabels}"
+                                                     Foreground="{StaticResource TextSecondaryColor}"/>
+                                        </lvc:CartesianChart.AxisX>
+                                    </lvc:CartesianChart>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Suppliers Chart -->
+                            <Border Style="{StaticResource ModernCard}" Grid.Column="1">
+                                <StackPanel>
+                                    <TextBlock Text="سهم خرید تأمین‌کنندگان"
+                                             Style="{StaticResource CardTitle}"/>
+                                    <lvc:PieChart Series="{Binding PurchaseChartSeries}"
+                                                Height="300"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Monthly Sales -->
+                            <Border Style="{StaticResource ModernCard}" 
+                                    Grid.Row="1" Grid.ColumnSpan="2">
+                                <StackPanel>
+                                    <TextBlock Text="فروش ماهانه سال جاری"
+                                             Style="{StaticResource CardTitle}"/>
+                                    <lvc:CartesianChart Style="{StaticResource ModernChart}"
+                                                       Series="{Binding MonthlySalesChart}"
+                                                       Height="300">
+                                        <lvc:CartesianChart.AxisX>
+                                            <lvc:Axis Title="ماه" 
+                                                     Labels="{Binding MonthLabels}"
+                                                     Foreground="{StaticResource TextSecondaryColor}"/>
+                                        </lvc:CartesianChart.AxisX>
+                                        <lvc:CartesianChart.AxisY>
+                                            <lvc:Axis Title="مجموع فروش (تومان)"
+                                                     Foreground="{StaticResource TextSecondaryColor}"/>
+                                        </lvc:CartesianChart.AxisY>
+                                    </lvc:CartesianChart>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+
+                <!-- مالی -->
+                <TabItem Header="مالی" Style="{StaticResource ModernTab}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Filter Controls -->
+                        <Border Style="{StaticResource ModernCard}">
+                            <StackPanel Orientation="Horizontal">
+                                <DatePicker x:Name="FinanceFromDate" Width="150" 
+                                          Style="{StaticResource ModernDatePicker}"
+                                          Margin="0,0,16,0"/>
+                                <TextBlock Text="تا" VerticalAlignment="Center" 
+                                         Style="{StaticResource SubHeaderText}"
+                                         Margin="0,0,16,0"/>
+                                <DatePicker x:Name="FinanceToDate" Width="150" 
+                                          Style="{StaticResource ModernDatePicker}"
+                                          Margin="0,0,16,0"/>
+                                <Button Content="محاسبه" Click="CalculateFinance_Click"
+                                        Style="{StaticResource ModernButton}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Grid Grid.Row="1" Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Financial Summary -->
+                            <Border Style="{StaticResource ModernCard}" Margin="0,0,8,0">
+                                <StackPanel>
+                                    <TextBlock Text="خلاصه مالی" 
+                                             Style="{StaticResource CardTitle}"/>
+                                    
+                                    <TextBlock Text="درآمد از فروش:" 
+                                             Style="{StaticResource FinancialLabel}"/>
+                                    <TextBlock x:Name="TotalSalesText" 
+                                             Style="{StaticResource FinancialValue}"/>
+
+                                    <TextBlock Text="هزینه خرید:" 
+                                             Style="{StaticResource FinancialLabel}"/>
+                                    <TextBlock x:Name="TotalPurchasesText" 
+                                             Style="{StaticResource FinancialValue}"/>
+
+                                    <TextBlock Text="سود خالص:" 
+                                             Style="{StaticResource FinancialLabel}"/>
+                                    <TextBlock x:Name="ProfitText" 
+                                             Style="{StaticResource FinancialValue}"/>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                                        <ComboBox x:Name="FinanceExportFormat" Width="120"
+                                                Style="{StaticResource ModernComboBox}"
+                                                Margin="0,0,16,0">
+                                            <ComboBoxItem Content="PDF" IsSelected="True"/>
+                                            <ComboBoxItem Content="Excel"/>
+                                        </ComboBox>
+                                        <Button Content="خروجی" Click="ExportFinance_Click"
+                                                Style="{StaticResource ModernButton}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Financial Chart -->
+                            <Border Grid.Column="1" Style="{StaticResource ModernCard}">
+                                <StackPanel>
+                                    <TextBlock Text="نمودار مالی" 
+                                             Style="{StaticResource CardTitle}"/>
+                                    <lvc:CartesianChart Style="{StaticResource ModernChart}"
+                                                       x:Name="FinanceChart" 
+                                                       Height="400"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </ScrollViewer>
     </Grid>
 </Page>

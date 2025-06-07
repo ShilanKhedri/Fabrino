@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using Microsoft.EntityFrameworkCore;
+using Fabrino.Services;
 
 
 namespace Fabrino.Views.DashBoard
@@ -27,6 +28,8 @@ namespace Fabrino.Views.DashBoard
         public SeriesCollection MonthlySalesChart { get; set; }
         public List<string> FabricLabels { get; set; }
         public List<string> MonthLabels { get; set; }
+        private FinanceReportService _financeService = new FinanceReportService(new AppDbContext());
+
 
         public ReportPage()
         {
@@ -260,6 +263,65 @@ namespace Fabrino.Views.DashBoard
                 }
             }
         }
+        private void ExportTextContent(string content, string fileName, ComboBox formatCombo)
+        {
+            var format = ((ComboBoxItem)formatCombo.SelectedItem)?.Content.ToString();
+
+            if (format == "PDF")
+            {
+                var dlg = new SaveFileDialog
+                {
+                    Filter = "PDF Files (*.pdf)|*.pdf",
+                    FileName = $"{fileName}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                };
+
+                if (dlg.ShowDialog() == true)
+                {
+                    var doc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4);
+                    var writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, new FileStream(dlg.FileName, FileMode.Create));
+                    doc.Open();
+                    doc.Add(new iTextSharp.text.Paragraph(content));
+                    doc.Close();
+                    MessageBox.Show("فایل PDF ذخیره شد.");
+                }
+            }
+            else if (format == "Excel")
+            {
+                var dlg = new SaveFileDialog
+                {
+                    Filter = "Excel Files (*.xlsx)|*.xlsx",
+                    FileName = $"{fileName}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+                };
+
+                if (dlg.ShowDialog() == true)
+                {
+                    using var package = new OfficeOpenXml.ExcelPackage();
+                    var sheet = package.Workbook.Worksheets.Add("گزارش مالی");
+
+                    // هر خط به یه سلول بریز
+                    var lines = content.Split('\n');
+                    for (int i = 0; i < lines.Length; i++)
+                        sheet.Cells[i + 1, 1].Value = lines[i];
+
+                    File.WriteAllBytes(dlg.FileName, package.GetAsByteArray());
+                    MessageBox.Show("فایل Excel ذخیره شد.");
+                }
+            }
+        }
+
+        private void ExportFinance_Click(object sender, RoutedEventArgs e)
+        {
+            string content = $"درآمد: {TotalSalesText.Text}\n" +
+                             $"هزینه: {TotalPurchasesText.Text}\n" +
+                             $"سود خالص: {ProfitText.Text}\n" +
+                             $"بازه: {FinanceFromDate.SelectedDate:yyyy/MM/dd} تا {FinanceToDate.SelectedDate:yyyy/MM/dd}";
+
+            ExportTextContent(content, "FinanceReport", FinanceExportFormat);
+        }
+
+
+        // اینا متدهای ذخیره خروجی که قبلاً هم استفاده کردی (EPPlus / iTextSharp)
+
 
         private void ExportSales_Click(object sender, RoutedEventArgs e) =>
             ExportByFormat(SalesGrid, "SalesReport", SalesExportFormat);
@@ -272,5 +334,44 @@ namespace Fabrino.Views.DashBoard
 
         private void ExportUsers_Click(object sender, RoutedEventArgs e) =>
             ExportByFormat(UsersGrid, "UserReport", UserExportFormat);
+
+        private void CalculateFinance_Click(object sender, RoutedEventArgs e)
+        {
+            if (FinanceFromDate.SelectedDate == null || FinanceToDate.SelectedDate == null)
+            {
+                MessageBox.Show("لطفاً بازه تاریخ را کامل وارد کنید.");
+                return;
+            }
+
+            var from = FinanceFromDate.SelectedDate.Value;
+            var to = FinanceToDate.SelectedDate.Value;
+            var summary = _financeService.GetSummary(from, to);
+
+            TotalSalesText.Text = summary.TotalSales.ToString("N0") + " تومان";
+            TotalPurchasesText.Text = summary.TotalPurchases.ToString("N0") + " تومان";
+            ProfitText.Text = summary.Profit.ToString("N0") + " تومان";
+
+            FinanceChart.Series = new LiveCharts.SeriesCollection
+    {
+        new LiveCharts.Wpf.ColumnSeries
+        {
+            Title = "درآمد",
+            Values = new LiveCharts.ChartValues<decimal> { summary.TotalSales }
+        },
+        new LiveCharts.Wpf.ColumnSeries
+        {
+            Title = "هزینه",
+            Values = new LiveCharts.ChartValues<decimal> { summary.TotalPurchases }
+        },
+        new LiveCharts.Wpf.ColumnSeries
+        {
+            Title = "سود",
+            Values = new LiveCharts.ChartValues<decimal> { summary.Profit }
+        }
+    };
+
+            FinanceChart.AxisX.Clear();
+            FinanceChart.AxisX.Add(new LiveCharts.Wpf.Axis { Labels = new[] { "مجموع" } });
+        }
     }
 }
