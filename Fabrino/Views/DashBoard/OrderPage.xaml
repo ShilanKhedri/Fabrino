@@ -410,6 +410,7 @@
                                        FontSize="14"
                                        PreviewTextInput="NumberValidationTextBox"
                                        TextAlignment="Center"
+                                         MaxLength="10"
                                        FlowDirection="LeftToRight"/>
                                 <Button Grid.Column="1" 
                                         Content="+" 
