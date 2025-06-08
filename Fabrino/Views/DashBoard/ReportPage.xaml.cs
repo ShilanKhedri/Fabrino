@@ -45,8 +45,35 @@ namespace Fabrino.Views.DashBoard
 
         private string ToPersianDate(DateTime date)
         {
-            var pc = new PersianCalendar();
-            return $"{pc.GetYear(date):0000}/{pc.GetMonth(date):00}/{pc.GetDayOfMonth(date):00}";
+            try
+            {
+                var pc = new PersianCalendar();
+                return $"{pc.GetYear(date)}/{pc.GetMonth(date):00}/{pc.GetDayOfMonth(date):00}";
+            }
+            catch
+            {
+                return "نامشخص";
+            }
+        }
+
+        private DateTime? FromPersianDate(string persianDate)
+        {
+            try
+            {
+                var parts = persianDate.Split('/');
+                if (parts.Length != 3) return null;
+
+                var pc = new PersianCalendar();
+                return pc.ToDateTime(
+                    int.Parse(parts[0]),
+                    int.Parse(parts[1]),
+                    int.Parse(parts[2]),
+                    0, 0, 0, 0);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private void LoadSales()
@@ -61,12 +88,15 @@ namespace Fabrino.Views.DashBoard
                         PersianOrderDate = o.OrderDate.HasValue ?
                             ToPersianDate(o.OrderDate.Value) : "نامشخص",
                         CustomerName = o.Customer?.FullName ?? "بدون مشتری",
-                        TotalAmount = o.TotalAmount ?? 0
-                        // فقط فیلدهای موجود استفاده شده‌اند
+                        TotalAmount = string.Format("{0:N0}", o.TotalAmount ?? 0) + " تومان"
                     })
                     .ToList();
 
                 SalesGrid.ItemsSource = orders;
+
+                // تنظیم مقادیر اولیه برای تاریخ‌ها
+                FromDatePicker.SelectedDate = DateTime.Now.AddMonths(-1).Date;
+                ToDatePicker.SelectedDate = DateTime.Now.Date;
             }
             catch (Exception ex)
             {
@@ -167,25 +197,38 @@ namespace Fabrino.Views.DashBoard
 
         private void FilterSales_Click(object sender, RoutedEventArgs e)
         {
-            if (FromDatePicker.SelectedDate == null || ToDatePicker.SelectedDate == null)
+            try
             {
-                MessageBox.Show("تاریخ شروع و پایان را انتخاب کنید.");
-                return;
-            }
-
-            var from = FromDatePicker.SelectedDate.Value;
-            var to = ToDatePicker.SelectedDate.Value;
-
-            var filtered = _context.Order.Include(o => o.Customer)
-                .Where(o => o.OrderDate >= from && o.OrderDate <= to).ToList()
-                .Select(o => new
+                if (FromDatePicker.SelectedDate == null || ToDatePicker.SelectedDate == null)
                 {
-                    PersianOrderDate = ToPersianDate(o.OrderDate ?? DateTime.MinValue),
-                    o.Customer,
-                    o.TotalAmount
-                }).ToList();
+                    MessageBox.Show("لطفاً تاریخ شروع و پایان را انتخاب کنید.", "خطا",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-            SalesGrid.ItemsSource = filtered;
+                var from = FromDatePicker.SelectedDate.Value.Date;
+                var to = ToDatePicker.SelectedDate.Value.Date.AddDays(1).AddSeconds(-1);
+
+                var filtered = _context.Order
+                    .Include(o => o.Customer)
+                    .Where(o => o.OrderDate >= from && o.OrderDate <= to)
+                    .AsEnumerable()
+                    .Select(o => new
+                    {
+                        PersianOrderDate = o.OrderDate.HasValue ?
+                            ToPersianDate(o.OrderDate.Value) : "نامشخص",
+                        CustomerName = o.Customer?.FullName ?? "بدون مشتری",
+                        TotalAmount = string.Format("{0:N0}", o.TotalAmount ?? 0) + " تومان"
+                    })
+                    .ToList();
+
+                SalesGrid.ItemsSource = filtered;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در فیلتر کردن اطلاعات: {ex.Message}", "خطا",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void ExportByFormat(DataGrid grid, string fileName, ComboBox formatCombo)
@@ -337,41 +380,75 @@ namespace Fabrino.Views.DashBoard
 
         private void CalculateFinance_Click(object sender, RoutedEventArgs e)
         {
-            if (FinanceFromDate.SelectedDate == null || FinanceToDate.SelectedDate == null)
+            try
             {
-                MessageBox.Show("لطفاً بازه تاریخ را کامل وارد کنید.");
-                return;
+                if (FinanceFromDate.SelectedDate == null || FinanceToDate.SelectedDate == null)
+                {
+                    MessageBox.Show("لطفاً بازه تاریخ را کامل وارد کنید.", "خطا",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                var from = FinanceFromDate.SelectedDate.Value.Date;
+                var to = FinanceToDate.SelectedDate.Value.Date.AddDays(1).AddSeconds(-1);
+
+                var summary = _financeService.GetSummary(from, to);
+
+                // نمایش مقادیر با فرمت مناسب
+                TotalSalesText.Text = string.Format("{0:N0}", summary.TotalSales) + " تومان";
+                TotalPurchasesText.Text = string.Format("{0:N0}", summary.TotalPurchases) + " تومان";
+                ProfitText.Text = string.Format("{0:N0}", summary.Profit) + " تومان";
+
+                // تنظیم رنگ سود/زیان
+                ProfitText.Foreground = summary.Profit >= 0 ? 
+                    new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(46, 125, 50)) :  // سبز
+                    new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(198, 40, 40));   // قرمز
+
+                // به‌روزرسانی نمودار
+                FinanceChart.Series = new LiveCharts.SeriesCollection
+                {
+                    new LiveCharts.Wpf.ColumnSeries
+                    {
+                        Title = "درآمد",
+                        Values = new LiveCharts.ChartValues<decimal> { summary.TotalSales },
+                        Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(46, 125, 50))
+                    },
+                    new LiveCharts.Wpf.ColumnSeries
+                    {
+                        Title = "هزینه",
+                        Values = new LiveCharts.ChartValues<decimal> { summary.TotalPurchases },
+                        Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(198, 40, 40))
+                    },
+                    new LiveCharts.Wpf.ColumnSeries
+                    {
+                        Title = "سود خالص",
+                        Values = new LiveCharts.ChartValues<decimal> { summary.Profit },
+                        Fill = new System.Windows.Media.SolidColorBrush(
+                            summary.Profit >= 0 ? 
+                                System.Windows.Media.Color.FromRgb(46, 125, 50) : 
+                                System.Windows.Media.Color.FromRgb(198, 40, 40))
+                    }
+                };
+
+                FinanceChart.AxisX.Clear();
+                FinanceChart.AxisX.Add(new LiveCharts.Wpf.Axis
+                {
+                    Title = "گزارش مالی",
+                    Labels = new[] { $"از {ToPersianDate(from)} تا {ToPersianDate(to)}" }
+                });
+
+                FinanceChart.AxisY.Clear();
+                FinanceChart.AxisY.Add(new LiveCharts.Wpf.Axis
+                {
+                    Title = "مبلغ (تومان)",
+                    LabelFormatter = value => string.Format("{0:N0}", value)
+                });
             }
-
-            var from = FinanceFromDate.SelectedDate.Value;
-            var to = FinanceToDate.SelectedDate.Value;
-            var summary = _financeService.GetSummary(from, to);
-
-            TotalSalesText.Text = summary.TotalSales.ToString("N0") + " تومان";
-            TotalPurchasesText.Text = summary.TotalPurchases.ToString("N0") + " تومان";
-            ProfitText.Text = summary.Profit.ToString("N0") + " تومان";
-
-            FinanceChart.Series = new LiveCharts.SeriesCollection
-    {
-        new LiveCharts.Wpf.ColumnSeries
-        {
-            Title = "درآمد",
-            Values = new LiveCharts.ChartValues<decimal> { summary.TotalSales }
-        },
-        new LiveCharts.Wpf.ColumnSeries
-        {
-            Title = "هزینه",
-            Values = new LiveCharts.ChartValues<decimal> { summary.TotalPurchases }
-        },
-        new LiveCharts.Wpf.ColumnSeries
-        {
-            Title = "سود",
-            Values = new LiveCharts.ChartValues<decimal> { summary.Profit }
-        }
-    };
-
-            FinanceChart.AxisX.Clear();
-            FinanceChart.AxisX.Add(new LiveCharts.Wpf.Axis { Labels = new[] { "مجموع" } });
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در محاسبات مالی: {ex.Message}", "خطا",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

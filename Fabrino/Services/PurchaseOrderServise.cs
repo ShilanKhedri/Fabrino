@@ -18,13 +18,33 @@ namespace Fabrino.Services
 
         public List<Supplier> GetSuppliers()
         {
-            return _context.Supplier.ToList();
+            try
+            {
+                return _context.Supplier
+                    .Where(s => s.is_active)
+                    .OrderBy(s => s.Name)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در دریافت لیست تامین‌کنندگان: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new List<Supplier>();
+            }
         }
 
         public List<Fabric> GetFabrics()
         {
-            Console.WriteLine(_context.Fabric);
-            return _context.Fabric.ToList();
+            try
+            {
+                return _context.Fabric
+                    .OrderBy(f => f.Name)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در دریافت لیست پارچه‌ها: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new List<Fabric>();
+            }
         }
 
         public void CreatePurchaseOrder(PurchaseOrder order, List<PurchaseOrderItem> items)
@@ -36,7 +56,7 @@ namespace Fabrino.Services
                 // تولید شماره سفارش
                 order.OrderNumber = GenerateOrderNumber();
                 order.OrderDate = DateTime.Now;
-                order.TotalAmount = items.Sum(i => i.TotalPrice);
+                order.TotalAmount = items.Sum(i => i.Quantity * i.UnitPrice);
 
                 _context.PurchaseOrder.Add(order);
                 _context.SaveChanges();
@@ -57,26 +77,34 @@ namespace Fabrino.Services
 
                 _context.SaveChanges();
                 transaction.Commit();
+
+                MessageBox.Show("سفارش با موفقیت ثبت شد.", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Message: {ex.Message}");
-                if (ex.InnerException != null)
-                    MessageBox.Show($"Inner Message: {ex.InnerException.Message}");
-
                 transaction.Rollback();
+                MessageBox.Show($"خطا در ثبت سفارش: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (ex.InnerException != null)
+                    MessageBox.Show($"جزئیات خطا: {ex.InnerException.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;
             }
         }
 
-
         public PurchaseOrder GetOrderByNumber(string orderNumber)
         {
-            return _context.PurchaseOrder
-                .Include(po => po.Supplier)
-                .Include(po => po.PurchaseOrderItems)
-                    .ThenInclude(poi => poi.Fabric)
-                .FirstOrDefault(po => po.OrderNumber == orderNumber);
+            try
+            {
+                return _context.PurchaseOrder
+                    .Include(po => po.Supplier)
+                    .Include(po => po.PurchaseOrderItems)
+                        .ThenInclude(poi => poi.Fabric)
+                    .FirstOrDefault(po => po.OrderNumber == orderNumber);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در دریافت اطلاعات سفارش: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
         }
 
         private string GenerateOrderNumber()

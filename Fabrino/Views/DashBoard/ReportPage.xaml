@@ -253,33 +253,101 @@
         <!-- Modern DatePicker -->
         <Style x:Key="ModernDatePicker" TargetType="DatePicker">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Padding" Value="12,8"/>
             <Setter Property="Background" Value="{StaticResource SurfaceColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryColor}"/>
+            <Setter Property="CalendarStyle">
+                <Setter.Value>
+                    <Style TargetType="Calendar">
+                        <Setter Property="Background" Value="{StaticResource SurfaceColor}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DatePicker">
-                        <Border CornerRadius="8" 
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <DatePickerTextBox x:Name="PART_TextBox"
-                                                Padding="{TemplateBinding Padding}"
-                                                VerticalContentAlignment="Center"/>
-                                <Button x:Name="PART_Button"
-                                        Grid.Column="1"
-                                        Width="30"
-                                        Content="📅"
-                                        Background="Transparent"
-                                        BorderThickness="0"/>
-                            </Grid>
-                        </Border>
+                        <Grid>
+                            <Grid.Resources>
+                                <ControlTemplate x:Key="DropDownButtonTemplate" TargetType="Button">
+                                    <Grid>
+                                        <Border x:Name="ButtonBorder"
+                                                Background="Transparent"
+                                                SnapsToDevicePixels="True">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path x:Name="Arrow" Grid.Column="1"
+                                                      Data="M0,0 L8,8 L16,0 Z"
+                                                      Fill="{StaticResource TextSecondaryColor}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Margin="5"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="ButtonBorder" Property="Background" Value="#10000000"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="ButtonBorder" Property="Background" Value="#20000000"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Grid.Resources>
+
+                            <Border x:Name="Border"
+                                    Padding="8,4"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+                                <Grid x:Name="PART_Root">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <DatePickerTextBox x:Name="PART_TextBox"
+                                                      Grid.Column="0"
+                                                      Focusable="True"
+                                                      FlowDirection="LeftToRight"
+                                                      HorizontalContentAlignment="Center"
+                                                      VerticalContentAlignment="Center"
+                                                      Foreground="{TemplateBinding Foreground}"/>
+
+                                    <Button x:Name="PART_Button"
+                                            Grid.Column="1"
+                                            Width="30"
+                                            Focusable="False"
+                                            VerticalAlignment="Center"
+                                            Template="{StaticResource DropDownButtonTemplate}"/>
+                                </Grid>
+                            </Border>
+
+                            <Popup x:Name="PART_Popup" 
+                                   StaysOpen="False" 
+                                   AllowsTransparency="True" 
+                                   PlacementTarget="{Binding ElementName=Border}">
+                                <Calendar x:Name="PART_Calendar"
+                                         Background="{TemplateBinding Background}"
+                                         BorderBrush="{TemplateBinding BorderBrush}"
+                                         BorderThickness="1"/>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -382,12 +450,20 @@
                             <StackPanel Orientation="Horizontal">
                                 <DatePicker x:Name="FromDatePicker" Width="160" 
                                           Style="{StaticResource ModernDatePicker}"
+                                          FlowDirection="LeftToRight"
+                                          SelectedDateFormat="Short"
+                                          IsTodayHighlighted="True"
+                                          FirstDayOfWeek="Saturday"
                                           Margin="0,0,16,0"/>
                                 <TextBlock Text="تا" VerticalAlignment="Center"
                                          Style="{StaticResource SubHeaderText}"
                                          Margin="0,0,16,0"/>
                                 <DatePicker x:Name="ToDatePicker" Width="160"
                                           Style="{StaticResource ModernDatePicker}"
+                                          FlowDirection="LeftToRight"
+                                          SelectedDateFormat="Short"
+                                          IsTodayHighlighted="True"
+                                          FirstDayOfWeek="Saturday"
                                           Margin="0,0,16,0"/>
                                 <Button Content="فیلتر" Click="FilterSales_Click"
                                         Style="{StaticResource ModernButton}"
@@ -409,13 +485,14 @@
                                 <TextBlock Text="لیست فروش‌ها" Style="{StaticResource CardTitle}"/>
                                 <DataGrid x:Name="SalesGrid"
                                          Style="{StaticResource ModernDataGrid}"
+                                         AutoGenerateColumns="False"
                                          MaxHeight="500">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="تاریخ" 
                                                           Binding="{Binding PersianOrderDate}"
                                                           Width="*"/>
                                         <DataGridTextColumn Header="مشتری"
-                                                          Binding="{Binding Customer.FullName}"
+                                                          Binding="{Binding CustomerName}"
                                                           Width="*"/>
                                         <DataGridTextColumn Header="مبلغ کل"
                                                           Binding="{Binding TotalAmount}"

@@ -97,7 +97,7 @@ namespace Fabrino.Views.DashBoard
         private void PurchaseButton_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(PurchaseButton);
-            MainFrame.Navigate(new PurchasePage());
+            MainFrame.Navigate(new Purchase2Way());
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
