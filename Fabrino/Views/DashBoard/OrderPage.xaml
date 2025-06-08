@@ -470,7 +470,7 @@
                                        FontSize="16"
                                        FlowDirection="LeftToRight"
                                        HorizontalContentAlignment="Center"
-                                       Margin="0,0,0,10"/>
+                                       Margin="0,0,0,10" MaxLength="11"/>
 
                                 <Label Content="آدرس:" Style="{StaticResource ModernLabel}"/>
                                 <TextBox x:Name="SupplierAddress" 
@@ -480,7 +480,7 @@
                                        FontSize="14"
                                        TextWrapping="Wrap"
                                        IsReadOnly="True"
-                                       Margin="0,0,0,10"/>
+                                       Margin="0,0,0,10" MaxLength="20"/>
                             </StackPanel>
                         </Border>
 

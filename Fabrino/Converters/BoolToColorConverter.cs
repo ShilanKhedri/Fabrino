@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -33,4 +33,4 @@ namespace Fabrino.Converters
             throw new NotImplementedException();
         }
     }
-} 
+}

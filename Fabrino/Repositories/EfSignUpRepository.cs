@@ -18,7 +18,7 @@ public class EfSignUpRepository : ISignUpRepository
             _db.Users.Add(user);
             return _db.SaveChanges() > 0;
         }
-        catch (Exception ex) // <-- تغییر اینجا
+        catch (Exception ex) 
         {
             MessageBox.Show($"خطای دیتابیس: {ex.Message}\n{ex.InnerException?.Message}");
             return false;

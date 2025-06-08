@@ -19,10 +19,10 @@
 
         <StackPanel Grid.Row="1" Margin="0,0,0,20">
             <TextBlock Text="نام کاربری:" Margin="0,0,0,5"/>
-            <TextBox x:Name="UsernameBox" Margin="0,0,0,15"/>
+            <TextBox x:Name="UsernameBox" Margin="0,0,0,15" MaxLength="15"/>
 
             <TextBlock Text="نام کامل:" Margin="0,0,0,5"/>
-            <TextBox x:Name="FullNameBox" Margin="0,0,0,15"/>
+            <TextBox x:Name="FullNameBox" Margin="0,0,0,15 " MaxLength="20"/>
 
             <TextBlock Text="نقش:" Margin="0,0,0,5"/>
             <ComboBox x:Name="RoleComboBox" Margin="0,0,0,15">
@@ -32,13 +32,13 @@
             </ComboBox>
 
             <TextBlock Text="شماره تماس:" Margin="0,0,0,5"/>
-            <TextBox x:Name="PhoneBox" Margin="0,0,0,15"/>
+            <TextBox x:Name="PhoneBox" Margin="0,0,0,15" MaxLength="11"/>
 
             <TextBlock Text="رمز عبور:" Margin="0,0,0,5"/>
-            <PasswordBox x:Name="PasswordBox" Margin="0,0,0,15"/>
+            <PasswordBox x:Name="PasswordBox" Margin="0,0,0,15" MaxLength="15"/>
 
             <TextBlock Text="تکرار رمز عبور:" Margin="0,0,0,5"/>
-            <PasswordBox x:Name="ConfirmPasswordBox" Margin="0,0,0,15"/>
+            <PasswordBox x:Name="ConfirmPasswordBox" Margin="0,0,0,15" MaxLength="15"/>
 
             <TextBlock Text="سوال امنیتی:" Margin="0,0,0,5"/>
             <ComboBox x:Name="SecurityQuestionComboBox" Margin="0,0,0,15">
@@ -50,7 +50,7 @@
             </ComboBox>
 
             <TextBlock Text="پاسخ سوال امنیتی:" Margin="0,0,0,5"/>
-            <TextBox x:Name="SecurityAnswerBox" Margin="0,0,0,15"/>
+            <TextBox x:Name="SecurityAnswerBox" Margin="0,0,0,15" MaxLength="18"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">

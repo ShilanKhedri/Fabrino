@@ -77,16 +77,16 @@
                                 
                                 <TextBlock Text="نام کاربری:" Margin="0,0,0,5"/>
                                 <TextBox x:Name="UsernameBox" Margin="0,0,0,15" 
-                                         IsReadOnly="True" Background="#F5F5F5"/>
+                                         IsReadOnly="True" Background="#F5F5F5" MaxLength="20"/>
                                 
                                 <TextBlock Text="نام کامل:" Margin="0,0,0,5"/>
-                                <TextBox x:Name="FullNameBox" Margin="0,0,0,15"/>
+                                <TextBox x:Name="FullNameBox" Margin="0,0,0,15" MaxLength="20"/>
 
                                 <TextBlock Text="ایمیل:" Margin="0,0,0,5"/>
-                                <TextBox x:Name="EmailBox" Margin="0,0,0,15"/>
+                                <TextBox x:Name="EmailBox" Margin="0,0,0,15" MaxLength="20"/>
                                 
                                 <TextBlock Text="شماره تماس:" Margin="0,0,0,5"/>
-                                <TextBox x:Name="PhoneBox" Margin="0,0,0,15"/>
+                                <TextBox x:Name="PhoneBox" Margin="0,0,0,15" MaxLength="11"/>
                                 
                                 <TextBlock Text="سوال امنیتی:" Margin="0,0,0,5"/>
                                 <ComboBox x:Name="SecurityQuestionComboBox" Margin="0,0,0,15">
@@ -98,7 +98,7 @@
                                 </ComboBox>
                                 
                                 <TextBlock Text="پاسخ سوال امنیتی:" Margin="0,0,0,5"/>
-                                <TextBox x:Name="SecurityAnswerBox" Margin="0,0,0,15"/>
+                                <TextBox x:Name="SecurityAnswerBox" Margin="0,0,0,15" MaxLength="20"/>
                                 
                                 <Button Content="ذخیره تغییرات" 
                                         Click="SaveProfile_Click" 
@@ -112,15 +112,15 @@
                                 <TextBlock Text="تغییر رمز عبور" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
                                 
                                 <TextBlock Text="رمز فعلی:" Margin="0,0,0,5"/>
-                                <PasswordBox x:Name="CurrentPassword" Margin="0,0,0,15"/>
+                                <PasswordBox x:Name="CurrentPassword" Margin="0,0,0,15" MaxLength="20"/>
                                 
                                 <TextBlock Text="رمز جدید:" Margin="0,0,0,5"/>
-                                <PasswordBox x:Name="NewPassword" Margin="0,0,0,5"/>
+                                <PasswordBox x:Name="NewPassword" Margin="0,0,0,5" MaxLength="20"/>
                                 <TextBlock Text="رمز عبور باید حداقل 8 کاراکتر و شامل حروف بزرگ، کوچک، اعداد و علائم باشد"
                                          FontSize="11" Foreground="Gray" Margin="0,0,0,15"/>
                                 
                                 <TextBlock Text="تکرار رمز جدید:" Margin="0,0,0,5"/>
-                                <PasswordBox x:Name="ConfirmPassword" Margin="0,0,0,15"/>
+                                <PasswordBox x:Name="ConfirmPassword" Margin="0,0,0,15" MaxLength="20"/>
                                 
                                 <Button Content="تغییر رمز" 
                                         Click="ChangePassword_Click" 

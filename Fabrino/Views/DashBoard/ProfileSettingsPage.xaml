@@ -44,13 +44,13 @@
             </StackPanel>
 
             <TextBlock Text="نام کامل:"/>
-            <TextBox x:Name="FullNameBox"/>
+            <TextBox x:Name="FullNameBox" MaxLength="20"/>
             
             <TextBlock Text="ایمیل:"/>
-            <TextBox x:Name="EmailBox"/>
+            <TextBox x:Name="EmailBox" MaxLength="20"/>
             
             <TextBlock Text="شماره تماس:"/>
-            <TextBox x:Name="PhoneBox"/>
+            <TextBox x:Name="PhoneBox" MaxLength="20"/>
             
             <Button Content="ذخیره تغییرات" 
                     Click="SaveProfile_Click" 
