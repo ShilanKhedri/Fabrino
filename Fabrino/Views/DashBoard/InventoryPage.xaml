@@ -187,22 +187,22 @@
 
 
                             <TextBox x:Name="ItemNameBox" Margin="0,0,0,10"
-                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="نام کالا"/>
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="نام کالا" MaxLength="20"/>
 
                             <TextBox x:Name="ItemColorBox" Margin="0,0,0,10"
-                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="رنگ"/>
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="رنگ" MaxLength="20"/>
 
                             <TextBox x:Name="ItemMaterialBox" Margin="0,0,0,10"
-                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="جنس"/>
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="جنس" MaxLength="20"/>
 
                             <TextBox x:Name="ItemWidthBox" Margin="0,0,0,10"
-                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="عرض (سانتی‌متر)"/>
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="عرض (سانتی‌متر)" MaxLength="20"/>
 
                             <TextBox x:Name="ItemQuantityBox" Margin="0,0,0,10"
-                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="تعداد"/>
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="تعداد" MaxLength="20"/>
 
                             <TextBox x:Name="ItemPriceBox" Margin="0,0,0,10"
-                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="قیمت واحد (تومان)"/>
+                                     Style="{StaticResource WatermarkTextBoxStyle}" Tag="قیمت واحد (تومان)" MaxLength="20"/>
 
                             <ComboBox x:Name="SupplierComboBox" Height="35" Margin="0,0,0,15"
                                       BorderBrush="#E0E0E0" BorderThickness="1">

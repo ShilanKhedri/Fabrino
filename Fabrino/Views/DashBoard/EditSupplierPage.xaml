@@ -44,7 +44,7 @@
             <TextBox x:Name="NameTextBox" 
                      Grid.Row="0" Grid.Column="1"
                      Margin="0,0,0,10"
-                     FontSize="14"/>
+                     FontSize="14" MaxLength="20"/>
 
             <!-- شماره تماس -->
             <Label Content="شماره تماس:" 
@@ -54,7 +54,7 @@
             <TextBox x:Name="PhoneTextBox" 
                      Grid.Row="1" Grid.Column="1"
                      Margin="0,0,0,10"
-                     FontSize="14"/>
+                     FontSize="14" MaxLength="11"/>
 
             <!-- ایمیل -->
             <Label Content="ایمیل:" 
@@ -64,7 +64,7 @@
             <TextBox x:Name="EmailTextBox" 
                      Grid.Row="2" Grid.Column="1"
                      Margin="0,0,0,10"
-                     FontSize="14"/>
+                     FontSize="14" MaxLength="20"/>
 
             <!-- آدرس -->
             <Label Content="آدرس:" 
@@ -77,7 +77,7 @@
                      Height="60" 
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
-                     FontSize="14"/>
+                     FontSize="14" MaxLength="50"/>
 
             <!-- شماره مالیاتی -->
             <Label Content="شماره مالیاتی:" 
@@ -87,7 +87,7 @@
             <TextBox x:Name="TaxNumberTextBox" 
                      Grid.Row="4" Grid.Column="1"
                      Margin="0,0,0,10"
-                     FontSize="14"/>
+                     FontSize="14" MaxLength="20"/>
         </Grid>
 
         <!-- دکمه‌های عملیات -->

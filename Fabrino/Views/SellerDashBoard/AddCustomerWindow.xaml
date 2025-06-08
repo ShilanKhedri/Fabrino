@@ -62,17 +62,17 @@
         <Border Background="White" Margin="20,20,20,10" Grid.Row="0">
             <StackPanel>
                 <TextBlock Text="نام و نام خانوادگی:" Margin="0,0,0,5"/>
-                <TextBox x:Name="FullNameTextBox" Style="{StaticResource InputTextBox}"/>
+                <TextBox x:Name="FullNameTextBox" Style="{StaticResource InputTextBox}" MaxLength="20"/>
 
                 <TextBlock Text="شماره تماس:" Margin="0,0,0,5"/>
-                <TextBox x:Name="PhoneTextBox" Style="{StaticResource InputTextBox}"/>
+                <TextBox x:Name="PhoneTextBox" Style="{StaticResource InputTextBox}" MaxLength="20"/>
 
-                <TextBlock Text="آدرس:" Margin="0,0,0,5"/>
+                <TextBlock Text="آدرس:" Margin="0,0,0,5" />
                 <TextBox x:Name="AddressTextBox" 
                          Style="{StaticResource InputTextBox}"
                          Height="80" 
                          TextWrapping="Wrap" 
-                         AcceptsReturn="True"/>
+                         AcceptsReturn="True" MaxLength="50"/>
             </StackPanel>
         </Border>
 

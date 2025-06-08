@@ -41,16 +41,16 @@
             </StackPanel>
 
             <Label Content="نام"/>
-            <TextBox x:Name="FirstNameBox" Height="30" Margin="0,0,0,5"/>
+            <TextBox x:Name="FirstNameBox" Height="30" Margin="0,0,0,5" MaxLength="20"/>
 
             <Label Content="نام خانوادگی"/>
-            <TextBox x:Name="LastNameBox" Height="30" Margin="0,0,0,5"/>
+            <TextBox x:Name="LastNameBox" Height="30" Margin="0,0,0,5" MaxLength="20"/>
 
             <Label Content="ایمیل"/>
-            <TextBox x:Name="EmailBox" Height="30" Margin="0,0,0,5"/>
+            <TextBox x:Name="EmailBox" Height="30" Margin="0,0,0,5" MaxLength="20"/>
 
             <Label Content="شماره تلفن"/>
-            <TextBox x:Name="PhoneBox" Height="30" Margin="0,0,0,5"/>
+            <TextBox x:Name="PhoneBox" Height="30" Margin="0,0,0,5" MaxLength="11"/>
 
             <Label Content="نقش"/>
             <ComboBox x:Name="RoleBox" Height="30" Margin="0,0,0,5">
@@ -59,13 +59,13 @@
             </ComboBox>
 
             <Label Content="نام کاربری"/>
-            <TextBox x:Name="UsernameBox" Height="30" Margin="0,0,0,5"/>
+            <TextBox x:Name="UsernameBox" Height="30" Margin="0,0,0,5" MaxLength="20"/>
 
             <Label Content="رمز عبور"/>
-            <PasswordBox x:Name="PasswordBox" Height="30" Margin="0,0,0,5"/>
+            <PasswordBox x:Name="PasswordBox" Height="30" Margin="0,0,0,5" MaxLength="20"/>
 
             <Label Content="تأیید رمز عبور"/>
-            <PasswordBox x:Name="ConfirmPasswordBox" Height="30" Margin="0,0,0,15"/>
+            <PasswordBox x:Name="ConfirmPasswordBox" Height="30" Margin="0,0,0,15" MaxLength="20"/>
 
             <TextBlock x:Name="ErrorMessage" Foreground="Red" FontSize="12" Visibility="Collapsed" Margin="0,0,0,10"/>
             <TextBlock x:Name="SuccessMessage" Foreground="Green" FontSize="12" Visibility="Collapsed" Margin="0,0,0,10"/>

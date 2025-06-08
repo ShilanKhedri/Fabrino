@@ -131,22 +131,22 @@
                             <TextBox x:Name="UsernameBox" 
                                     Style="{StaticResource TextBoxStyle}"
                                     IsReadOnly="True"
-                                    ToolTip="نام کاربری شما"/>
+                                    ToolTip="نام کاربری شما" MaxLength="20"/>
 
                             <TextBlock Text="نام و نام خانوادگی:" Style="{StaticResource LabelStyle}" HorizontalAlignment="Stretch"/>
                             <TextBox x:Name="FullNameBox" 
                                     Style="{StaticResource TextBoxStyle}"
-                                    ToolTip="نام و نام خانوادگی خود را وارد کنید"/>
+                                    ToolTip="نام و نام خانوادگی خود را وارد کنید" MaxLength="20"/>
 
                             <TextBlock Text="ایمیل:" Style="{StaticResource LabelStyle}" HorizontalAlignment="Stretch"/>
                             <TextBox x:Name="EmailBox" 
                                     Style="{StaticResource TextBoxStyle}"
-                                    ToolTip="آدرس ایمیل خود را وارد کنید"/>
+                                    ToolTip="آدرس ایمیل خود را وارد کنید" MaxLength="20"/>
 
                             <TextBlock Text="شماره موبایل:" Style="{StaticResource LabelStyle}" HorizontalAlignment="Stretch"/>
                             <TextBox x:Name="PhoneBox" 
                                     Style="{StaticResource TextBoxStyle}"
-                                    ToolTip="شماره موبایل خود را وارد کنید"/>
+                                    ToolTip="شماره موبایل خود را وارد کنید" MaxLength="20"/>
 
                             <Button x:Name="SaveProfileButton"
                                     Content="ذخیره تغییرات" 
@@ -178,7 +178,7 @@
                                 </Grid.ColumnDefinitions>
                                 <PasswordBox x:Name="CurrentPassword"
                                            Style="{StaticResource PasswordBoxStyle}"
-                                           ToolTip="رمز عبور فعلی خود را وارد کنید"/>
+                                           ToolTip="رمز عبور فعلی خود را وارد کنید" MaxLength="20"/>
                                 <Button Grid.Column="1"
                                        x:Name="ToggleCurrentPassword"
                                        Width="30" Height="30"
@@ -205,7 +205,7 @@
                                 <PasswordBox x:Name="NewPassword"
                                            Style="{StaticResource PasswordBoxStyle}"
                                            PasswordChanged="NewPassword_PasswordChanged"
-                                           ToolTip="رمز عبور جدید خود را وارد کنید"/>
+                                           ToolTip="رمز عبور جدید خود را وارد کنید" MaxLength="20"/>
                                 <Button Grid.Column="1"
                                        x:Name="ToggleNewPassword"
                                        Width="30" Height="30"
@@ -243,7 +243,7 @@
                                 </Grid.ColumnDefinitions>
                                 <PasswordBox x:Name="ConfirmPassword"
                                            Style="{StaticResource PasswordBoxStyle}"
-                                           ToolTip="رمز عبور جدید را مجددا وارد کنید"/>
+                                           ToolTip="رمز عبور جدید را مجددا وارد کنید" MaxLength="20"/>
                                 <Button Grid.Column="1"
                                        x:Name="ToggleConfirmPassword"
                                        Width="30" Height="30"
@@ -295,7 +295,7 @@
                             <TextBlock Text="پاسخ سوال امنیتی:" Style="{StaticResource LabelStyle}" HorizontalAlignment="Stretch"/>
                             <TextBox x:Name="SecurityAnswerBox"
                                    Style="{StaticResource TextBoxStyle}"
-                                   ToolTip="پاسخ سوال امنیتی خود را وارد کنید"/>
+                                   ToolTip="پاسخ سوال امنیتی خود را وارد کنید" MaxLength="20"/>
 
                             <Button Content="ذخیره سوال امنیتی" 
                                     Style="{StaticResource MainButtonStyle}"
