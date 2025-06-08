@@ -1,13 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<!-- WPF Application Project File -->
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Project Properties -->
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-<TargetFrameworks>net8.0-windows</TargetFrameworks>
-	  <Nullable>enable</Nullable>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <!-- Excluded Image Resources -->
   <ItemGroup>
     <Compile Remove="Images\**" />
     <EmbeddedResource Remove="Images\**" />
@@ -15,6 +18,7 @@
     <Page Remove="Images\**" />
   </ItemGroup>
 
+  <!-- Resource Files Configuration -->
   <ItemGroup>
     <None Remove="eye_closed.png" />
     <None Remove="eye_open.png" />
@@ -61,32 +65,24 @@
     <None Remove="Views\SellerDashBoard\Assets\user.png" />
   </ItemGroup>
 
+  <!-- NuGet Package Dependencies -->
   <ItemGroup>
-
     <PackageReference Include="EPPlus" Version="5.8.3" />
-
     <PackageReference Include="iTextSharp" Version="5.5.13.4" />
-
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
-
     <PackageReference Include="MaterialDesignColors" Version="5.2.1" />
-
     <PackageReference Include="MaterialDesignThemes" Version="5.2.0" />
-
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="4.6.0" />
-
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
-
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
-
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
-
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
+  <!-- Application Resources -->
   <ItemGroup>
     <Resource Include="eye_closed.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -215,11 +211,11 @@
     </Resource>
   </ItemGroup>
 
+  <!-- XAML Page Configuration -->
   <ItemGroup>
     <Page Update="Views\LoginSignUp\MainWindow.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
-
   </ItemGroup>
 
 </Project>

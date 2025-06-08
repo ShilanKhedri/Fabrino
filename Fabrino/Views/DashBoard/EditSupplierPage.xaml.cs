@@ -8,23 +8,27 @@ namespace Fabrino.Views.DashBoard
     public partial class EditSupplierPage : Page
     {
         private readonly AppDbContext _context = new AppDbContext();
-        private readonly Supplier _supplierToEdit;
+        private readonly Supplier _supplier;
+        
+        // Add event for supplier update notification
+        public event EventHandler SupplierUpdated;
 
         public EditSupplierPage(Supplier supplier)
         {
             InitializeComponent();
-            _supplierToEdit = supplier ?? throw new ArgumentNullException(nameof(supplier));
+            _supplier = supplier;
             LoadSupplierData();
         }
 
         private void LoadSupplierData()
         {
             // بارگذاری داده‌های تامین‌کننده در فرم
-            NameTextBox.Text = _supplierToEdit.Name;
-            PhoneTextBox.Text = _supplierToEdit.Phone;
-            EmailTextBox.Text = _supplierToEdit.Email;
-            AddressTextBox.Text = _supplierToEdit.Address;
-            TaxNumberTextBox.Text = _supplierToEdit.TaxNumber;
+            NameTextBox.Text = _supplier.Name;
+            ContactPersonTextBox.Text = _supplier.ContactPerson;
+            PhoneTextBox.Text = _supplier.Phone;
+            EmailTextBox.Text = _supplier.Email;
+            AddressTextBox.Text = _supplier.Address;
+            TaxNumberTextBox.Text = _supplier.TaxNumber;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -39,16 +43,23 @@ namespace Fabrino.Views.DashBoard
                 }
 
                 // بروزرسانی اطلاعات تامین‌کننده
-                _supplierToEdit.Name = NameTextBox.Text.Trim();
-                _supplierToEdit.Phone = PhoneTextBox.Text?.Trim();
-                _supplierToEdit.Email = EmailTextBox.Text?.Trim();
-                _supplierToEdit.Address = AddressTextBox.Text?.Trim();
-                _supplierToEdit.TaxNumber = TaxNumberTextBox.Text?.Trim();
+                _supplier.Name = NameTextBox.Text.Trim();
+                _supplier.ContactPerson = ContactPersonTextBox.Text?.Trim();
+                _supplier.Phone = PhoneTextBox.Text?.Trim();
+                _supplier.Email = EmailTextBox.Text?.Trim();
+                _supplier.Address = AddressTextBox.Text?.Trim();
+                _supplier.TaxNumber = TaxNumberTextBox.Text?.Trim();
 
                 // ذخیره تغییرات
+                _context.Supplier.Update(_supplier);
                 _context.SaveChanges();
 
                 MessageBox.Show("تغییرات با موفقیت ذخیره شد.", "موفقیت");
+                
+                // Notify listeners that supplier was updated
+                SupplierUpdated?.Invoke(this, EventArgs.Empty);
+                
+                // بازگشت به صفحه قبلی بدون ذخیره تغییرات
                 NavigationService.GoBack();
             }
             catch (Exception ex)

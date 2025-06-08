@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,11 +19,19 @@ namespace Fabrino.Views.DashBoard
         {
             InitializeComponent();
             LoadSuppliers();
+            this.Loaded += PurchasePage_Loaded;
+        }
+
+        private void PurchasePage_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadSuppliers(); // Refresh when returning to page
         }
 
         private void LoadSuppliers()
         {
-            _allSuppliers = _context.Supplier.ToList();
+            _allSuppliers = _context.Supplier
+                .Where(s => s.is_active)  // Only show active suppliers
+                .ToList();
             _suppliersViewSource = new CollectionViewSource { Source = _allSuppliers };
             SupplierGrid.ItemsSource = _suppliersViewSource.View;
         }
@@ -82,36 +89,47 @@ namespace Fabrino.Views.DashBoard
             switch (FilterComboBox.SelectedIndex)
             {
                 case 0: // همه
-                    _suppliersViewSource.View.Filter = null;
+                    _suppliersViewSource.View.Filter = item => (item as Supplier)?.is_active ?? false;
                     break;
                 case 1: // داخلی
                     _suppliersViewSource.View.Filter = item =>
-                        (item as Supplier)?.Phone?.StartsWith("0") ?? false;
+                        ((item as Supplier)?.is_active ?? false) && 
+                        ((item as Supplier)?.Phone?.StartsWith("0") ?? false);
                     break;
                 case 2: // خارجی
                     _suppliersViewSource.View.Filter = item =>
-                        !(item as Supplier)?.Phone?.StartsWith("0") ?? true;
+                        ((item as Supplier)?.is_active ?? false) && 
+                        !((item as Supplier)?.Phone?.StartsWith("0") ?? false);
                     break;
             }
         }
 
         private void EditSupplier_Click(object sender, RoutedEventArgs e)
         {
-            if (SupplierGrid.SelectedItem is Supplier selectedSupplier)
-            {
-                // انتقال به صفحه ویرایش با ارسال تامین‌کننده انتخاب شده
-                var editPage = new EditSupplierPage(selectedSupplier);
-                this.NavigationService.Navigate(editPage);
-            }
-            else
+            var button = sender as Button;
+            var selectedSupplier = button?.Tag as Supplier;
+
+            if (selectedSupplier == null)
             {
                 MessageBox.Show("لطفاً یک تامین‌کننده را انتخاب کنید.", "هشدار");
+                return;
             }
+
+            // انتقال به صفحه ویرایش با ارسال تامین‌کننده انتخاب شده
+            var editPage = new EditSupplierPage(selectedSupplier);
+            editPage.SupplierUpdated += (s, args) => 
+            {
+                LoadSuppliers(); // Refresh after update
+            };
+            this.NavigationService.Navigate(editPage);
         }
 
         private async void DeleteSupplier_Click(object sender, RoutedEventArgs e)
         {
-            if (SupplierGrid.SelectedItem is not Supplier selectedSupplier || selectedSupplier.SupplierID == 0)
+            var button = sender as Button;
+            var selectedSupplier = button?.Tag as Supplier;
+
+            if (selectedSupplier == null || selectedSupplier.SupplierID == 0)
             {
                 MessageBox.Show("لطفاً یک تامین‌کننده معتبر را انتخاب کنید.");
                 return;
@@ -126,7 +144,7 @@ namespace Fabrino.Views.DashBoard
                 if (hasOrders)
                 {
                     var confirm = MessageBox.Show(
-                        "این تامین‌کننده در سفارشات استفاده شده است. آیا می‌خواهید ارتباط را قطع کنید؟",
+                        "این تامین‌کننده در سفارشات استفاده شده است. آیا می‌خواهید حذف کنید؟",
                         "تایید عملیات",
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Warning);
@@ -139,11 +157,10 @@ namespace Fabrino.Views.DashBoard
 
                 try
                 {
-
-
-                    // حذف تامین‌کننده
+                    // حذف منطقی تامین‌کننده
                     selectedSupplier.is_active = false;
-                    _context.Supplier.Update(selectedSupplier); await _context.SaveChangesAsync();
+                    _context.Supplier.Update(selectedSupplier);
+                    await _context.SaveChangesAsync();
 
                     await transaction.CommitAsync();
 
@@ -165,8 +182,11 @@ namespace Fabrino.Views.DashBoard
 
         private void AddNewSupplier_Click(object sender, RoutedEventArgs e)
         {
-            // انتقال به صفحه افزودن جدید
             var addPage = new AddSupplierPage();
+            addPage.SupplierAdded += (s, args) => 
+            {
+                LoadSuppliers(); // Refresh after adding
+            };
             this.NavigationService.Navigate(addPage);
         }
 

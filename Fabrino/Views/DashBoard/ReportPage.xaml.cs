@@ -15,7 +15,7 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using Microsoft.EntityFrameworkCore;
 using Fabrino.Services;
-
+using System.Text;
 
 namespace Fabrino.Views.DashBoard
 {
@@ -250,26 +250,46 @@ namespace Fabrino.Views.DashBoard
 
             if (dlg.ShowDialog() == true)
             {
-                Document doc = new Document(PageSize.A4);
-                PdfWriter.GetInstance(doc, new FileStream(dlg.FileName, FileMode.Create));
-                doc.Open();
-
-                PdfPTable table = new PdfPTable(grid.Columns.Count);
-                foreach (var col in grid.Columns)
-                    table.AddCell(new Phrase(col.Header.ToString()));
-
-                foreach (var item in grid.ItemsSource)
+                try
                 {
+                    Document doc = new Document(PageSize.A4.Rotate());
+                    PdfWriter.GetInstance(doc, new FileStream(dlg.FileName, FileMode.Create));
+                    doc.Open();
+
+                    PdfPTable table = new PdfPTable(grid.Columns.Count);
+                    table.WidthPercentage = 100;
+
+                    // Add headers
                     foreach (var col in grid.Columns)
                     {
-                        var cellContent = col.GetCellContent(item) as TextBlock;
-                        table.AddCell(new Phrase(cellContent?.Text ?? ""));
+                        table.AddCell(new PdfPCell(new Phrase(col.Header.ToString()))
+                        {
+                            BackgroundColor = new BaseColor(240, 240, 240),
+                            Padding = 5
+                        });
                     }
-                }
 
-                doc.Add(table);
-                doc.Close();
-                MessageBox.Show("فایل PDF ذخیره شد.");
+                    // Add data
+                    foreach (var item in grid.ItemsSource)
+                    {
+                        foreach (var col in grid.Columns)
+                        {
+                            var cellContent = col.GetCellContent(item) as TextBlock;
+                            table.AddCell(new PdfPCell(new Phrase(cellContent?.Text ?? ""))
+                            {
+                                Padding = 5
+                            });
+                        }
+                    }
+
+                    doc.Add(table);
+                    doc.Close();
+                    MessageBox.Show("فایل PDF با موفقیت ذخیره شد.", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"خطا در ایجاد فایل PDF: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -320,12 +340,24 @@ namespace Fabrino.Views.DashBoard
 
                 if (dlg.ShowDialog() == true)
                 {
-                    var doc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4);
-                    var writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, new FileStream(dlg.FileName, FileMode.Create));
-                    doc.Open();
-                    doc.Add(new iTextSharp.text.Paragraph(content));
-                    doc.Close();
-                    MessageBox.Show("فایل PDF ذخیره شد.");
+                    try
+                    {
+                        var doc = new Document(PageSize.A4);
+                        PdfWriter.GetInstance(doc, new FileStream(dlg.FileName, FileMode.Create));
+                        doc.Open();
+
+                        foreach (var line in content.Split('\n'))
+                        {
+                            doc.Add(new Paragraph(line));
+                        }
+
+                        doc.Close();
+                        MessageBox.Show("فایل PDF با موفقیت ذخیره شد.", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"خطا در ایجاد فایل PDF: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
             else if (format == "Excel")

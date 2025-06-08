@@ -37,16 +37,22 @@ namespace Fabrino.Views.DashBoard
         {
             try
             {
-                // Load suppliers
-                var suppliers = _service.GetSuppliers();
+                // Load suppliers - only active suppliers
+                var suppliers = _service.GetSuppliers()
+                    .Where(s => s.is_active)
+                    .OrderBy(s => s.Name)
+                    .ToList();
                 SupplierName.ItemsSource = suppliers;
+                SupplierName.DisplayMemberPath = "Name";
+                SupplierName.SelectedValuePath = "SupplierID";
 
                 // Load fabrics
-                var fabrics = _service.GetFabrics();
+                var fabrics = _service.GetFabrics()
+                    .OrderBy(f => f.Name)
+                    .ToList();
                 ProductName.ItemsSource = fabrics;
-
-                // Set default date
-                DeliveryDate.SelectedDate = DateTime.Now.AddDays(7);
+                ProductName.DisplayMemberPath = "Name";
+                ProductName.SelectedValuePath = "FabricID";
 
                 // Initialize cart
                 CartGrid.ItemsSource = _cartItems;
@@ -158,18 +164,27 @@ namespace Fabrino.Views.DashBoard
                     return;
                 }
 
-                if (!decimal.TryParse(QuantityBox.Text.Replace(",", ""), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal quantity) || quantity <= 0)
+                var quantityText = QuantityBox.Text.Replace(",", "").Replace("٫", "").Trim();
+                if (!decimal.TryParse(quantityText, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal quantity))
                 {
                     MessageBox.Show("لطفاً متراژ معتبر وارد کنید.", "خطا",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (!decimal.TryParse(UnitPrice.Text.Replace(",", ""), NumberStyles.Any, CultureInfo.InvariantCulture, out decimal unitPrice) || unitPrice <= 0)
+                // حذف همه جداکننده‌های هزارگان (کاما و ممیز فارسی)
+                var unitPriceText = UnitPrice.Text.Replace(",", "").Replace("٫", "").Trim();
+                decimal unitPrice;
+                // سعی در تبدیل با فرهنگ فارسی
+                if (!decimal.TryParse(unitPriceText, NumberStyles.Any, _persianCulture, out unitPrice))
                 {
-                    MessageBox.Show("لطفاً قیمت معتبر وارد کنید.", "خطا",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    // اگر با فرهنگ فارسی نشد، با فرهنگ انگلیسی امتحان کن
+                    if (!decimal.TryParse(unitPriceText, NumberStyles.Any, CultureInfo.InvariantCulture, out unitPrice))
+                    {
+                        MessageBox.Show("لطفاً قیمت معتبر وارد کنید.", "خطا",
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
                 }
 
                 var cartItem = new CartItem
@@ -231,18 +246,11 @@ namespace Fabrino.Views.DashBoard
                     return;
                 }
 
-                if (!DeliveryDate.SelectedDate.HasValue)
-                {
-                    MessageBox.Show("لطفاً تاریخ تحویل را انتخاب کنید.", "خطا",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
                 var order = new PurchaseOrder
                 {
                     SupplierID = selectedSupplier.SupplierID,
                     OrderDate = DateTime.Now,
-                    ExpectedDeliveryDate = DeliveryDate.SelectedDate.Value,
+                    ExpectedDeliveryDate = DateTime.Now, // تاریخ تحویل همان زمان حال
                     TotalAmount = _totalAmount,
                     Status = "Pending"
                 };
@@ -267,12 +275,37 @@ namespace Fabrino.Views.DashBoard
                 SupplierName.SelectedIndex = -1;
                 SupplierPhone.Text = "";
                 SupplierAddress.Text = "";
-                DeliveryDate.SelectedDate = DateTime.Now.AddDays(7);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"خطا در ثبت سفارش: {ex.Message}", "خطا",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            // Allow digits and one decimal point
+            if (e.Text == "." && sender is TextBox textBox)
+            {
+                // Only allow one decimal point
+                if (textBox.Text.Contains("."))
+                {
+                    e.Handled = true;
+                    return;
+                }
+                e.Handled = false;
+                return;
+            }
+
+            e.Handled = !decimal.TryParse(e.Text, out _);
+        }
+
+        private void NumberValidationKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true;
             }
         }
     }
@@ -285,7 +318,6 @@ namespace Fabrino.Views.DashBoard
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
 
-        // اضافه کردن متدهای فرمت‌کننده برای نمایش در DataGrid
         public string QuantityFormatted => FormatQuantity(Quantity);
         public string UnitPriceFormatted => UnitPrice.ToString("N0", new CultureInfo("fa-IR"));
         public string TotalPriceFormatted => TotalPrice.ToString("N0", new CultureInfo("fa-IR"));

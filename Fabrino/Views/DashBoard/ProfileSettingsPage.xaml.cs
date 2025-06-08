@@ -29,9 +29,23 @@ namespace Fabrino.Views.DashBoard
 
         private void SaveProfile_Click(object sender, RoutedEventArgs e)
         {
-            _userService.UpdateUserInfo(_currentUser, FullNameBox.Text, EmailBox.Text, PhoneBox.Text);
-            MessageBox.Show("تغییرات با موفقیت ذخیره شد", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
-            NavigationService.GoBack();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(FullNameBox.Text))
+                {
+                    MessageBox.Show("لطفاً نام کامل را وارد کنید", "خطا", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                _userService.UpdateUserInfo(_currentUser, FullNameBox.Text, EmailBox.Text, PhoneBox.Text);
+                _context.SaveChanges();
+                MessageBox.Show("تغییرات با موفقیت ذخیره شد", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
+                NavigationService.GoBack();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطا در ذخیره اطلاعات: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

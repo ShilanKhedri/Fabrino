@@ -4,6 +4,9 @@ using Fabrino.Models;
 
 namespace Fabrino.Services
 {
+    /// <summary>
+    /// Handles order processing and management operations
+    /// </summary>
     public class OrderService
     {
         private readonly AppDbContext _db;
@@ -13,9 +16,11 @@ namespace Fabrino.Services
             _db = db;
         }
 
+        // Retrieves reference data for order creation
         public List<Supplier> GetSuppliers() => _db.Supplier.ToList();
         public List<Fabric> GetProducts() => _db.Fabric.ToList();
 
+        // Processes new order creation
         public void CreateOrder(Order order)
         {
             _db.Order.Add(order);

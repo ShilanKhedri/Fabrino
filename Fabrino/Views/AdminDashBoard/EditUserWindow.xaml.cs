@@ -82,12 +82,10 @@ namespace Fabrino.Views.AdminDashBoard
         {
             try
             {
-                // Validation
-                if (string.IsNullOrWhiteSpace(FullNameBox.Text) ||
-                    RoleComboBox.SelectedItem == null ||
-                    SecurityQuestionComboBox.SelectedItem == null)
+                // Only validate full name as required
+                if (string.IsNullOrWhiteSpace(FullNameBox.Text))
                 {
-                    MessageBox.Show("لطفاً تمام فیلدهای ضروری را پر کنید.", "خطا",
+                    MessageBox.Show("لطفاً نام کامل را وارد کنید.", "خطا",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -114,15 +112,27 @@ namespace Fabrino.Views.AdminDashBoard
 
                 // Update user
                 _user.full_name = FullNameBox.Text.Trim();
-                _user.role = ((ComboBoxItem)RoleComboBox.SelectedItem).Content.ToString();
-                _user.Phone = PhoneBox.Text.Trim();
-                _user.Email = EmailBox.Text.Trim();
-                _user.security_question = ((ComboBoxItem)SecurityQuestionComboBox.SelectedItem).Content.ToString();
+                
+                // Update role if selected
+                if (RoleComboBox.SelectedItem != null)
+                {
+                    _user.role = ((ComboBoxItem)RoleComboBox.SelectedItem).Content.ToString();
+                }
+                
+                // Update optional fields
+                _user.Phone = PhoneBox.Text?.Trim() ?? _user.Phone;
+                _user.Email = EmailBox.Text?.Trim() ?? _user.Email;
+
+                // Update security question if selected
+                if (SecurityQuestionComboBox.SelectedItem != null)
+                {
+                    _user.security_question = ((ComboBoxItem)SecurityQuestionComboBox.SelectedItem).Content.ToString();
+                }
 
                 // Only update security answer if a new one is provided
                 if (!string.IsNullOrWhiteSpace(SecurityAnswerBox.Text))
                 {
-                    _user.security_answer_hash = SecurityAnswerBox.Text.Trim();
+                    _user.security_answer_hash = SecurityHelper.ComputeSha256Hash(SecurityAnswerBox.Text.Trim());
                 }
 
                 _context.SaveChanges();

@@ -1,4 +1,5 @@
-﻿<Application x:Class="Fabrino.App"
+﻿<!-- Main Application Configuration File -->
+<Application x:Class="Fabrino.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Fabrino"
@@ -8,16 +9,14 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
-                <!-- تنها چیزی که نیازه در نسخه جدید -->
+                <!-- Material Design Theme Configuration -->
                 <materialDesign:BundledTheme BaseTheme="Light"
                                              PrimaryColor="Indigo"
                                              SecondaryColor="Cyan"
                                              />
-
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Converters -->
+            <!-- Custom Value Converters -->
             <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
         </ResourceDictionary>
     </Application.Resources>

@@ -5,7 +5,7 @@ using System.Windows;
 namespace Fabrino;
 
 /// <summary>
-/// Interaction logic for App.xaml
+/// Main application class that handles application-wide behavior and resources
 /// </summary>
 public partial class App : Application
 {

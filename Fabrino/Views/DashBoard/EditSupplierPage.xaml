@@ -34,6 +34,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- نام تامین‌کننده -->
@@ -46,33 +47,43 @@
                      Margin="0,0,0,10"
                      FontSize="14"/>
 
-            <!-- شماره تماس -->
-            <Label Content="شماره تماس:" 
+            <!-- شخص رابط -->
+            <Label Content="شخص رابط:" 
                    Grid.Row="1" Grid.Column="0"
                    HorizontalAlignment="Right"
                    Margin="0,0,10,10"/>
-            <TextBox x:Name="PhoneTextBox" 
+            <TextBox x:Name="ContactPersonTextBox" 
                      Grid.Row="1" Grid.Column="1"
+                     Margin="0,0,0,10"
+                     FontSize="14"/>
+
+            <!-- شماره تماس -->
+            <Label Content="شماره تماس:" 
+                   Grid.Row="2" Grid.Column="0"
+                   HorizontalAlignment="Right"
+                   Margin="0,0,10,10"/>
+            <TextBox x:Name="PhoneTextBox" 
+                     Grid.Row="2" Grid.Column="1"
                      Margin="0,0,0,10"
                      FontSize="14"/>
 
             <!-- ایمیل -->
             <Label Content="ایمیل:" 
-                   Grid.Row="2" Grid.Column="0"
+                   Grid.Row="3" Grid.Column="0"
                    HorizontalAlignment="Right"
                    Margin="0,0,10,10"/>
             <TextBox x:Name="EmailTextBox" 
-                     Grid.Row="2" Grid.Column="1"
+                     Grid.Row="3" Grid.Column="1"
                      Margin="0,0,0,10"
                      FontSize="14"/>
 
             <!-- آدرس -->
             <Label Content="آدرس:" 
-                   Grid.Row="3" Grid.Column="0"
+                   Grid.Row="4" Grid.Column="0"
                    HorizontalAlignment="Right"
                    Margin="0,0,10,10"/>
             <TextBox x:Name="AddressTextBox" 
-                     Grid.Row="3" Grid.Column="1"
+                     Grid.Row="4" Grid.Column="1"
                      Margin="0,0,0,10"
                      Height="60" 
                      TextWrapping="Wrap"
@@ -81,11 +92,11 @@
 
             <!-- شماره مالیاتی -->
             <Label Content="شماره مالیاتی:" 
-                   Grid.Row="4" Grid.Column="0"
+                   Grid.Row="5" Grid.Column="0"
                    HorizontalAlignment="Right"
                    Margin="0,0,10,10"/>
             <TextBox x:Name="TaxNumberTextBox" 
-                     Grid.Row="4" Grid.Column="1"
+                     Grid.Row="5" Grid.Column="1"
                      Margin="0,0,0,10"
                      FontSize="14"/>
         </Grid>

@@ -159,18 +159,57 @@ namespace Fabrino.Views.AdminDashBoard
                 var user = _context.Users.FirstOrDefault(u => u.username == _currentUser.username);
                 if (user != null)
                 {
-                    user.full_name = FullNameBox.Text;
-                    user.Email = EmailBox.Text;
-                    user.Phone = PhoneBox.Text;
+                    bool hasChanges = false;
 
-                    // Update security question directly in user model
-                    var selectedQuestion = ((ComboBoxItem)SecurityQuestionComboBox.SelectedItem).Content.ToString();
-                    user.security_question = selectedQuestion;
-                    user.security_answer_hash = SecurityAnswerBox.Text;
+                    // Only update if changed
+                    if (user.full_name != FullNameBox.Text)
+                    {
+                        user.full_name = FullNameBox.Text;
+                        hasChanges = true;
+                    }
 
-                    _context.SaveChanges();
-                    MessageBox.Show("اطلاعات با موفقیت ذخیره شد.", "موفقیت", 
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (user.Email != EmailBox.Text)
+                    {
+                        user.Email = EmailBox.Text;
+                        hasChanges = true;
+                    }
+
+                    if (user.Phone != PhoneBox.Text)
+                    {
+                        user.Phone = PhoneBox.Text;
+                        hasChanges = true;
+                    }
+
+                    // Update security question if changed
+                    var selectedQuestion = ((ComboBoxItem)SecurityQuestionComboBox.SelectedItem)?.Content.ToString();
+                    if (selectedQuestion != null && user.security_question != selectedQuestion)
+                    {
+                        user.security_question = selectedQuestion;
+                        hasChanges = true;
+                    }
+
+                    // Only update security answer if provided and changed
+                    if (!string.IsNullOrWhiteSpace(SecurityAnswerBox.Text))
+                    {
+                        var hashedAnswer = SecurityHelper.ComputeSha256Hash(SecurityAnswerBox.Text);
+                        if (user.security_answer_hash != hashedAnswer)
+                        {
+                            user.security_answer_hash = hashedAnswer;
+                            hasChanges = true;
+                        }
+                    }
+
+                    if (hasChanges)
+                    {
+                        _context.SaveChanges();
+                        MessageBox.Show("اطلاعات با موفقیت ذخیره شد.", "موفقیت", 
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("تغییری در اطلاعات ایجاد نشده است.", "اطلاع", 
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
             }
             catch (Exception ex)
@@ -250,11 +289,43 @@ namespace Fabrino.Views.AdminDashBoard
                 string backupFileName = $"FabrinoBackup_{DateTime.Now:yyyyMMdd_HHmmss}.bak";
                 string backupPath = Path.Combine(BackupPathBox.Text, backupFileName);
 
-                string query = $"BACKUP DATABASE [Fabrino] TO DISK = '{backupPath}'";
-                _context.Database.ExecuteSqlRaw(query);
+                // Ensure the backup directory exists
+                Directory.CreateDirectory(Path.GetDirectoryName(backupPath));
+
+                // Use parameterized query to prevent SQL injection
+                using (var connection = new Microsoft.Data.SqlClient.SqlConnection(_context.Database.GetConnectionString()))
+                {
+                    connection.Open();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "BACKUP DATABASE @dbName TO DISK = @path";
+                        command.Parameters.AddWithValue("@dbName", "Fabrino");
+                        command.Parameters.AddWithValue("@path", backupPath);
+                        command.CommandTimeout = 300; // 5 minutes timeout
+
+                        command.ExecuteNonQuery();
+                    }
+                }
 
                 MessageBox.Show("پشتیبان‌گیری با موفقیت انجام شد.", "موفقیت", 
                     MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("دسترسی به مسیر انتخاب شده امکان‌پذیر نیست. لطفاً مسیر دیگری را انتخاب کنید یا با دسترسی ادمین برنامه را اجرا کنید.", 
+                    "خطای دسترسی", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                string errorMessage = "خطا در پشتیبان‌گیری از دیتابیس: ";
+                if (ex.Number == 1807) // Cannot open backup device
+                    errorMessage += "امکان ایجاد فایل پشتیبان در مسیر انتخاب شده وجود ندارد. لطفاً مطمئن شوید SQL Server به این مسیر دسترسی دارد.";
+                else if (ex.Number == 3201) // Cannot open backup device
+                    errorMessage += "خطا در دسترسی به فایل پشتیبان. لطفاً مطمئن شوید مسیر معتبر است و SQL Server به آن دسترسی دارد.";
+                else
+                    errorMessage += ex.Message;
+
+                MessageBox.Show(errorMessage, "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
@@ -275,22 +346,102 @@ namespace Fabrino.Views.AdminDashBoard
 
                 if (dialog.ShowDialog() == true)
                 {
-                    string query = $@"
-                        USE [master];
-                        ALTER DATABASE [Fabrino] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-                        RESTORE DATABASE [Fabrino] FROM DISK = '{dialog.FileName}' WITH REPLACE;
-                        ALTER DATABASE [Fabrino] SET MULTI_USER;";
+                    // First check if the file exists and is accessible
+                    if (!File.Exists(dialog.FileName))
+                    {
+                        MessageBox.Show("فایل پشتیبان انتخاب شده وجود ندارد.", "خطا", 
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
 
-                    _context.Database.ExecuteSqlRaw(query);
+                    var result = MessageBox.Show(
+                        "بازیابی نسخه پشتیبان باعث جایگزینی تمام اطلاعات فعلی با اطلاعات نسخه پشتیبان خواهد شد. آیا مطمئن هستید؟",
+                        "هشدار",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
 
-                    MessageBox.Show("بازیابی با موفقیت انجام شد.", "موفقیت", 
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        using (var connection = new Microsoft.Data.SqlClient.SqlConnection(_context.Database.GetConnectionString()))
+                        {
+                            connection.Open();
+                            
+                            // Close all existing connections
+                            using (var command = connection.CreateCommand())
+                            {
+                                command.CommandText = @"
+                                    USE [master];
+                                    ALTER DATABASE [Fabrino] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;";
+                                command.ExecuteNonQuery();
+                            }
+
+                            // Restore database
+                            using (var command = connection.CreateCommand())
+                            {
+                                command.CommandText = "RESTORE DATABASE @dbName FROM DISK = @path WITH REPLACE";
+                                command.Parameters.AddWithValue("@dbName", "Fabrino");
+                                command.Parameters.AddWithValue("@path", dialog.FileName);
+                                command.CommandTimeout = 300; // 5 minutes timeout
+
+                                command.ExecuteNonQuery();
+                            }
+
+                            // Set database back to multi-user mode
+                            using (var command = connection.CreateCommand())
+                            {
+                                command.CommandText = "ALTER DATABASE [Fabrino] SET MULTI_USER";
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        MessageBox.Show("بازیابی با موفقیت انجام شد. لطفاً برنامه را مجدداً اجرا کنید.", "موفقیت", 
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                        
+                        Application.Current.Shutdown();
+                    }
                 }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("دسترسی به فایل پشتیبان امکان‌پذیر نیست. لطفاً مطمئن شوید دسترسی کافی دارید.", 
+                    "خطای دسترسی", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                string errorMessage = "خطا در بازیابی دیتابیس: ";
+                if (ex.Number == 3201)
+                    errorMessage += "خطا در دسترسی به فایل پشتیبان. لطفاً مطمئن شوید SQL Server به فایل دسترسی دارد.";
+                else if (ex.Number == 3154)
+                    errorMessage += "فایل پشتیبان معتبر نیست یا آسیب دیده است.";
+                else
+                    errorMessage += ex.Message;
+
+                MessageBox.Show(errorMessage, "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"خطا در بازیابی: {ex.Message}", "خطا", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                try
+                {
+                    // Always try to set database back to multi-user mode in case of errors
+                    using (var connection = new Microsoft.Data.SqlClient.SqlConnection(_context.Database.GetConnectionString()))
+                    {
+                        connection.Open();
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = "ALTER DATABASE [Fabrino] SET MULTI_USER";
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore errors in cleanup
+                }
             }
         }
     }

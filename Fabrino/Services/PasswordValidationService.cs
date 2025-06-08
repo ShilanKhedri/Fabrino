@@ -3,14 +3,19 @@ using System.Linq;
 
 namespace Fabrino.Services
 {
+    /// <summary>
+    /// Validates password strength using multiple criteria including length, complexity, and character variety
+    /// </summary>
     public class PasswordValidationService
     {
+        // Checks if password meets minimum security requirements
         public bool IsPasswordStrongEnough(string password)
         {
             var strength = CheckPasswordStrength(password);
             return strength >= PasswordStrength.Medium;
         }
 
+        // Evaluates password strength using a scoring system
         public PasswordStrength CheckPasswordStrength(string password)
         {
             if (string.IsNullOrEmpty(password)) return PasswordStrength.Weak;

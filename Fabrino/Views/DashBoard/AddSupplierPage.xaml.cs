@@ -9,6 +9,9 @@ namespace Fabrino.Views.DashBoard
     {
         private readonly AppDbContext _context = new AppDbContext();
 
+        // Add event for supplier addition notification
+        public event EventHandler SupplierAdded;
+
         public AddSupplierPage()
         {
             InitializeComponent();
@@ -18,54 +21,46 @@ namespace Fabrino.Views.DashBoard
         {
             try
             {
-                // اعتبارسنجی داده‌های اجباری
-                if (string.IsNullOrWhiteSpace(NameTextBox.Text))
+                // Validate required fields
+                if (string.IsNullOrWhiteSpace(NameTextBox.Text) ||
+                    string.IsNullOrWhiteSpace(PhoneTextBox.Text))
                 {
-                    MessageBox.Show("نام تامین‌کننده الزامی است.", "خطا",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    NameTextBox.Focus();
+                    MessageBox.Show("لطفاً نام و شماره تماس را وارد کنید", "خطا", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (string.IsNullOrWhiteSpace(PhoneTextBox.Text))
-                {
-                    MessageBox.Show("شماره تماس الزامی است.", "خطا",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    PhoneTextBox.Focus();
-                    return;
-                }
-
-                // ایجاد تامین‌کننده جدید
-                var newSupplier = new Supplier
+                // Create new supplier
+                var supplier = new Supplier
                 {
                     Name = NameTextBox.Text.Trim(),
                     ContactPerson = ContactPersonTextBox.Text?.Trim(),
                     Phone = PhoneTextBox.Text.Trim(),
                     Email = EmailTextBox.Text?.Trim(),
                     Address = AddressTextBox.Text?.Trim(),
-                    TaxNumber = TaxNumberTextBox.Text?.Trim()
+                    TaxNumber = TaxNumberTextBox.Text?.Trim(),
+                    is_active = true
                 };
 
-                // ذخیره در دیتابیس
-                _context.Supplier.Add(newSupplier);
+                // Save to database
+                _context.Supplier.Add(supplier);
                 _context.SaveChanges();
 
-                MessageBox.Show("تامین‌کننده جدید با موفقیت اضافه شد.", "موفقیت",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // بازگشت به صفحه قبلی
+                MessageBox.Show("تامین‌کننده جدید با موفقیت اضافه شد", "موفقیت", MessageBoxButton.OK, MessageBoxImage.Information);
+                
+                // Notify listeners that supplier was added
+                SupplierAdded?.Invoke(this, EventArgs.Empty);
+                
+                // Navigate back
                 NavigationService.GoBack();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"خطا در ذخیره تامین‌کننده: {ex.Message}", "خطا",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"خطا در ذخیره اطلاعات: {ex.Message}", "خطا", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            // بازگشت به صفحه قبلی بدون ذخیره تغییرات
             NavigationService.GoBack();
         }
     }

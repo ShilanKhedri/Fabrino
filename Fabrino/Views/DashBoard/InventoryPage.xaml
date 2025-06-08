@@ -104,6 +104,45 @@
             <Setter Property="Height" Value="40"/>
             <Setter Property="Padding" Value="10,0"/>
         </Style>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="70"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="EditButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1976D2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Background" Value="#F44336"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#D32F2F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -171,8 +210,29 @@
                                   HeadersVisibility="Column">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="نام کالا" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="رنگ" Binding="{Binding Color}" Width="*"/>
+                                <DataGridTextColumn Header="جنس" Binding="{Binding Material}" Width="*"/>
+                                <DataGridTextColumn Header="عرض" Binding="{Binding Width}" Width="*"/>
                                 <DataGridTextColumn Header="تعداد موجودی" Binding="{Binding Quantity}" Width="*"/>
-                                <DataGridTextColumn Header="قیمت هر متر" Binding="{Binding PricePerMeter}" Width="*"/>
+                                <DataGridTextColumn Header="قیمت هر متر">
+                                    <DataGridTextColumn.Binding>
+                                        <Binding Path="PricePerMeter" StringFormat="{}{0:N0} تومان"/>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="عملیات" Width="160">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="ویرایش" 
+                                                        Style="{StaticResource EditButtonStyle}"
+                                                        Click="EditItem_Click"/>
+                                                <Button Content="حذف" 
+                                                        Style="{StaticResource DeleteButtonStyle}"
+                                                        Click="DeleteItem_Click"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
@@ -219,5 +279,133 @@
                 </Grid>
             </StackPanel>
         </ScrollViewer>
+
+        <!-- Edit Popup -->
+        <Popup x:Name="EditPopup" 
+               StaysOpen="False"
+               AllowsTransparency="True" 
+               PopupAnimation="Fade"
+               Placement="Center"
+               PlacementTarget="{Binding ElementName=InventoryGrid}"
+               Width="400">
+            <Border Background="White" 
+                    CornerRadius="15"
+                    BorderBrush="#E0E0E0" 
+                    BorderThickness="1"
+                    Padding="25">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" 
+                                    ShadowDepth="0" 
+                                    Color="#40000000"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="✏️ ویرایش کالا" 
+                               Foreground="#2196F3"
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               Margin="0,0,0,20"/>
+
+                    <TextBox x:Name="EditItemNameBox" 
+                             Margin="0,0,0,10"
+                             Style="{StaticResource WatermarkTextBoxStyle}" 
+                             Tag="نام کالا"/>
+
+                    <TextBox x:Name="EditItemColorBox" 
+                             Margin="0,0,0,10"
+                             Style="{StaticResource WatermarkTextBoxStyle}" 
+                             Tag="رنگ"/>
+
+                    <TextBox x:Name="EditItemMaterialBox" 
+                             Margin="0,0,0,10"
+                             Style="{StaticResource WatermarkTextBoxStyle}" 
+                             Tag="جنس"/>
+
+                    <TextBox x:Name="EditItemWidthBox" 
+                             Margin="0,0,0,10"
+                             Style="{StaticResource WatermarkTextBoxStyle}" 
+                             Tag="عرض (سانتی‌متر)"/>
+
+                    <TextBox x:Name="EditItemQuantityBox" 
+                             Margin="0,0,0,10"
+                             Style="{StaticResource WatermarkTextBoxStyle}" 
+                             Tag="تعداد"/>
+
+                    <TextBox x:Name="EditItemPriceBox" 
+                             Margin="0,0,0,10"
+                             Style="{StaticResource WatermarkTextBoxStyle}" 
+                             Tag="قیمت واحد (تومان)"/>
+
+                    <ComboBox x:Name="EditSupplierComboBox" 
+                              Height="35" 
+                              Margin="0,0,0,15"
+                              BorderBrush="#E0E0E0" 
+                              BorderThickness="1"/>
+
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center">
+                        <Button Content="ذخیره تغییرات" 
+                                Width="120" 
+                                Height="40"
+                                Style="{StaticResource EditButtonStyle}"
+                                Click="SaveEdit_Click"
+                                Margin="0,0,10,0"/>
+                        <Button Content="انصراف" 
+                                Width="120" 
+                                Height="40"
+                                Background="#9E9E9E"
+                                Style="{StaticResource ActionButtonStyle}"
+                                Click="CancelEdit_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <!-- Delete Confirmation Popup -->
+        <Popup x:Name="DeleteConfirmationPopup" 
+               StaysOpen="False"
+               AllowsTransparency="True" 
+               PopupAnimation="Fade"
+               Placement="Center"
+               PlacementTarget="{Binding ElementName=InventoryGrid}">
+            <Border Background="White" 
+                    CornerRadius="15"
+                    BorderBrush="#E0E0E0" 
+                    BorderThickness="1"
+                    Padding="25" 
+                    Width="300">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" 
+                                    ShadowDepth="0" 
+                                    Color="#40000000"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="⚠️ حذف کالا" 
+                               Foreground="#F44336"
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               Margin="0,0,0,20"/>
+                    
+                    <TextBlock Text="آیا از حذف این کالا اطمینان دارید؟"
+                               TextWrapping="Wrap" 
+                               Margin="0,0,0,20"/>
+
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Center">
+                        <Button Content="حذف" 
+                                Width="100" 
+                                Height="35"
+                                Style="{StaticResource DeleteButtonStyle}"
+                                Click="ConfirmDelete_Click"
+                                Margin="0,0,10,0"/>
+                        <Button Content="انصراف" 
+                                Width="100" 
+                                Height="35"
+                                Background="#9E9E9E"
+                                Style="{StaticResource ActionButtonStyle}"
+                                Click="CancelDelete_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
     </Grid>
 </Page>
